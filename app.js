@@ -12,13 +12,13 @@ let app = {
     app.input = new Input();
 
     app.scrollable = { div: document.querySelector(".scrollable") };
-    app.world = new World({x: 0, y: 0, w: 5000, h: 5000});
+    app.world = new World({ x: 0, y: 0, w: 5000, h: 5000 });
 
     app.me = new Mover({ x: 100, y: 100, w: 50, h: 50 });
     this.doTest();
-    
+
   },
-  
+
   doTest() {
     let itemInfo = items.makeDiamond('test', 200, 300, true);
     app.test = new Item(itemInfo);
@@ -28,15 +28,29 @@ let app = {
     document.querySelector(`#msg${id}`).innerHTML = desc + JSON.stringify(msg);
   },
 
-  endMovement() {
-    console.log('endMove');
-  }
+  endMovement: function () {
+    if (app.showCollision) {
+      // show the collisions of all things that have moved
+      console.log('show collision boxes of moved items');
+    }
+  },
+
+  // given a event, work out the key code and return up, down left right or undefined
+  getDirection: function (code) {
+    let keyCode = code.toLowerCase().replace('arrow', '');
+    return typeof app.directions[keyCode] === 'string' ? app.directions[keyCode] : keyCode;
+  },
+
+  // return true if the key code is a valid direction (otherwise its space, esc, enter etc..)
+  isDirection: function (keyCode) {
+    return typeof app.directions[keyCode] === 'object';
+  },
 
 
 };
 
 async function shiftSuburbsAsync(mobile) {
-  let postcode = app.world.suburbs.makeKey(mobile);
+  let postcode = app.world['suburbs'].makeKey(mobile);
   if (mobile.lastPostcode !== postcode) {
     await showSuburbsAsync(mobile);
     await hideSuburbsAsync(mobile);
@@ -45,7 +59,7 @@ async function shiftSuburbsAsync(mobile) {
 }
 
 async function showSuburbsAsync(mobile) {
-  let inSuburbs = await app.world.suburbs.queryKingsSquare(mobile);
+  let inSuburbs = await app.world['suburbs'].queryKingsSquare(mobile);
   if (inSuburbs && inSuburbs.list && inSuburbs.list.length > 0) {
     await Promise.all(inSuburbs.list.map(async (itemId) => {
       let item = app.items[itemId];
@@ -57,12 +71,12 @@ async function showSuburbsAsync(mobile) {
 }
 
 async function hideSuburbsAsync(mobile) {
-  let postcode = app.world.suburbs.makeKey(mobile);
-  let suburbs = await app.world.suburbs.kingsSquare(postcode);
+  let postcode = app.world['suburbs'].makeKey(mobile);
+  let suburbs = await app.world['suburbs'].kingsSquare(postcode);
   if (app.lastShown && app.lastShown.list && app.lastShown.list.length > 0) {
     let toHide = app.lastShown.outside(suburbs.list);
     await Promise.all(toHide.map(async (postcode) => {
-      await app.world.suburbs.grid[postcode].forEach(async (itemId) => {
+      await app.world['suburbs'].grid[postcode].forEach(async (itemId) => {
         let item = app.items[itemId];
         await item.hide();
       });
