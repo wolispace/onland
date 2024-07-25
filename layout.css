@@ -1,0 +1,106 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: black;
+}
+
+.scrollable {
+  position: absolute;
+  border: 1px solid red;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.world {
+  position: absolute;
+  border: 1px solid yellow;
+  width: 500px;
+  height: 500px;
+}
+
+.item {
+  position: absolute;
+  opacity: 100%;
+}
+
+.collideZone {
+  position: absolute;
+  background-color: white;
+  border:2px solid black;
+  opacity: 50%;
+}
+
+.ghostZone {
+  position: absolute;
+  background-color: yellow;
+  border:2px solid maroon;
+  opacity: 50%;
+}
+
+
+.item > svg {
+  position: absolute;
+}
+
+.collideGhost {
+  position: absolute;
+  background-color: yellow;
+  border:2px solid navy;
+}
+
+.ghost {
+  opacity: .5;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.showGrid {
+  outline:1px solid white;
+  position: absolute;
+}
+
+.point {
+  position: absolute;
+  background-color: white;
+  width: 1px;
+  height: 1px;
+}
+
+.controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  gap: .5rem;
+}
+
+.control {
+  border: 3px solid darkslategray;
+  padding: 0.2rem;
+  margin: 0.2rem;
+  border-radius: .5rem;
+  background: silver;
+  cursor: pointer;
+}
+
+.msg {
+  color: white;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  z-index: 99999999;
+}
+#msg1 {
+  position:absolute;
+  top: 0;
+  left: 0;
+}
+#msg2 {
+  position:absolute;
+  top: 1rem;
+  left: 0;
+}
+#msg3 {
+  position:absolute;
+  top: 2rem;
+  left: 0;
+}
