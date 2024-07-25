@@ -81,6 +81,13 @@ class SpacialHashGrid extends Rectangle{
     this.grid = {};
   }
 
+  addAll(collideList, id) {
+    collideList.forEach((item) => {
+      item.id = id;
+      this.add(item);
+    });
+  }
+
   // add a new item (its id) to the grid
   add(params) {
     const key = this.makeKey(params);

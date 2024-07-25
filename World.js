@@ -21,6 +21,7 @@ class World extends Rectangle {
       surface: this.gridSize, // obstacles we can bump into
       underground: this.gridSize, // things we can dig up
       overhead: this.gridSize, // amove we cant bump into
+      ghosts: this.gridSize, // items to ghost when we move behind
       suburbs: this.suburbSize(app.suburbSize), // screen spaces/zones that are loaded dynamically
     };
   }
@@ -29,6 +30,15 @@ class World extends Rectangle {
     for (const [key, gridSize] of Object.entries(this.gridDefinitions())) {
       const gridRectangle = new Rectangle(gridSize);
       this.grids[key] = new SpacialHashGrid(gridRectangle);
+    }
+  }
+
+  // every item has some grids they are part of 'ghosts', 'surface' etc..
+  addToGrids(item) {
+    for (const [key, gridSize] of Object.entries(this.gridDefinitions())) {
+      if (item[key]) {
+        this.grids[key].addAll(item[key], this.id);
+      }
     }
   }
 
@@ -63,6 +73,7 @@ class World extends Rectangle {
   hideCursor() {
     this.div.style.cursor = "none";
   }
+
 
 /*
   addItem(item) {

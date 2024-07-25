@@ -3,7 +3,7 @@ class Item extends Rectangle {
   it;  // the element on the screen (in the world)
   qty = 0;
   svg = '';
-  collisions = [];
+  surface = [];
   ghosts = [];
   autoShow = false;
 
@@ -28,7 +28,7 @@ class Item extends Rectangle {
     // make the collision boxes
     params.collisions.forEach((collisionParams) => {
       const collision = new Collidable(collisionParams);
-      this.collisions.push(collision);
+      this.surface.push(collision);
     });
   }
 
@@ -40,7 +40,7 @@ class Item extends Rectangle {
     });
   }
 
-  // add the item to the world divad
+  // add the item to the world div
   show() {
     if (this.it) {
       // its already here..
@@ -48,10 +48,9 @@ class Item extends Rectangle {
       let newSvg = `<div id="i${this.id}" class="item">${this.svg}</div>`;
       app.world.add(newSvg);
       this.it = document.querySelector(`#i${this.id}`);
-
-      //app.world.grid['ghosts'].add(this.ghosts[0]);
       this.size();
       this.position();
+      app.world.addToGrids(this);
     }
   }
 

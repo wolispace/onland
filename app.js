@@ -21,6 +21,8 @@ let app = {
     let itemInfo = items.makeDiamond('test', 200, 300, true);
 
     app.test = new Item(itemInfo);
+    
+
 
   }
 }
