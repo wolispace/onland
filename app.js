@@ -7,6 +7,7 @@ let app = {
   isDev: true,
   suburbSize: null,
   showCollision: false,
+  contextMenu: true,
 
   start() {
     app.input = new Input();
@@ -14,10 +15,21 @@ let app = {
     app.scrollable = { div: document.querySelector(".scrollable") };
     app.world = new World({ x: 0, y: 0, w: 5000, h: 5000 });
 
-    app.me = new Mover({ x: 100, y: 100, w: 50, h: 50 });
+    const params = items.makeDiamond('me', 200, 200, true);
+
+    app.me = new Mover(params);
     this.doTest();
+    app.gameLoop();
 
   },
+
+  gameLoop() {
+    app.gameTimer = setInterval(() => {
+      // find all the movable items and move them.
+      app.me.move();
+    }, app.gameLoopSpeed);
+  },
+
 
   doTest() {
     let itemInfo = items.makeDiamond('test', 200, 300, true);

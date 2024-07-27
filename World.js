@@ -65,6 +65,11 @@ class World extends Rectangle {
       app.world.div.removeChild(element);
     }
   }
+  
+   setPos(element, point) {
+    element.style.left = `${point.x}px`;
+    element.style.top = `${point.y}px`;
+  }
 
   showCursor() {
     this.div.style.cursor = "auto";

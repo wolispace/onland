@@ -22,6 +22,10 @@ class UniqueSet {
     return this.list;
   }
 
+  has(item) {
+    return this.list.includes(item);
+  }
+
   clear() {
     this.list = [];
     return this.list;

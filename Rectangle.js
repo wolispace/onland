@@ -1,4 +1,4 @@
-class Rectangle extends Vector{
+class Rectangle extends Vector {
   w = 0;
   h = 0;
 
@@ -14,13 +14,16 @@ class Rectangle extends Vector{
       this.h / 2);
   }
 
+  /**
+   * 
+   * @returns an array of points for each corner in this order [TL, TR, BR, BL]
+   */
   corners() {
-    // get a point for each corner TL, TR, BR, BL
     return [
-      new Point(x, y),
-      new Point(x + w, y),
-      new Point(x + w, y + h),
-      new Point(x, y + h),
+      new Point(this.x, this.y),
+      new Point(this.x + this.w, this.y),
+      new Point(this.x + this.w, this.y + this.h),
+      new Point(this.x, this.y + this.h),
     ];
   }
 }
