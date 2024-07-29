@@ -48,10 +48,6 @@ class Input {
       app.msg(1, this.keys, 'keyUp');
     });
 
-    document.addEventListener("mousemove", (event) => {
-      app.world.showCursor();
-    });
-
     // if they touched something
     ['touchstart', 'touchmove', 'touchend', 'touchcancel'].forEach(eventName => {
       document.addEventListener(eventName, this.handleTouchEvent, { passive: false });
