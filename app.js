@@ -8,7 +8,8 @@ let app = {
   suburbSize: null,
   showCollision: false,
   contextMenu: true,
-
+  gameLoopSpeed: 20,
+  
   start() {
     app.input = new Input();
 

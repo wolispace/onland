@@ -26,4 +26,21 @@ class Rectangle extends Vector {
       new Point(this.x, this.y + this.h),
     ];
   }
+
+  // return -1, 1 of colliding before or after the mid point or zero for no collision
+  collides(otherRect) {
+    // Calculate the distance between the two rectangles' centers
+    var dx = (this.x + this.w / 2) - (otherRect.x + otherRect.w / 2);
+    var dy = (this.y + this.h / 2) - (otherRect.y + otherRect.h / 2);
+
+    // Compare distance with sum of half widths and heights
+    if (Math.abs(dx) < (this.w / 2 + otherRect.w / 2) && Math.abs(dy) < (this.h / 2 + otherRect.h / 2)) {
+      // return -1 or +1 indicating above or below, before or after centre point.
+      return {
+        x: this.x + this.w / 2 < otherRect.x + otherRect.w / 2 ? -1 : 1,
+        y: this.y + this.h / 2 < otherRect.y + otherRect.h / 2 ? -1 : 1
+      };
+    }
+    return { x: 0, y: 0 }; // They are not colliding
+  }
 }

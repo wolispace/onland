@@ -58,10 +58,12 @@ class Vector extends Point{
   }
 
   limit(maxMagnitude) {
-    if (this.magnitude() > maxMagnitude) {
-      this.normalize();
-      this.multiply(maxMagnitude);
-    }
+    this.x = this.x > maxMagnitude ? maxMagnitude : this.x;
+    this.y = this.y > maxMagnitude ? maxMagnitude : this.y;
+    // if (this.magnitude() > maxMagnitude) {
+    //   this.normalize();
+    //   this.multiply(maxMagnitude);
+    // }
   }
 
   backup() {

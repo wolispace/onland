@@ -79,6 +79,26 @@ class World extends Rectangle {
     this.div.style.cursor = "none";
   }
 
+    // scroll the world div so the player is in the middle of the screen if possible
+    centerPlayer() {
+      // Calculate the middle position of the window
+      var centerX = window.innerWidth / 2;
+      var centerY = window.innerHeight / 2;
+  
+      // Get the player's coordinates
+      var rect = { top: app.me.y, left: app.me.x };
+      // app.me.it.getBoundingClientRect();
+  
+      // Calculate the amount of scrolling
+      var scrollLeft = rect.left + window.scrollX - centerX;
+      var scrollTop = rect.top + window.scrollY - centerY;
+  
+      //window.scrollTo(scrollLeft, scrollTop);
+  
+      // // Scroll the world div
+      app.scrollable.div.scrollLeft = scrollLeft;
+      app.scrollable.div.scrollTop = scrollTop;
+    }
 
 /*
   addItem(item) {
