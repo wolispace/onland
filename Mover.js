@@ -18,7 +18,7 @@ class Mover extends Item {
     this.applyFriction();
     this.applyVector();
     if (app.scrollBrowser) {
-      world.centerPlayer();
+      app.world.centerPlayer();
     }
   }
 
@@ -41,6 +41,7 @@ class Mover extends Item {
 
   applyFriction() {
     if (this.velocity.isZero()) return;
+    if(app.input.active) return;
 
     console.log(this.velocity, 1);
     this.velocity.multiply(this.friction);

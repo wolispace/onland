@@ -9,6 +9,7 @@ let app = {
   showCollision: false,
   contextMenu: true,
   gameLoopSpeed: 20,
+  scrollBrowser: true,
   
   start() {
     app.input = new Input();

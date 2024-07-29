@@ -2,6 +2,7 @@ class Input {
 
   keys = new UniqueSet(); // the direction keys currently held down
   touchPoint = new Rectangle({ x: 0, y: 0, w: 20, h: 20 });  // where the user has touched
+  active = false;
 
   constructor() {
     this.setupEvents();
@@ -27,6 +28,7 @@ class Input {
       let directionVector = this.directions[keyCode];
       if (directionVector) {
         this.keys.add(keyCode);
+        this.active = true;
         app.msg(1, this.keys, 'keyDown');
       } else if (event.code == 'Space') {
         console.log('digging');
@@ -67,6 +69,7 @@ class Input {
 
     document.addEventListener("mousedown", (event) => {
       this.mousedown = true;
+      this.active = true;
       app.world.showCursor();
       event.preventDefault();
 
@@ -142,6 +145,7 @@ class Input {
     if (this.anyKeysPressed()) {
       return;
     }
+    this.active = false;
     app.endMovement();
   }
 
