@@ -83,14 +83,12 @@ class Input {
 
     document.addEventListener("mouseup", (event) => {
       this.mousedown = false;
-      this.touchPoint.clear();
       this.endInput();
       app.msg(1, this.touchPoint, 'mouseup');
     });
 
     document.addEventListener("mousemove", (event) => {
       if (!this.mousedown) return;
-      this.touchPoint.clear();
       this.endInput();
       this.setTouchPoint(event);
       app.me.move();
@@ -118,19 +116,6 @@ class Input {
     }
   }
 
-  // the whole screen is the controller input.. not ideal
-  touchMove = (touch) => {
-    let parentDiv = app.findParentDiv(touch.target);
-
-    if (parentDiv.classList.contains('controls')) {
-      app.msg(1, 'controls!');
-      return;
-    }
-
-    app.me.move();
-    app.msg(1, this.keys, 'touch move');
-  }
-
   // returns true when no keys are pressed - then we clear the timer
   anyKeysPressed() {
     return this.keys.count() > 0;
@@ -142,6 +127,7 @@ class Input {
       return;
     }
     this.active = false;
+    this.clearTouchPoint();
     app.endMovement();
   }
 
@@ -155,7 +141,7 @@ class Input {
     this.showTouchPoint();
   }
 
-  // us is no longer mouse down or touching/dragging
+  // no longer mouse down or touching/dragging
   clearTouchPoint() {
     this.mousedown = false;
     this.touchPoint.clear();

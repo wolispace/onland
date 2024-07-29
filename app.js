@@ -8,7 +8,7 @@ let app = {
   suburbSize: null,
   showCollision: false,
   contextMenu: true,
-  gameLoopSpeed: 20,
+  gameLoopSpeed: 100,
   scrollBrowser: true,
   
   start() {
