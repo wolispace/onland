@@ -80,6 +80,7 @@ class Mover extends Item {
       if (this.velocity.isZero()) return;
       //console.log(app.input.touchPoint.toString());
     }
+    this.velocity.round(this.precision);
     this.add(this.velocity);
     this.position();
   }

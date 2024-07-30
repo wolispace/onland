@@ -110,7 +110,7 @@ class World extends Rectangle {
       
       let x = app.randomItems ? app.rnd(app.world.w) : lastPos.x;
       let y = app.randomItems ? app.rnd(app.world.h) : lastPos.y;
-      let key = `i${i}`;
+      let key = i;
 
       let itemInfo;
       switch (app.randomItems ? app.rnd(3) : 0) {

@@ -11,13 +11,13 @@ let app = {
   gameLoopSpeed: 50,
   scrollBrowser: true,
   randomItems: true,
-  itemQty: 1000,
+  itemQty: 10,
 
   start() {
     app.input = new Input();
 
     app.scrollable = { div: document.querySelector(".scrollable") };
-    app.world = new World({ x: 0, y: 0, w: 2000, h: 2000 });
+    app.world = new World({ x: 0, y: 0, w: 200, h: 200 });
 
     const params = items.makeDiamond('me', 200, 200, true);
 

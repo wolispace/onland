@@ -70,6 +70,7 @@ class Item extends Rectangle {
     if (this.it) {
       this.it.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
       this.it.style.zIndex = this.y;
+      console.log(this.it, this.y);
       if (app.showCollision) {
         this.showCollision();
       }
