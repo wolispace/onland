@@ -4,8 +4,10 @@ class Mover extends Item {
   acceleration = new Vector();
   maxSpeed = 10;
   friction = 0.7;
+  precision = 1;
   lastPostcode = null;
   moveStep = 1;
+  endTouchZone = 20;
 
   constructor(params) {
     super(params);
@@ -28,7 +30,7 @@ class Mover extends Item {
         let direction = app.input.directions[key];
         this.acceleration.add(direction);
         this.acceleration.multiply(this.moveStep);
-        this.acceleration.round(2);
+        this.acceleration.round(this.precision);
         app.msg(2, this.acceleration, 'accel A ');
       });
     } else if (!app.input.touchPoint.isZero()) {
@@ -36,14 +38,15 @@ class Mover extends Item {
       this.acceleration.take(this);
       this.acceleration.normalise();
       this.acceleration.multiply(this.moveStep);
-      this.acceleration.round(2);
+      this.acceleration.round(this.precision);
       app.msg(2, this.acceleration, 'accel M ');
     }
   }
 
   applyFriction() {
     if (this.velocity.isZero()) return;
-    if(app.input.active) return;
+    if (app.input.active) return;
+    if (!app.input.touchPoint.isZero()) return;
 
     this.velocity.multiply(this.friction);
     if (this.velocity.magnitude() < this.friction) {
@@ -60,10 +63,23 @@ class Mover extends Item {
   applyVector() {
     if (this.velocity.isZero()) return;
     
-    this.velocity.round(2);
-
-    app.msg(3, this.velocity, 'velocity');''
+    this.velocity.round(this.precision);
+    
+    app.msg(3, this.velocity, 'velocity'); 
     // add the vector to the current position
+    // have we reached the touchPoint if one is set?
+    if (app.input.touchPoint.isZero() == false) {
+      // check if this.x and y is within +-5 of the app.input.touchPoint.x an y
+      if (this.x > app.input.touchPoint.x - this.endTouchZone && this.x < app.input.touchPoint.x + this.endTouchZone
+        && this.y > app.input.touchPoint.y - this.endTouchZone && this.y < app.input.touchPoint.y + this.endTouchZone) {
+          app.input.touchPoint.clear();
+          this.velocity.multiply(0.5);
+          this.applyFriction();
+      }
+
+      if (this.velocity.isZero()) return;
+      //console.log(app.input.touchPoint.toString());
+    }
     this.add(this.velocity);
     this.position();
   }

@@ -127,7 +127,7 @@ class Input {
       return;
     }
     this.active = false;
-    this.clearTouchPoint();
+    //this.clearTouchPoint();
     app.endMovement();
   }
 
@@ -140,6 +140,7 @@ class Input {
       event.clientX + app.scrollable.div.scrollLeft,
       event.clientY + app.scrollable.div.scrollTop,
     );
+    this.touchPoint.round(2);
     this.showTouchPoint();
   }
 
