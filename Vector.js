@@ -38,12 +38,13 @@ class Vector extends Point{
     return Math.sqrt(this.x ** 2 + this.y ** 2);
   }
 
-  // Normalizes the vector to have a magnitude of 1
+  // Normalises the vector to have a magnitude of 1
   // If the vector has a magnitude of 0, it remains unchanged
-  normalize() {
-    if (this.magnitude() > 0) {
-      this.x /= this.magnitude();
-      this.y /= this.magnitude();
+  normalise() {
+    const magnitude = this.magnitude();
+    if (magnitude > 0) {
+      this.x /= magnitude;
+      this.y /= magnitude;
     }
   }
 
@@ -61,7 +62,7 @@ class Vector extends Point{
     // this.x = Math.abs(this.x) > maxMagnitude ? Math.sign(this.x) * maxMagnitude : this.x;
     // this.y = Math.abs(this.y) > maxMagnitude ? Math.sign(this.y) * maxMagnitude : this.y;
     if (Math.abs(this.magnitude()) > maxMagnitude) {
-      this.normalize();
+      this.normalise();
       this.multiply(maxMagnitude);
     }
   }

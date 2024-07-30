@@ -2,9 +2,8 @@ class Mover extends Item {
 
   velocity = new Vector();
   acceleration = new Vector();
-  velocityThreshold = 0.9;
   maxSpeed = 10;
-  friction = 0.9;
+  friction = 0.7;
   lastPostcode = null;
   moveStep = 1;
 
@@ -29,13 +28,16 @@ class Mover extends Item {
         let direction = app.input.directions[key];
         this.acceleration.add(direction);
         this.acceleration.multiply(this.moveStep);
-        app.msg(2, this.acceleration, 'accel');
+        this.acceleration.round(2);
+        app.msg(2, this.acceleration, 'accel A ');
       });
     } else if (!app.input.touchPoint.isZero()) {
       this.acceleration = app.input.touchPoint.clone();
       this.acceleration.take(this);
+      this.acceleration.normalise();
+      this.acceleration.multiply(this.moveStep);
       this.acceleration.round(2);
-      app.msg(2, this.acceleration, 'accel');
+      app.msg(2, this.acceleration, 'accel M ');
     }
   }
 
@@ -43,12 +45,10 @@ class Mover extends Item {
     if (this.velocity.isZero()) return;
     if(app.input.active) return;
 
-    console.log(this.velocity, 1);
     this.velocity.multiply(this.friction);
     if (this.velocity.magnitude() < this.friction) {
       this.velocity.clear();
     }
-    this.velocity.round(2);
   }
   
   applyMomentum() {
@@ -60,8 +60,9 @@ class Mover extends Item {
   applyVector() {
     if (this.velocity.isZero()) return;
     
-    console.log(this.velocity, 2);
-    app.msg(3, this.velocity, 'velocity');
+    this.velocity.round(2);
+
+    app.msg(3, this.velocity, 'velocity');''
     // add the vector to the current position
     this.add(this.velocity);
     this.position();

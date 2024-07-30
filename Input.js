@@ -64,7 +64,7 @@ class Input {
     });
 
     document.addEventListener("mousedown", (event) => {
-      this.mousedown = true;
+      if (this.mousedown) return;
       this.active = true;
       app.world.showCursor();
       event.preventDefault();
@@ -133,6 +133,8 @@ class Input {
 
   // calculate real x, y based on touchPoint and worlds offset
   setTouchPoint(event) {
+    if (this.mousedown) return;
+
     this.mousedown = true;
     this.touchPoint.set(
       event.clientX + app.scrollable.div.scrollLeft,
