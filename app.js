@@ -10,19 +10,21 @@ let app = {
   contextMenu: true,
   gameLoopSpeed: 50,
   scrollBrowser: true,
-  
+  randomItems: true,
+  itemQty: 1000,
+
   start() {
     app.input = new Input();
 
     app.scrollable = { div: document.querySelector(".scrollable") };
-    app.world = new World({ x: 0, y: 0, w: 5000, h: 5000 });
+    app.world = new World({ x: 0, y: 0, w: 2000, h: 2000 });
 
     const params = items.makeDiamond('me', 200, 200, true);
 
     app.me = new Mover(params);
     this.doTest();
+    app.world.populate();
     app.gameLoop();
-
   },
 
   gameLoop() {
@@ -32,10 +34,15 @@ let app = {
     }, app.gameLoopSpeed);
   },
 
-
   doTest() {
     let itemInfo = items.makeDiamond('test', 200, 300, true);
     app.test = new Item(itemInfo);
+  },
+
+  // randoms a random number like a dice roll, with side being the number of sides: rnd(2) is a flip of a coin, rnd(6) is a six sided dice.
+  // this a zero based number so rnd(2) gives us 0 or 1, rnd(6) gives us 0...5
+  rnd: function (sides) {
+    return Math.floor(Math.random() * sides);
   },
 
   msg: function (id, msg, desc = '') {
@@ -59,8 +66,6 @@ let app = {
   isDirection: function (keyCode) {
     return typeof app.directions[keyCode] === 'object';
   },
-
-
 };
 
 async function shiftSuburbsAsync(mobile) {

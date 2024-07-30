@@ -65,8 +65,8 @@ class World extends Rectangle {
       app.world.div.removeChild(element);
     }
   }
-  
-   setPos(element, point) {
+
+  setPos(element, point) {
     element.style.left = `${point.x}px`;
     element.style.top = `${point.y}px`;
   }
@@ -79,49 +79,85 @@ class World extends Rectangle {
     this.div.style.cursor = "none";
   }
 
-    // scroll the world div so the player is in the middle of the screen if possible
-    centerPlayer() {
-      // Calculate the middle position of the window
-      var centerX = window.innerWidth / 2;
-      var centerY = window.innerHeight / 2;
-  
-      // Get the player's coordinates
-      var rect = { top: app.me.y, left: app.me.x };
-      // app.me.it.getBoundingClientRect();
-  
-      // Calculate the amount of scrolling
-      var scrollLeft = rect.left + window.scrollX - centerX;
-      var scrollTop = rect.top + window.scrollY - centerY;
-  
-      //window.scrollTo(scrollLeft, scrollTop);
-  
-      // // Scroll the world div
-      app.scrollable.div.scrollLeft = scrollLeft;
-      app.scrollable.div.scrollTop = scrollTop;
-    }
+  // scroll the world div so the player is in the middle of the screen if possible
+  centerPlayer() {
+    // Calculate the middle position of the window
+    var centerX = window.innerWidth / 2;
+    var centerY = window.innerHeight / 2;
 
-/*
-  addItem(item) {
-    this.items.push(item);
+    // Get the player's coordinates
+    var rect = { top: app.me.y, left: app.me.x };
+    // app.me.it.getBoundingClientRect();
+
+    // Calculate the amount of scrolling
+    var scrollLeft = rect.left + window.scrollX - centerX;
+    var scrollTop = rect.top + window.scrollY - centerY;
+
+    //window.scrollTo(scrollLeft, scrollTop);
+
+    // // Scroll the world div
+    app.scrollable.div.scrollLeft = scrollLeft;
+    app.scrollable.div.scrollTop = scrollTop;
   }
 
-  removeItem(item) {
-    const index = this.items.indexOf(item);
-    if (index !== -1) {
-      this.items.splice(index, 1);
+  // fill the world with items
+  populate() {
+    const stepPos = new Point(144, 133);
+    const lastPos = new Point(200, 200);
+    let itemQty = app.itemQty;
+
+    for (var i = 1; i < itemQty; i++) {
+      
+      let x = app.randomItems ? app.rnd(app.world.w) : lastPos.x;
+      let y = app.randomItems ? app.rnd(app.world.h) : lastPos.y;
+      let key = `i${i}`;
+
+      let itemInfo;
+      switch (app.randomItems ? app.rnd(3) : 0) {
+        case 0:
+          itemInfo = items.makeTree(key, x, y, true);
+          break;
+        case 1:
+          itemInfo = items.makeRock(key, x, y, true);
+          break;
+        case 2:
+          itemInfo = items.makeDiamond(key, x, y, true);
+          break;
+      }
+
+      this.items[i] = new Item(itemInfo);
+
+      // increment pos grid
+      lastPos.x += stepPos.x;
+      if (lastPos.x > this.x) {
+        lastPos.x = stepPos.x;
+        lastPos.y += stepPos.y;
+      }
     }
   }
 
-  update() {
-    for (const item of this.items) {
-      item.update();
+  /*
+    addItem(item) {
+      this.items.push(item);
     }
-  }
-
-  draw() {
-    for (const item of this.items) {
-      item.draw();
+  
+    removeItem(item) {
+      const index = this.items.indexOf(item);
+      if (index !== -1) {
+        this.items.splice(index, 1);
+      }
     }
-  }
-    */
+  
+    update() {
+      for (const item of this.items) {
+        item.update();
+      }
+    }
+  
+    draw() {
+      for (const item of this.items) {
+        item.draw();
+      }
+    }
+      */
 }

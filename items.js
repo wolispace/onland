@@ -31,10 +31,18 @@ const items = {
         return params;
     },
 
-    makeRock() {
-        const params = {
-            top: -20, left: -2, width: 50, w: 42, h: 10, onCollide: 'stop',
-            ghostOffset: { x: 0, y: -10, w: 0, h: 10 }
+    makeRock(id = 'unknown', x = 0, y = 0, autoShow = false) {
+        let params = {
+            id: id, 
+            x: x,
+            y: y,
+            top: -20, 
+            left: -2,
+            width: 50,
+            autoShow: autoShow,
+            onCollide: 'stop',
+            collisions: [{y: -20, x: -2, h: 10, w: 42}], // a list of collision boxes
+            ghosts: [{ x: 0, y: -10, w: 0, h: 10 }], // a list of ghost collision boxes
         };
         const style = `style="left:${params.left}px; top:${params.top}px; width:${params.width}px;"`;
         params.svg = `<svg viewBox="0 0 97 64" ${style}>
@@ -46,17 +54,27 @@ const items = {
          <path d="m62.977 32.748 7.2423 13.54 21.727-8.9742z" style="fill:#fff;paint-order:stroke fill markers;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.3;stroke:#000"/>
          <path d="m2.6765 38.258 12.123-0.62977 3.1488 22.042-12.753-11.808z" style="fill-opacity:.70466;fill:#2e2e2e;paint-order:stroke fill markers;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.3;stroke:#000"/>
         </svg>`;
+
         return params;
     },
 
-    makeTree() {
+    makeTree(id = 'unknown', x = 0, y = 0, autoShow = false) {
         // top and left are offests from x,y of collision
         // width should match the svg width (height will be automatic)
         // w is collision width, h is collision height
-        const params = {
-            top: -100, left: -20, width: 104, w: 60, h: 20, onCollide: 'skim',
-            ghostOffset: { x: 0, y: -90, w: 0, h: 70 }
+        let params = {
+            id: id, 
+            x: x,
+            y: y,
+            top: -100, 
+            left: -22,
+            width: 60,
+            autoShow: autoShow,
+            onCollide: 'skim',
+            collisions: [{y: -100, x: -20, h: 20, w: 60}], // a list of collision boxes
+            ghosts: [{ x: 0, y: -90, w: 0, h: 70 }], // a list of ghost collision boxes
         };
+
         const style = `style="left:${params.left}px; top:${params.top}px; width:${params.width}px;"`;
         params.svg = `<svg viewBox="0 0 104 121" ${style}>
       <path d="m17.324 114.9c15.556-11.314 16.617-22.627 16.617-22.627l0.70711-41.366 23.688-0.35355s-4.9497 29.698 1.4142 42.073c6.364 12.374 16.263 19.092 16.263 19.092l-2.1213 3.182s-9.1924-7.4246-15.91-4.9497c-6.7175 2.4749-7.4246 7.4246-7.4246 7.4246l-8.4853 0.7071s6.8724-11.522-1.4142-9.8995c-3.6858 0.72165-8.7725 3.4516-11.667 6.7175z" style="fill:#572e11;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.4;stroke:#000"/>
