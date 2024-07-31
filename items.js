@@ -7,13 +7,13 @@ const items = {
             id: id, 
             x: x,
             y: y,
-            top: -30, 
+            top: -32, 
             left: -22,
             width: 50,
             autoShow: autoShow,
             onCollide: 'skim',
-            collisions: [{y: -30, x: -22, h: 10, w: 10}], // a list of collision boxes
-            ghosts: [{ x: -15, y: -30, w: 25, h: 20 }], // a list of ghost collision boxes
+            collisions: [{x: 0, y: 0, w: 10, h: 10}], // a list of collision boxes
+            ghosts: [{ x: -5, y: -20, w: 20, h: 20 }], // a list of ghost collision boxes
         };
         const style = `style="left:${params.left}px; top:${params.top}px; width:${params.width}px;"`;
 
@@ -37,11 +37,11 @@ const items = {
             x: x,
             y: y,
             top: -20, 
-            left: -2,
+            left: -5,
             width: 50,
             autoShow: autoShow,
             onCollide: 'stop',
-            collisions: [{y: 0, x: -2, h: 10, w: 42}], // a list of collision boxes
+            collisions: [{ x: 0, y: 0, w: 40, h: 10}], // a list of collision boxes
             ghosts: [{ x: 0, y: -10, w: 40, h: 10 }], // a list of ghost collision boxes
         };
         const style = `style="left:${params.left}px; top:${params.top}px; width:${params.width}px;"`;
@@ -66,13 +66,13 @@ const items = {
             id: id, 
             x: x,
             y: y,
-            top: -100, 
-            left: -22,
+            top: -50, 
+            left: -10,
             width: 60,
             autoShow: autoShow,
             onCollide: 'skim',
-            collisions: [{y: -100, x: -20, h: 20, w: 60}], // a list of collision boxes
-            ghosts: [{ x: 0, y: -90, w: 0, h: 70 }], // a list of ghost collision boxes
+            collisions: [{x: 0, y: 0, w: 30, h: 15}], // a list of collision boxes
+            ghosts: [{ x: 0, y: -45, w: 30, h: 45 }], // a list of ghost collision boxes
         };
 
         const style = `style="left:${params.left}px; top:${params.top}px; width:${params.width}px;"`;

@@ -22,7 +22,6 @@ body {
 .item {
   position: absolute;
   opacity: 100%;
-  border:1px solid red;
 }
 
 .collideZone {

@@ -113,7 +113,7 @@ class World extends Rectangle {
       let key = i;
 
       let itemInfo;
-      switch (app.randomItems ? app.rnd(2) : 0) {
+      switch (app.randomItems ? app.rnd(2) : 1) {
         case 0:
           itemInfo = items.makeTree(key, x, y, true);
           break;
