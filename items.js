@@ -41,8 +41,8 @@ const items = {
             width: 50,
             autoShow: autoShow,
             onCollide: 'stop',
-            collisions: [{y: -20, x: -2, h: 10, w: 42}], // a list of collision boxes
-            ghosts: [{ x: 0, y: -10, w: 0, h: 10 }], // a list of ghost collision boxes
+            collisions: [{y: 0, x: -2, h: 10, w: 42}], // a list of collision boxes
+            ghosts: [{ x: 0, y: -10, w: 40, h: 10 }], // a list of ghost collision boxes
         };
         const style = `style="left:${params.left}px; top:${params.top}px; width:${params.width}px;"`;
         params.svg = `<svg viewBox="0 0 97 64" ${style}>
