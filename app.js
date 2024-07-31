@@ -6,18 +6,18 @@ document.addEventListener("DOMContentLoaded", function () {
 let app = {
   isDev: true,
   suburbSize: null,
-  showCollision: false,
+  showCollision: true,
   contextMenu: true,
   gameLoopSpeed: 50,
   scrollBrowser: true,
   randomItems: true,
-  itemQty: 10,
+  itemQty: 100,
 
   start() {
     app.input = new Input();
 
     app.scrollable = { div: document.querySelector(".scrollable") };
-    app.world = new World({ x: 0, y: 0, w: 200, h: 200 });
+    app.world = new World({ x: 0, y: 0, w: 2000, h: 2000 });
 
     const params = items.makeDiamond('me', 200, 200, true);
 
@@ -50,10 +50,7 @@ let app = {
   },
 
   endMovement: function () {
-    if (app.showCollision) {
-      // show the collisions of all things that have moved
-      console.log('show collision boxes of moved items');
-    }
+    // do something when we have stopped moving..
   },
 
   // given a event, work out the key code and return up, down left right or undefined

@@ -67,36 +67,44 @@ class Item extends Rectangle {
   }
 
   position() {
-    if (this.it) {
-      this.it.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
-      this.it.style.zIndex = this.y;
-      console.log(this.it, this.y);
-      if (app.showCollision) {
-        this.showCollision();
-      }
+    if (!this.it) return;
+    this.it.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
+    this.it.style.zIndex = parseInt(this.y);
+    if (app.showCollision) {
+      this.showCollision();
     }
   }
 
-    // add a shape that defines the collision boarder
-    showCollision() {
-      if (this.cl) {
-        app.world.div.removeChild(this.cl);
-      }
-      if (this.gh) {
-        app.world.div.removeChild(this.gh);
-      }
-  
-      let html = `<div id="c${this.id}" class="collideZone" 
-          style="top:${this.pos.y}px; left:${this.pos.x}px; width:${this.dims.w}px; height:${this.dims.h}px"></div>`;
-       html += `<div id="g${this.id}" class="ghostZone" 
-              style="top:${this.ghost.y}px; 
-              left:${this.ghost.x}px; 
-              width:${this.ghost.w}px; 
-              height:${this.ghost.h}px">`;
-      app.world.add(html);
-  
-      this.cl = document.querySelector(`#c${this.id}`);
-      this.gh = document.querySelector(`#g${this.id}`);
-    }
+  /**
+ * Add the html into the items div at the end - eg collision boxes
+ * @param {string} html 
+ */
+  addChild(html) {
+    if (!this.it) return;
+    this.it.insertAdjacentHTML('beforeend', html);
+  }
 
+  /**
+   * Remove all child items from this item that match the childSelector
+   * @param {string} childrenSelector 
+   */
+  removeChildren(childrenSelector) {
+    if (!this.it) return;
+    let children = this.it.querySelectorAll(childrenSelector);
+    children.forEach(child => this.it.removeChild(child));
+  }
+
+
+  // add a shape that defines the collision boarders and ghost borders
+  showCollision() {
+    this.removeChildren('.collideZone');
+
+    this.surface.forEach((collider) => {
+      this.addChild(collider.html());
+    });
+
+    this.ghosts.forEach((collider) => {
+      this.addChild(collider.html());
+    });
+  }
 }
