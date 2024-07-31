@@ -69,9 +69,8 @@ class Mover extends Item {
     // add the vector to the current position
     // have we reached the touchPoint if one is set?
     if (app.input.touchPoint.isZero() == false) {
-      // check if this.x and y is within +-5 of the app.input.touchPoint.x an y
-      if (this.x > app.input.touchPoint.x - this.endTouchZone && this.x < app.input.touchPoint.x + this.endTouchZone
-        && this.y > app.input.touchPoint.y - this.endTouchZone && this.y < app.input.touchPoint.y + this.endTouchZone) {
+      // if the distance between this item and the touchPoint is less than a specific size then stop moving (apply friction)
+      if (this.distance(app.input.touchPoint) <= this.endTouchZone) { 
           app.input.touchPoint.clear();
           this.velocity.multiply(0.5);
           this.applyFriction();

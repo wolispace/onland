@@ -48,6 +48,17 @@ class Vector extends Point{
     }
   }
 
+  /**
+   * 
+   * @param {*} vector 
+   * @returns 
+   */
+  distance(vector) {
+    const dx = this.x - vector.x;
+    const dy = this.y - vector.y;
+    return Math.sqrt(dx ** 2 + dy ** 2);
+  }
+
   round(decimals = 2) {
     this.x = parseFloat(this.x.toFixed(decimals));
     this.y = parseFloat(this.y.toFixed(decimals));
