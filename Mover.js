@@ -8,6 +8,7 @@ class Mover extends Item {
   lastPostcode = null;
   moveStep = 1;
   endTouchZone = 20;
+  collisionSlide = 0.5;
 
   constructor(params) {
     super(params);
@@ -17,7 +18,9 @@ class Mover extends Item {
     this.calcAcceleration();
     this.applyMomentum();
     this.applyFriction();
-    this.applyVector();
+    this.backupPos();
+    this.applyVelocity();
+    this.checkCollisions();
     if (app.scrollBrowser) {
       app.world.centerPlayer();
     }
@@ -53,27 +56,27 @@ class Mover extends Item {
       this.velocity.clear();
     }
   }
-  
+
   applyMomentum() {
     // Accumulate the acceleration into the velocity
     this.velocity.add(this.acceleration);
     this.velocity.limit(this.maxSpeed);
   }
-  
-  applyVector() {
+
+  applyVelocity() {
     if (this.velocity.isZero()) return;
-    
+
     this.velocity.round(this.precision);
-    
-    app.msg(3, this.velocity, 'velocity'); 
+
+    app.msg(3, this.velocity, 'velocity');
     // add the vector to the current position
     // have we reached the touchPoint if one is set?
     if (app.input.touchPoint.isZero() == false) {
       // if the distance between this item and the touchPoint is less than a specific size then stop moving (apply friction)
-      if (this.distance(app.input.touchPoint) <= this.endTouchZone) { 
-          app.input.touchPoint.clear();
-          this.velocity.multiply(0.5);
-          this.applyFriction();
+      if (this.distance(app.input.touchPoint) <= this.endTouchZone) {
+        app.input.touchPoint.clear();
+        this.velocity.multiply(0.5);
+        this.applyFriction();
       }
 
       if (this.velocity.isZero()) return;
@@ -83,4 +86,52 @@ class Mover extends Item {
     this.add(this.velocity);
     this.position();
   }
+
+  // backup the current position before applying the velocity and potentially colliding with something
+  backupPos() {
+    this.oldPos = new Point(this.x, this.y);
+  }
+
+  restorePos() {
+    this.x = this.oldPos.x;
+    this.y = this.oldPos.y;
+  }
+
+  // check the grid to see what we are colliding with
+  checkCollisions() {
+    let inCell = app.world.grids['surface'].queryShape(this);
+
+    if (inCell && inCell.list && inCell.list.length > 0) {
+      inCell.list.forEach((itemId) => {
+        let item = app.world.items[itemId];
+        if (!item) return;
+
+        let poss = this.collides(item);
+        // if x = -1 we are on the left|top of centre, +1 is right|bottom
+
+        if (poss.x != 0 || poss.y != 0) {
+          // we hit something so return to previous pos and modify velocity before applying it again
+          this.restorePos();
+          if (item.onCollide === 'stop') {
+            this.velocity.clear();
+            app.input.clearKeys();
+          } else if (item.onCollide === 'bounce') {
+            this.velocity.multiply(poss);
+          } else {
+            if (Math.abs(this.velocity.y) > this.friction) {
+              this.velocity.x = Math.abs(this.velocity.y * this.collisionSlide) * poss.x;
+              this.velocity.y = 0;
+            } else if (Math.abs(this.velocity.x) > this.friction) {
+              this.velocity.y = Math.abs(this.velocity.x * this.collisionSlide) * poss.y;
+              this.velocity.x = 0;
+            }
+          }
+          this.velocity.limit(this.maxSpeed);
+          this.applyVelocity();
+        }
+
+      });
+    };
+  }
+
 }

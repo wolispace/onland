@@ -37,8 +37,16 @@ class UniqueSet {
 
   // adds the new list into the list making sure there are not duplicates
   join(newList) {
-    newList.forEach(item => this.add(item));
+    if (newList && newList.length > 0) {
+      newList.forEach(item => this.add(item));
+    }
     return this.list;
+  }
+
+  // merge two uniqueSets together
+  merge(newSet) {
+    if (!newSet) return;
+    return this.join(newSet.list);
   }
 
   // compares this.list with newList. return an object {same: [], toAdd: [], toTake: [] }

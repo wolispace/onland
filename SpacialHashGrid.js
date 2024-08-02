@@ -1,18 +1,16 @@
 class SpacialHashGrid extends Rectangle{
   grid = {};
-  rows = 0;
-  cols = 0;
 
-  constructor(rectangle) {
+  constructor(rectangle, cellSize) {
     super(rectangle);
+    this.cellSize = cellSize;
     this.setup();
   }
 
   setup() {
-    // 1000 x 1000 with a 10 cellSize gives us a 100 x 100 grid
-    const rowCols = this.makeRowCols();
-    this.rows = rowCols.x;
-    this.cols = rowCols.y;
+    // the whole area divided up into a cellSize grid give is a point of x,y rows and cols
+    const area = new Point(this.w, this.h);
+    this.rowCols = this.makeRowCols(area, this.cellSize);
   }
 
   // show the grid
@@ -20,32 +18,35 @@ class SpacialHashGrid extends Rectangle{
     Object.keys(this.grid).forEach(key => {
       //const thisValue = this.surface[key];
       let parts = key.split("_");
-      let left = Number(parts[0]) * this.w;
-      let top = Number(parts[1]) * this.h;
+      let left = Number(parts[0]) * this.cellSize.w;
+      let top = Number(parts[1]) * this.cellSize.h;
 
-      const div = `<div class="showGrid ${this.name}" style="top: ${top}px; left: ${left}px; width:${this.w}px; height:${this.h}px;"></div>`;
+      const div = `<div class="showGrid ${this.name}" 
+      style="top: ${top}px; left: ${left}px; width:${this.cellSize.w}px; height:${this.cellSize.h}px;"></div>`;
       app.world.add(div);
     });
   }
 
-  makeRowCols() {
-    return {
-      x: Math.floor(this.x / this.w),
-      y: Math.floor(this.y / this.h),
-    };
+  // 1000 x 1000 with a 10 x 10 cellSize gives us a 100 rows x 100 cols grid
+  // a rectangles x, y given a cell size results in the rows and cols to that point
+  makeRowCols(pos, cellSize) {
+    return new Point(
+      Math.floor(pos.x / cellSize.w), 
+      Math.floor(pos.y / cellSize.h)
+    );
   }
 
   // the top left corner of a given cell eg '4_6'
   cellTopLeft(key) {
     const [x, y] = key.split('_').map(Number);
-    return {
-      x: x * this.w,
-      y: y * this.h
-    };
+    return new Point(
+      x * this.cellSize.w,
+      y * this.cellSize.h
+    );
   }
 
   hash(params) {
-    const rowCols = this.makeRowCols(params);
+    const rowCols = this.makeRowCols(params, this.cellSize);
     return `${rowCols.x}_${rowCols.y}`;
   }
 
@@ -81,10 +82,12 @@ class SpacialHashGrid extends Rectangle{
     this.grid = {};
   }
 
-  addAll(collideList, id) {
-    collideList.forEach((item) => {
-      item.id = id;
-      this.add(item);
+  addAll(item, key) {
+    item[key].forEach((collidable) => {
+      collidable.x += item.x;
+      collidable.y += item.y;
+      collidable.id = item.id;
+      this.add(collidable);
     });
   }
 
@@ -97,22 +100,17 @@ class SpacialHashGrid extends Rectangle{
   // we know the key '3_4' and id of the item to add
   addToCell(key, id) {
     if (!this.grid[key]) {
-      this.grid[key] = [];
+      this.grid[key] = new UniqueSet();
     }
+    this.grid[key].add(id);
 
-    if (!this.grid[key].includes(id)) {
-      this.grid[key].push(id);
-    }
-    //console.log(this.name, key, id);
+    //console.log(this.grid[key], key, id);
     return key;
   }
 
   remove(params) {
     const key = this.makeKey(params);
-    if (!this.grid[key].includes(params.id)) {
-      // remove the itemId from the array of this.grid[key]
-      this.grid[key].remove(params.id);
-    }
+    this.grid[key].take(params.id);
   }
 
   // update 
@@ -120,21 +118,10 @@ class SpacialHashGrid extends Rectangle{
     const key = this.makeKey(params);
   }
 
-  // only add the item to the list if it does not exist
-  addUniqueItem(list, item) {
-    if (!item) {
-      return list;
-    }
-    if (!list.includes(item)) {
-      list.push(item);
-    }
-    return list;
-  }
-
   // pass in a Rectangle and get its 4 corners
   getCornerCells(rectangle) {
     let cells = new UniqueSet();
-    rectangle.corners.forEach((corner) => {
+    rectangle.corners().forEach((corner) => {
       const key = this.makeKey(corner);
       cells.add(key);
     });
@@ -159,12 +146,7 @@ class SpacialHashGrid extends Rectangle{
   query(cells) {
     let found = new UniqueSet();
     cells.forEach((key) => {
-      const items = this.grid[key];
-      if (items) {
-        items.forEach((item) => {
-          found.add(item);
-        });
-      }
+      found.merge(this.grid[key]);
     });
     //app.msg(1, `cells=${JSON.stringify(cells)} inCells=${JSON.stringify(found)}`);
 

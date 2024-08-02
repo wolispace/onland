@@ -1,6 +1,6 @@
 // The world is what the game is played on, its a rectangle
 class World extends Rectangle {
-  gridSize = { w: 10, h: 10 }; // how big all the grids will be
+  cellSize = new Rectangle({w:10, h:10}); // size of each cell within a grid
   grids = {}; // holds all the spacialHashGrids
 
   constructor(x, y, w, h) {
@@ -18,35 +18,36 @@ class World extends Rectangle {
 
   gridDefinitions() {
     return {
-      surface: this.gridSize, // obstacles we can bump into
-      underground: this.gridSize, // things we can dig up
-      overhead: this.gridSize, // amove we cant bump into
-      ghosts: this.gridSize, // items to ghost when we move behind
+      surface: this.cellSize, // obstacles we can bump into
+      underground: this.cellSize, // things we can dig up
+      overhead: this.cellSize, // amove we cant bump into
+      ghosts: this.cellSize, // items to ghost when we move behind
       suburbs: this.suburbSize(app.suburbSize), // screen spaces/zones that are loaded dynamically
     };
   }
 
   setupGrids() {
-    for (const [key, gridSize] of Object.entries(this.gridDefinitions())) {
-      const gridRectangle = new Rectangle(gridSize);
-      this.grids[key] = new SpacialHashGrid(gridRectangle);
+    for (const [key, cellSize] of Object.entries(this.gridDefinitions())) {
+      const gridRectangle = new Rectangle(this);
+      this.grids[key] = new SpacialHashGrid(gridRectangle, cellSize);
     }
   }
 
-  // every item has some grids they are part of 'ghosts', 'surface' etc..
+  // every item has some uniqueSets they are part of 'ghosts', 'surface' etc..
   addToGrids(item) {
-    for (const [key, gridSize] of Object.entries(this.gridDefinitions())) {
+    for (const [key, cellSize] of Object.entries(this.gridDefinitions())) {
       if (item[key]) {
-        this.grids[key].addAll(item[key], this.id);
+        //console.log(item);
+        this.grids[key].addAll(item, key);
       }
     }
   }
 
   suburbSize(defaultSize) {
-    return {
+    return new Rectangle({
       w: defaultSize ?? window.innerWidth,
       h: defaultSize ?? window.innerHeight,
-    };
+    });
   }
 
   styleWorld() {
@@ -113,7 +114,7 @@ class World extends Rectangle {
       let key = i;
 
       let itemInfo;
-      switch (app.randomItems ? app.rnd(2) : 1) {
+      switch (app.randomItems ? app.rnd(2) : 0) {
         case 0:
           itemInfo = items.makeTree(key, x, y, true);
           break;

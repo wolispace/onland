@@ -11,7 +11,7 @@ const items = {
             left: -22,
             width: 50,
             autoShow: autoShow,
-            onCollide: 'skim',
+            onCollide: 'stop',
             collisions: [{x: 0, y: 0, w: 10, h: 10}], // a list of collision boxes
             ghosts: [{ x: -5, y: -20, w: 20, h: 20 }], // a list of ghost collision boxes
         };
@@ -70,7 +70,7 @@ const items = {
             left: -10,
             width: 60,
             autoShow: autoShow,
-            onCollide: 'skim',
+            onCollide: 'stop',
             collisions: [{x: 0, y: 0, w: 30, h: 15}], // a list of collision boxes
             ghosts: [{ x: 0, y: -45, w: 30, h: 45 }], // a list of ghost collision boxes
         };

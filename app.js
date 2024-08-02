@@ -6,12 +6,12 @@ document.addEventListener("DOMContentLoaded", function () {
 let app = {
   isDev: true,
   suburbSize: null,
-  showCollision: false,
+  showCollision: true,
   contextMenu: true,
   gameLoopSpeed: 50,
   scrollBrowser: true,
   randomItems: false,
-  itemQty: 30,
+  itemQty: 3,
 
   start() {
     app.input = new Input();
@@ -20,7 +20,6 @@ let app = {
     app.world = new World({ x: 0, y: 0, w: 3000, h: 3000 });
 
     const params = items.makeDiamond('me', 200, 200, true);
-
     app.me = new Mover(params);
     this.doTest();
     app.world.populate();
