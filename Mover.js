@@ -138,12 +138,8 @@ class Mover extends Item {
             this.velocity.limit(this.maxSpeed);
             this.applyVelocity();
           }
-
         });
-
-
       });
     };
   }
-
 }

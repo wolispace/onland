@@ -152,6 +152,7 @@ class Input {
   }
 
   showTouchPoint() {
+    if (!app.showTouchPoint) return;
     if (!this.touchPointDiv) {
       app.world.add(`<div id="touchId">`);
       this.touchPointDiv = document.querySelector('#touchId');

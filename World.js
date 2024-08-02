@@ -134,7 +134,9 @@ class World extends Rectangle {
         lastPos.y += stepPos.y;
       }
     }
-    this.grids['surface'].show();
+    if (app.showCollision) {
+      this.grids['surface'].show();
+    }
   }
 
   /*

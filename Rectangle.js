@@ -43,7 +43,6 @@ class Rectangle extends Vector {
     // Calculate the distance between the two rectangles' centers
     var dx = (this.x + this.w / 2) - (otherRect.x + otherRect.w / 2);
     var dy = (this.y + this.h / 2) - (otherRect.y + otherRect.h / 2);
-console.log(dx, dy, this, otherRect);
     // Compare distance with sum of half widths and heights
     if (Math.abs(dx) < (this.w / 2 + otherRect.w / 2) && Math.abs(dy) < (this.h / 2 + otherRect.h / 2)) {
       // return -1 or +1 indicating above or below, before or after centre point.

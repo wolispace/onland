@@ -6,18 +6,18 @@ document.addEventListener("DOMContentLoaded", function () {
 let app = {
   isDev: true,
   suburbSize: null,
-  showCollision: true,
+  showCollision: false,
   contextMenu: true,
   gameLoopSpeed: 50,
   scrollBrowser: true,
-  randomItems: false,
-  itemQty: 3,
+  randomItems: true,
+  itemQty: 100,
 
   start() {
     app.input = new Input();
 
     app.scrollable = { div: document.querySelector(".scrollable") };
-    app.world = new World({ x: 0, y: 0, w: 300, h: 300 });
+    app.world = new World({ x: 0, y: 0, w: 1000, h: 1000 });
 
     const params = items.makeDiamond('me', 100, 100, true);
     app.me = new Mover(params);
