@@ -88,6 +88,7 @@ class Input {
     });
 
     document.addEventListener('mousemove', (event) => {
+      app.world.showCursor();
       if (!this.mousedown) return;
       this.endInput();
       this.setTouchPoint(event);

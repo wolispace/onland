@@ -97,38 +97,50 @@ class Mover extends Item {
     this.y = this.oldPos.y;
   }
 
+  myCollisionBox() {
+    let rectangle = this['surface'][0].copyWithPos(this);
+    return rectangle;
+  }
+
   // check the grid to see what we are colliding with
   checkCollisions() {
-    let inCell = app.world.grids['surface'].queryShape(this);
+    // first collidable for the surface is the thing we are checking.
+    let thisCollision = this.myCollisionBox();
+    let inCell = app.world.grids['surface'].queryShape(thisCollision);
 
     if (inCell && inCell.list && inCell.list.length > 0) {
       inCell.list.forEach((itemId) => {
         let item = app.world.items[itemId];
         if (!item) return;
 
-        let poss = this.collides(item);
-        // if x = -1 we are on the left|top of centre, +1 is right|bottom
-
-        if (poss.x != 0 || poss.y != 0) {
-          // we hit something so return to previous pos and modify velocity before applying it again
-          this.restorePos();
-          if (item.onCollide === 'stop') {
-            this.velocity.clear();
-            app.input.clearKeys();
-          } else if (item.onCollide === 'bounce') {
-            this.velocity.multiply(poss);
-          } else {
-            if (Math.abs(this.velocity.y) > this.friction) {
-              this.velocity.x = Math.abs(this.velocity.y * this.collisionSlide) * poss.x;
-              this.velocity.y = 0;
-            } else if (Math.abs(this.velocity.x) > this.friction) {
-              this.velocity.y = Math.abs(this.velocity.x * this.collisionSlide) * poss.y;
-              this.velocity.x = 0;
+        item['surface'].forEach((otherItem) => {
+          let collidable = otherItem.copyWithPos(item);
+          let poss = thisCollision.collides(collidable);
+          // if x = -1 we are on the left|top of centre, +1 is right|bottom
+  
+          if (poss.x != 0 || poss.y != 0) {
+            // we hit something so return to previous pos and modify velocity before applying it again
+            this.restorePos();
+            if (item.onCollide === 'stop') {
+              this.velocity.clear();
+              app.input.clearKeys();
+            } else if (item.onCollide === 'bounce') {
+              this.velocity.multiply(poss);
+            } else {
+              if (Math.abs(this.velocity.y) > this.friction) {
+                this.velocity.x = Math.abs(this.velocity.y * this.collisionSlide) * poss.x;
+                this.velocity.y = 0;
+              } else if (Math.abs(this.velocity.x) > this.friction) {
+                this.velocity.y = Math.abs(this.velocity.x * this.collisionSlide) * poss.y;
+                this.velocity.x = 0;
+              }
             }
+            this.velocity.limit(this.maxSpeed);
+            this.applyVelocity();
           }
-          this.velocity.limit(this.maxSpeed);
-          this.applyVelocity();
-        }
+
+        });
+
 
       });
     };

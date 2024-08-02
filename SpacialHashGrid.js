@@ -72,7 +72,6 @@ class SpacialHashGrid extends Rectangle{
     // read keys[0] (TL) and keys[2] (BR) to get the top, left, bottom right
     let [left, top] = keys[0].split('_').map(Number);
     let [right, bottom] = keys[2].split('_').map(Number);
-    console.log(left, top, right, bottom);
 
     for (let x = left; x <= right; x++) {
       for (let y = top; y <= bottom; y++) {
@@ -86,7 +85,6 @@ class SpacialHashGrid extends Rectangle{
   }
 
   addAll(item, key) {
-    console.log('addAll', item, key);
     item[key].forEach((collide) => {
       let collidable = collide.copy();
       collidable.x += item.x;
