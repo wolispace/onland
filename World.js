@@ -1,6 +1,6 @@
 // The world is what the game is played on, its a rectangle
 class World extends Rectangle {
-  cellSize = new Rectangle({w:10, h:10}); // size of each cell within a grid
+  cellSize = new Rectangle({w:50, h:50}); // size of each cell within a grid
   grids = {}; // holds all the spacialHashGrids
 
   constructor(x, y, w, h) {
@@ -13,7 +13,6 @@ class World extends Rectangle {
     this.div = document.querySelector(".world");
     this.styleWorld();
     this.setupGrids();
-    this.grids['surface'].show();
   }
 
   gridDefinitions() {
@@ -29,7 +28,7 @@ class World extends Rectangle {
   setupGrids() {
     for (const [key, cellSize] of Object.entries(this.gridDefinitions())) {
       const gridRectangle = new Rectangle(this);
-      this.grids[key] = new SpacialHashGrid(gridRectangle, cellSize);
+      this.grids[key] = new SpacialHashGrid(key, gridRectangle, cellSize);
     }
   }
 
@@ -135,6 +134,7 @@ class World extends Rectangle {
         lastPos.y += stepPos.y;
       }
     }
+    this.grids['surface'].show();
   }
 
   /*

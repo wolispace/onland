@@ -8,6 +8,10 @@ class Rectangle extends Vector {
     this.h = params.h ?? 50;
   }
 
+  copy() {
+    return new Rectangle(this);
+  }
+  
   center() {
     return new Vector(
       this.w / 2,

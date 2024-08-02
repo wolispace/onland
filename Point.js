@@ -9,5 +9,10 @@ class Point {
 
   toString() {
     return JSON.stringify(this);
-  }     
+  }
+
+  copy() {
+    return new Point(this.x, this.y);
+  }
+
 }

@@ -155,7 +155,7 @@ class Input {
       app.world.add(`<div id="touchId">`);
       this.touchPointDiv = document.querySelector('#touchId');
     }
-    const touchPos = this.touchPoint.clone();
+    const touchPos = this.touchPoint.copy();
     const centre = this.touchPoint.center();
     touchPos.take(centre);
     app.world.setPos(this.touchPointDiv, touchPos);

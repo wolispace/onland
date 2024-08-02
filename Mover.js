@@ -37,7 +37,7 @@ class Mover extends Item {
         app.msg(2, this.acceleration, 'accel A ');
       });
     } else if (!app.input.touchPoint.isZero()) {
-      this.acceleration = app.input.touchPoint.clone();
+      this.acceleration = app.input.touchPoint.copy();
       this.acceleration.take(this);
       this.acceleration.normalise();
       this.acceleration.multiply(this.moveStep);

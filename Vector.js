@@ -5,7 +5,7 @@ class Vector extends Point{
     super(x, y);
   }
 
-  clone() {
+  copy() {
     return new Vector(this.x, this.y);
   }
 

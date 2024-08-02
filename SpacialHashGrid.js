@@ -1,8 +1,9 @@
 class SpacialHashGrid extends Rectangle{
   grid = {};
 
-  constructor(rectangle, cellSize) {
+  constructor(name, rectangle, cellSize) {
     super(rectangle);
+    this.name = name;
     this.cellSize = cellSize;
     this.setup();
   }
@@ -58,11 +59,12 @@ class SpacialHashGrid extends Rectangle{
 
   // work out the bounding box for this shape and add() points into the grid for the corners and all cells between them
   // the parmas must include a Rectangle and an id
-  addShape(params) {    
+  addShape(params) {  
     let keys = [];
     // find 4 corners
     // add each to the grid, recording the keys for each cell
-    params.corners.forEach((corner) => {
+    params.corners().forEach((point) => {
+      let corner = point.copy();
       corner.id = params.id;
       keys.push(this.add(corner));
     });
@@ -70,6 +72,7 @@ class SpacialHashGrid extends Rectangle{
     // read keys[0] (TL) and keys[2] (BR) to get the top, left, bottom right
     let [left, top] = keys[0].split('_').map(Number);
     let [right, bottom] = keys[2].split('_').map(Number);
+    console.log(left, top, right, bottom);
 
     for (let x = left; x <= right; x++) {
       for (let y = top; y <= bottom; y++) {
@@ -83,11 +86,13 @@ class SpacialHashGrid extends Rectangle{
   }
 
   addAll(item, key) {
-    item[key].forEach((collidable) => {
+    console.log('addAll', item, key);
+    item[key].forEach((collide) => {
+      let collidable = collide.copy();
       collidable.x += item.x;
       collidable.y += item.y;
       collidable.id = item.id;
-      this.add(collidable);
+      this.addShape(collidable);
     });
   }
 

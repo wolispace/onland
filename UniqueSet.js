@@ -5,6 +5,10 @@ class UniqueSet {
     this.list = params || [];
   }
 
+  copy() {
+    return new UniqueSet([...this.list]);
+  }
+  
   // only add the item to the list if it does not exist
   add(item) {
     if (!item) {
