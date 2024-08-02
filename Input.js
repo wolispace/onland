@@ -53,17 +53,17 @@ class Input {
       document.addEventListener(eventName, this.handleTouchEvent, { passive: false });
     });
 
-    window.addEventListener("resize", (event) => {
+    window.addEventListener('resize', (event) => {
       clearTimeout(app.debounceTimeout);
       app.debounceTimeout = setTimeout(() => {
-        console.log("resize");
+        console.log('resize');
         // if (!dialog.hasInput) {
         //   location.reload();
         // }
       }, 200); // 200ms delay
     });
 
-    document.addEventListener("mousedown", (event) => {
+    document.addEventListener('mousedown', (event) => {
       if (this.mousedown) return;
       this.active = true;
       app.world.showCursor();
@@ -71,7 +71,7 @@ class Input {
 
       // Check if the click target is a control button
       if (event.target.classList.contains('control')) {
-        console.log('it\'s a control button');
+        console.log('a control button');
         return;
       }
 
@@ -81,13 +81,13 @@ class Input {
       app.me.move();
     });
 
-    document.addEventListener("mouseup", (event) => {
+    document.addEventListener('mouseup', (event) => {
       this.mousedown = false;
       this.endInput();
       app.msg(1, this.touchPoint, 'mouseup');
     });
 
-    document.addEventListener("mousemove", (event) => {
+    document.addEventListener('mousemove', (event) => {
       if (!this.mousedown) return;
       this.endInput();
       this.setTouchPoint(event);
