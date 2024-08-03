@@ -5,19 +5,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let app = {
   isDev: true,
-  suburbSize: null,
+  suburbSize: 200,
   showCollision: false,
   contextMenu: true,
   gameLoopSpeed: 50,
   scrollBrowser: true,
   randomItems: true,
-  itemQty: 100,
+  itemQty: 1000,
 
   start() {
     app.input = new Input();
 
     app.scrollable = { div: document.querySelector(".scrollable") };
-    app.world = new World({ x: 0, y: 0, w: 1000, h: 1000 });
+    app.world = new World({ x: 0, y: 0, w: 3000, h: 3000 });
 
     const params = items.makeDiamond('me', 100, 100, true);
     app.me = new Mover(params);
@@ -67,10 +67,10 @@ let app = {
 
 async function shiftSuburbsAsync(mobile) {
   let postcode = app.world.grids.suburbs.makeKey(mobile);
-  if (mobile.lastPostcode !== postcode) {
+  if (mobile.postcode !== postcode) {
     await showSuburbsAsync(mobile);
     await hideSuburbsAsync(mobile);
-    mobile.lastPostcode = postcode;
+    mobile.postcode = postcode;
   }
 }
 

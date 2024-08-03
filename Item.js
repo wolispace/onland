@@ -17,6 +17,7 @@ class Item extends Rectangle {
   }
 
   setup(params) {
+    this.setPostcode();
     this.setupCollisions(params);
     this.setupGhosts(params);
     if (this.autoShow) {
@@ -40,18 +41,42 @@ class Item extends Rectangle {
     });
   }
 
+  setPostcode() {
+    this.lastPostcode = app.world.grids.suburbs.makeKey(this);
+  }
+
+  /**
+   * 
+   * @returns is the item in view of the player
+   */
+  isVisible() {
+    let isVisible = true;
+    if (this.id !== 'me') {
+      // which suburb will this item be in
+      let currentPostcode = app.world.grids.suburbs.makeKey(app.me);
+      let itemPostcode = app.world.grids.suburbs.makeKey(this);
+      //console.log(itemPostcode, currentPostcode);
+      if (itemPostcode !== currentPostcode) {
+        isVisible = false;
+      };
+    }
+    return isVisible;
+  }
+
   // add the item to the world div
   show() {
-    if (this.it) {
-      // its already here..
-    } else {
-      let newSvg = `<div id="i${this.id}" class="item">${this.svg}</div>`;
-      app.world.add(newSvg);
-      this.it = document.querySelector(`#i${this.id}`);
-      this.size();
-      this.position();
-      app.world.addToGrids(this);
-    }
+    // its already here..
+    if (this.it) return;
+
+    // if its outside of our current vire
+    if (!this.isVisible()) return;
+
+    let newSvg = `<div id="i${this.id}" class="item">${this.svg}</div>`;
+    app.world.add(newSvg);
+    this.it = document.querySelector(`#i${this.id}`);
+    this.size();
+    this.position();
+    app.world.addToGrids(this);
   }
 
   hide() {

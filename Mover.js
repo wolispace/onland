@@ -5,7 +5,7 @@ class Mover extends Item {
   maxSpeed = 10;
   friction = 0.7;
   precision = 1;
-  postcode = null;
+  lastPostcode = null;
   moveStep = 1;
   endTouchZone = 20;
   collisionSlide = 0.5;
