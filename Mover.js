@@ -5,7 +5,7 @@ class Mover extends Item {
   maxSpeed = 10;
   friction = 0.7;
   precision = 1;
-  lastPostcode = null;
+  postcode = null;
   moveStep = 1;
   endTouchZone = 20;
   collisionSlide = 0.5;
@@ -21,6 +21,7 @@ class Mover extends Item {
     this.backupPos();
     this.applyVelocity();
     this.checkCollisions();
+    shiftSuburbsAsync(this);
     if (app.scrollBrowser) {
       app.world.centerPlayer();
     }
@@ -112,6 +113,7 @@ class Mover extends Item {
       inCell.list.forEach((itemId) => {
         let item = app.world.items[itemId];
         if (!item) return;
+        //console.log(item);
 
         item['surface'].forEach((otherItem) => {
           let collidable = otherItem.copyWithPos(item);

@@ -139,9 +139,9 @@ class SpacialHashGrid extends Rectangle{
 
   // return all items found in the kings square around the center suburb
   queryKingsSquare(params) {
-    let suburb = app.world.suburbs.makeKey(params);
+    let suburb = app.world.grids.suburbs.makeKey(params);
     // find the kings square around it
-    let cells = app.world.suburbs.kingsSquare(suburb);
+    let cells = app.world.grids.suburbs.kingsSquare(suburb);
     return this.query(cells.list);
   }
 

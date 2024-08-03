@@ -40,6 +40,7 @@ class World extends Rectangle {
         this.grids[key].addAll(item, key);
       }
     }
+    this.grids['suburbs'].add(item);
   }
 
   suburbSize(defaultSize) {

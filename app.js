@@ -23,6 +23,7 @@ let app = {
     app.me = new Mover(params);
     this.doTest();
     app.world.populate();
+    showSuburbsAsync(app.me);
     app.gameLoop();
   },
 
@@ -65,7 +66,7 @@ let app = {
 };
 
 async function shiftSuburbsAsync(mobile) {
-  let postcode = app.world['suburbs'].makeKey(mobile);
+  let postcode = app.world.grids.suburbs.makeKey(mobile);
   if (mobile.lastPostcode !== postcode) {
     await showSuburbsAsync(mobile);
     await hideSuburbsAsync(mobile);
@@ -74,7 +75,7 @@ async function shiftSuburbsAsync(mobile) {
 }
 
 async function showSuburbsAsync(mobile) {
-  let inSuburbs = await app.world['suburbs'].queryKingsSquare(mobile);
+  let inSuburbs = await app.world.grids.suburbs.queryKingsSquare(mobile);
   if (inSuburbs && inSuburbs.list && inSuburbs.list.length > 0) {
     await Promise.all(inSuburbs.list.map(async (itemId) => {
       let item = app.items[itemId];
@@ -86,12 +87,12 @@ async function showSuburbsAsync(mobile) {
 }
 
 async function hideSuburbsAsync(mobile) {
-  let postcode = app.world['suburbs'].makeKey(mobile);
-  let suburbs = await app.world['suburbs'].kingsSquare(postcode);
+  let postcode = app.world.grids.suburbs.makeKey(mobile);
+  let suburbs = await app.world.grids.suburbs.kingsSquare(postcode);
   if (app.lastShown && app.lastShown.list && app.lastShown.list.length > 0) {
     let toHide = app.lastShown.outside(suburbs.list);
     await Promise.all(toHide.map(async (postcode) => {
-      await app.world['suburbs'].grid[postcode].forEach(async (itemId) => {
+      await app.world.grids.suburbs.grid[postcode].forEach(async (itemId) => {
         let item = app.items[itemId];
         await item.hide();
       });
