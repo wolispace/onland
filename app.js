@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let app = {
   isDev: true,
-  suburbSize: 200,
+  suburbSize: null,
   showCollision: false,
   contextMenu: true,
   gameLoopSpeed: 50,
@@ -23,7 +23,7 @@ let app = {
     app.me = new Mover(params);
     this.doTest();
     app.world.populate();
-    showSuburbs(app.me);
+    showSuburbsAsync(app.me);
     app.gameLoop();
   },
 
@@ -65,82 +65,46 @@ let app = {
   },
 };
 
-function shiftSuburbs(mover) {
+async function shiftSuburbsAsync(mover) {
   let postcode = app.world.grids.suburbs.makeKey(mover);
   if (mover.postcode !== postcode) {
-    hideSuburbs(mover);
-    showSuburbs(mover);
+    await hideSuburbsAsync(mover);
+    await showSuburbsAsync(mover);
     mover.postcode = postcode;
   }
 }
 
-function showSuburbs(mover) {
+async function showSuburbsAsync(mover) {
   let suburb = app.world.grids.suburbs.makeKey(mover);
   // find the kings square around it
   app.lastShown = app.world.grids.suburbs.kingsSquare(suburb);
 
   let inSuburbs = app.world.grids.suburbs.queryKingsSquare(mover);
   if (inSuburbs && inSuburbs.list && inSuburbs.list.length > 0) {
-    inSuburbs.list.forEach((itemId) => {
+    for (const itemId of inSuburbs.list) {
       let item = app.world.items[itemId];
       if (item) {
         item.show();
       }
-    });
+    }
   }
 }
 
-function hideSuburbs(mover) {
+async function hideSuburbsAsync(mover) {
   let postcode = app.world.grids.suburbs.makeKey(mover);
   let suburbs = app.world.grids.suburbs.kingsSquare(postcode);
   if (app.lastShown && app.lastShown.list && app.lastShown.list.length > 0) {
     let toHide = app.lastShown.outside(suburbs.list);
     if (toHide && toHide.length > 0) {
-      toHide.forEach((postcode) => {
+      for (const postcode of toHide) {
         const oneSuburb = app.world.grids.suburbs.grid[postcode];
-        oneSuburb.list.forEach((itemId) => {
+        for (const itemId of oneSuburb.list) {
           let item = app.world.items[itemId];
           if (item) {
             item.hide();
           }
-        });
-      });
+        }
+      }
     }
   }
-}
-
-async function shiftSuburbsAsync(mobile) {
-  let postcode = app.world.grids.suburbs.makeKey(mobile);
-  if (mobile.postcode !== postcode) {
-    await showSuburbsAsync(mobile);
-    await hideSuburbsAsync(mobile);
-    mobile.postcode = postcode;
-  }
-}
-
-async function showSuburbsAsync(mobile) {
-  let inSuburbs = await app.world.grids.suburbs.queryKingsSquare(mobile);
-  if (inSuburbs && inSuburbs.list && inSuburbs.list.length > 0) {
-    await Promise.all(inSuburbs.list.map(async (itemId) => {
-      let item = app.items[itemId];
-      if (item) {
-        await item.show();
-      }
-    }));
-  }
-}
-
-async function hideSuburbsAsync(mobile) {
-  let postcode = app.world.grids.suburbs.makeKey(mobile);
-  let suburbs = await app.world.grids.suburbs.kingsSquare(postcode);
-  if (app.lastShown && app.lastShown.list && app.lastShown.list.length > 0) {
-    let toHide = app.lastShown.outside(suburbs.list);
-    await Promise.all(toHide.map(async (postcode) => {
-      await app.world.grids.suburbs.grid[postcode].forEach(async (itemId) => {
-        let item = app.items[itemId];
-        await item.hide();
-      });
-    }));
-  }
-  app.lastShown = suburbs;
 }

@@ -21,7 +21,7 @@ class Mover extends Item {
     this.backupPos();
     this.applyVelocity();
     this.checkCollisions();
-    shiftSuburbs(this);
+    shiftSuburbsAsync(this);
     if (app.scrollBrowser) {
       app.world.centerPlayer();
     }
