@@ -42,7 +42,7 @@ class Item extends Rectangle {
   }
 
   setPostcode() {
-    this.lastPostcode = app.world.grids.suburbs.makeKey(this);
+    this.postcode = app.world.grids.suburbs.makeKey(this);
   }
 
   /**
@@ -55,8 +55,10 @@ class Item extends Rectangle {
       // which suburb will this item be in
       let currentPostcode = app.world.grids.suburbs.makeKey(app.me);
       let itemPostcode = app.world.grids.suburbs.makeKey(this);
-      //console.log(itemPostcode, currentPostcode);
-      if (itemPostcode !== currentPostcode) {
+      let kingsSquare = app.world.grids.suburbs.kingsSquare(currentPostcode);
+      
+      //console.log('inKingsSquare?', itemPostcode, kingsSquare);
+      if (!kingsSquare.has(itemPostcode)) {
         isVisible = false;
       };
     }
@@ -68,7 +70,8 @@ class Item extends Rectangle {
     // its already here..
     if (this.it) return;
 
-    // if its outside of our current vire
+    app.world.addToGrids(this);
+    // if its outside of our current view
     if (!this.isVisible()) return;
 
     let newSvg = `<div id="i${this.id}" class="item">${this.svg}</div>`;
@@ -76,7 +79,6 @@ class Item extends Rectangle {
     this.it = document.querySelector(`#i${this.id}`);
     this.size();
     this.position();
-    app.world.addToGrids(this);
   }
 
   hide() {

@@ -139,9 +139,9 @@ class SpacialHashGrid extends Rectangle{
 
   // return all items found in the kings square around the center suburb
   queryKingsSquare(params) {
-    let suburb = app.world.grids.suburbs.makeKey(params);
+    let suburb = this.makeKey(params);
     // find the kings square around it
-    let cells = app.world.grids.suburbs.kingsSquare(suburb);
+    let cells = this.kingsSquare(suburb);
     return this.query(cells.list);
   }
 
@@ -152,7 +152,6 @@ class SpacialHashGrid extends Rectangle{
       found.merge(this.grid[key]);
     });
     //app.msg(1, `cells=${JSON.stringify(cells)} inCells=${JSON.stringify(found)}`);
-
     return found;
   }
 
@@ -177,9 +176,8 @@ class SpacialHashGrid extends Rectangle{
       var newCol = col + dc;
 
       // Check if the new row and column are within the grid
-      if (newRow >= 0 && newRow < this.rows && newCol >= 0 && newCol < this.cols) {
+      if (newRow >= 0 && newRow < this.rowCols.y && newCol >= 0 && newCol < this.rowCols.x) {
         var newPoint = newRow + "_" + newCol;
-
         // Check if the new point exists in the grid
         if (this.grid[newPoint]) {
           cells.add(newPoint);

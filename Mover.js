@@ -5,7 +5,7 @@ class Mover extends Item {
   maxSpeed = 10;
   friction = 0.7;
   precision = 1;
-  lastPostcode = null;
+  postcode = '0_0';
   moveStep = 1;
   endTouchZone = 20;
   collisionSlide = 0.5;
@@ -21,10 +21,16 @@ class Mover extends Item {
     this.backupPos();
     this.applyVelocity();
     this.checkCollisions();
-    shiftSuburbsAsync(this);
+    shiftSuburbs(this);
     if (app.scrollBrowser) {
       app.world.centerPlayer();
     }
+  }
+
+  recordLastSuburbs() {
+    this.postcode = app.world.grids.suburbs.makeKey(this);
+    // find the kings square around it
+    app.lastShown = app.world.grids.suburbs.kingsSquare(suburb);
   }
 
   calcAcceleration() {

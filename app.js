@@ -23,7 +23,7 @@ let app = {
     app.me = new Mover(params);
     this.doTest();
     app.world.populate();
-    showSuburbsAsync(app.me);
+    showSuburbs(app.me);
     app.gameLoop();
   },
 
@@ -64,6 +64,50 @@ let app = {
     return typeof app.directions[keyCode] === 'object';
   },
 };
+
+function shiftSuburbs(mover) {
+  let postcode = app.world.grids.suburbs.makeKey(mover);
+  if (mover.postcode !== postcode) {
+    hideSuburbs(mover);
+    showSuburbs(mover);
+    mover.postcode = postcode;
+  }
+}
+
+function showSuburbs(mover) {
+  let suburb = app.world.grids.suburbs.makeKey(mover);
+  // find the kings square around it
+  app.lastShown = app.world.grids.suburbs.kingsSquare(suburb);
+
+  let inSuburbs = app.world.grids.suburbs.queryKingsSquare(mover);
+  if (inSuburbs && inSuburbs.list && inSuburbs.list.length > 0) {
+    inSuburbs.list.forEach((itemId) => {
+      let item = app.world.items[itemId];
+      if (item) {
+        item.show();
+      }
+    });
+  }
+}
+
+function hideSuburbs(mover) {
+  let postcode = app.world.grids.suburbs.makeKey(mover);
+  let suburbs = app.world.grids.suburbs.kingsSquare(postcode);
+  if (app.lastShown && app.lastShown.list && app.lastShown.list.length > 0) {
+    let toHide = app.lastShown.outside(suburbs.list);
+    if (toHide && toHide.length > 0) {
+      toHide.forEach((postcode) => {
+        const oneSuburb = app.world.grids.suburbs.grid[postcode];
+        oneSuburb.list.forEach((itemId) => {
+          let item = app.world.items[itemId];
+          if (item) {
+            item.hide();
+          }
+        });
+      });
+    }
+  }
+}
 
 async function shiftSuburbsAsync(mobile) {
   let postcode = app.world.grids.suburbs.makeKey(mobile);
