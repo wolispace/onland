@@ -29,7 +29,7 @@ class Input {
       if (directionVector) {
         this.keys.add(keyCode);
         this.active = true;
-        app.msg(1, this.keys, 'keyDown');
+        //app.msg(1, this.keys, 'keyDown');
       } else if (event.code == 'Space') {
         console.log('digging');
       } else if (event.code == 'Enter') {
@@ -45,7 +45,7 @@ class Input {
       this.keys.take(keyCode);
 
       this.endInput();
-      app.msg(1, this.keys, 'keyUp');
+      //app.msg(1, this.keys, 'keyUp');
     });
 
     // if they touched something
@@ -77,14 +77,14 @@ class Input {
 
       // Get the click coordinates
       this.setTouchPoint(event);
-      app.msg(1, this.touchPoint, 'mousedown');
+      //app.msg(1, this.touchPoint, 'mousedown');
       app.me.move();
     });
 
     document.addEventListener('mouseup', (event) => {
       this.mousedown = false;
       this.endInput();
-      app.msg(1, this.touchPoint, 'mouseup');
+      //app.msg(1, this.touchPoint, 'mouseup');
     });
 
     document.addEventListener('mousemove', (event) => {

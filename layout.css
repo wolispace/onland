@@ -6,7 +6,6 @@ body {
 
 .scrollable {
   position: absolute;
-  border: 1px solid red;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -14,7 +13,6 @@ body {
 
 .world {
   position: absolute;
-  border: 1px solid yellow;
   width: 500px;
   height: 500px;
 }

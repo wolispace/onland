@@ -21,10 +21,13 @@ class Mover extends Item {
     this.backupPos();
     this.applyVelocity();
     this.checkCollisions();
+    this.checkGhosts();
+    this.removeGhosts();
     shiftSuburbsAsync(this);
     if (app.scrollBrowser) {
       app.world.centerPlayer();
     }
+    app.msg(1, { x: Math.round(this.x, 0), y: Math.round(this.y, 0) }, 'pos');
   }
 
   recordLastSuburbs() {
@@ -41,7 +44,7 @@ class Mover extends Item {
         this.acceleration.add(direction);
         this.acceleration.multiply(this.moveStep);
         this.acceleration.round(this.precision);
-        app.msg(2, this.acceleration, 'accel A ');
+        //app.msg(2, this.acceleration, 'accel A ');
       });
     } else if (!app.input.touchPoint.isZero()) {
       this.acceleration = app.input.touchPoint.copy();
@@ -49,7 +52,7 @@ class Mover extends Item {
       this.acceleration.normalise();
       this.acceleration.multiply(this.moveStep);
       this.acceleration.round(this.precision);
-      app.msg(2, this.acceleration, 'accel M ');
+      //app.msg(2, this.acceleration, 'accel M ');
     }
   }
 
@@ -75,7 +78,7 @@ class Mover extends Item {
 
     this.velocity.round(this.precision);
 
-    app.msg(3, this.velocity, 'velocity');
+    //app.msg(3, this.velocity, 'velocity');
     // add the vector to the current position
     // have we reached the touchPoint if one is set?
     if (app.input.touchPoint.isZero() == false) {
@@ -125,7 +128,7 @@ class Mover extends Item {
           let collidable = otherItem.copyWithPos(item);
           let poss = thisCollision.collides(collidable);
           // if x = -1 we are on the left|top of centre, +1 is right|bottom
-  
+
           if (poss.x != 0 || poss.y != 0) {
             // we hit something so return to previous pos and modify velocity before applying it again
             this.restorePos();
@@ -149,5 +152,43 @@ class Mover extends Item {
         });
       });
     };
+  }
+
+  // check the ghosts grid to see what we are colliding with any ghosts
+  checkGhosts() {
+    const inCell = app.world.grids.ghosts.queryShape(this);
+    // the first collidable part of the player
+    const moverRectangle = this.surface[0].copyWithPos(this);
+    app.ghosted.clear();
+    app.msg(3, app.ghosted.count());
+    if (inCell && inCell.list && inCell.list.length > 0) {
+      inCell.list.forEach((itemId) => {
+        const item = app.world.items[itemId];
+        if (!item) return;
+        if (!app.doGhosting) return;
+        item.ghosts.forEach((ghost) => {
+          const ghostRectangle = ghost.copyWithPos(item);
+          const poss = moverRectangle.collides(ghostRectangle);
+          if (poss.x != 0 || poss.y != 0) {
+            app.ghosted.add(itemId);
+            // add ghost class to this item
+            if (item.it) {
+              item.addClass('ghost');
+            }
+          }
+        });
+      });
+    }
+  }
+
+  removeGhosts() {
+
+    if (app.ghosted.count() < 1) {
+      // remove all ghost class
+      var elements = document.querySelectorAll('.ghost');
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].classList.remove('ghost');
+      }
+    }
   }
 }

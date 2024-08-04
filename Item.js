@@ -56,7 +56,7 @@ class Item extends Rectangle {
       let currentPostcode = app.world.grids.suburbs.makeKey(app.me);
       let itemPostcode = app.world.grids.suburbs.makeKey(this);
       let kingsSquare = app.world.grids.suburbs.kingsSquare(currentPostcode);
-      
+
       //console.log('inKingsSquare?', itemPostcode, kingsSquare);
       if (!kingsSquare.has(itemPostcode)) {
         isVisible = false;
@@ -68,7 +68,10 @@ class Item extends Rectangle {
   // add the item to the world div
   show() {
     // its already here..
-    if (this.it) return;
+    if (this.it) {
+      //console.log('it exists', this);
+      return;
+    }
 
     app.world.addToGrids(this);
     // if its outside of our current view
@@ -119,6 +122,16 @@ class Item extends Rectangle {
     if (!this.it) return;
     let children = this.it.querySelectorAll(childrenSelector);
     children.forEach(child => this.it.removeChild(child));
+  }
+
+  addClass(className) {
+    if (!this.it) return;
+    this.it.classList.add(className);
+  }
+
+  removeClass(className) {
+    if (!this.it) return;
+    this.it.classList.remove(className);
   }
 
 

@@ -44,9 +44,11 @@ class World extends Rectangle {
   }
 
   suburbSize(defaultSize) {
+    let size =  window.innerWidth;
+    size = size > window.innerHeight ? size : window.innerHeight;
     return new Rectangle({
-      w: defaultSize ?? window.innerWidth,
-      h: defaultSize ?? window.innerHeight,
+      w: defaultSize ?? size,
+      h: defaultSize ?? size,
     });
   }
 
