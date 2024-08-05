@@ -12,7 +12,7 @@ let app = {
   scrollBrowser: true,
   randomItems: true,
   doGhosting: true,
-  itemQty: 1000,
+  itemQty: 3,
 
   start() {
     app.input = new Input();
@@ -24,7 +24,7 @@ let app = {
     const params = assets.make('diamond', 'me', 100, 100, true);
     app.me = new Mover(params);
     //this.doTest();
-    app.world.populate();
+    app.world.load();
     showSuburbsAsync(app.me);
     app.gameLoop();
     //app.world.grids.suburbs.show();

@@ -140,15 +140,47 @@ class World extends Rectangle {
   }
 
   load() {
-    // 
-    const data = [
-      { id: 1, asset: 'tree', x: 100, y: 100 },
-      { id: 2, asset: 'rock', x: 80, y: 150 },
-      { id: 3, asset: 'rock', x: 120, y: 100 },
-    ];
+    let index = 1;
+    let data = [];
+
+
+    let maxItems = index + 20;
+    while(index < maxItems) {
+      const wobble = app.rnd(20) - 10;
+      data.push({ id: index, type: 'arch', x: 200 + wobble, y: 200 + index * 30 });
+      index++;
+    }
+
+    maxItems = index + 20;
+    while(index < maxItems) {
+      const centre = {
+        x: 100,
+        y: 170
+      }
+      const wobble = {
+        x: app.rnd(100) - 50, 
+        y: app.rnd(100) - 50};
+      data.push({ id: index, type: 'rock', x: centre.x + wobble.x, y: centre.y + wobble.y });
+      index++;
+    }
+
+    maxItems = index + 20;
+    while(index < maxItems) {
+      const centre = {
+        x: 550,
+        y: 150
+      }
+      const wobble = {
+        x: app.rnd(500) - 250, 
+        y: app.rnd(200) - 100};
+      data.push({ id: index, type: 'tree', x: centre.x + wobble.x, y: centre.y + wobble.y });
+      index++;
+    }
+
 
     data.forEach(item => {
-      this.items[item.id] = new Item(item);
+      const itemInfo = assets.make(item.type, item.id, item.x, item.y, true);
+      this.items[item.id] = new Item(itemInfo);
     });
   }
 
