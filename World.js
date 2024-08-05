@@ -1,6 +1,6 @@
 // The world is what the game is played on, its a rectangle
 class World extends Rectangle {
-  cellSize = new Rectangle({w:50, h:50}); // size of each cell within a grid
+  cellSize = new Rectangle({ w: 50, h: 50 }); // size of each cell within a grid
   grids = {}; // holds all the spacialHashGrids
 
   constructor(x, y, w, h) {
@@ -44,7 +44,7 @@ class World extends Rectangle {
   }
 
   suburbSize(defaultSize) {
-    let size =  window.innerWidth;
+    let size = window.innerWidth;
     size = size > window.innerHeight ? size : window.innerHeight;
     return new Rectangle({
       w: defaultSize ?? size,
@@ -110,23 +110,20 @@ class World extends Rectangle {
     let itemQty = app.itemQty;
 
     for (var i = 1; i < itemQty; i++) {
-      
+
       let x = app.randomItems ? app.rnd(app.world.w) : lastPos.x;
       let y = app.randomItems ? app.rnd(app.world.h) : lastPos.y;
       let key = i;
 
-      let itemInfo;
-      switch (app.randomItems ? app.rnd(2) : 0) {
-        case 0:
-          itemInfo = assets.make('trees', key, x, y, true);
-          break;
-        case 1:
-          itemInfo = assets.make('rocks', key, x, y, true);
-          break;
-        case 2:
-          itemInfo = assets.make('diamonds', key, x, y, true);
-          break;
+      let itemType = 'rock';
+      if (app.rnd(20) == 1) {
+        itemType = 'arch';
+      } else {
+        if (app.rnd(2) == 1) {
+          itemType = 'tree';
+        }
       }
+      const itemInfo = assets.make(itemType, key, x, y, true);
 
       this.items[i] = new Item(itemInfo);
 

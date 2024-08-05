@@ -21,7 +21,7 @@ let app = {
     app.scrollable = { div: document.querySelector(".scrollable") };
     app.world = new World({ x: 0, y: 0, w: 3000, h: 3000 });
 
-    const params = assets.make('diamonds', 'me', 100, 100, true);
+    const params = assets.make('diamond', 'me', 100, 100, true);
     app.me = new Mover(params);
     //this.doTest();
     app.world.populate();
@@ -38,7 +38,7 @@ let app = {
   },
 
   doTest() {
-    let itemInfo = items.makeDiamond('test', 200, 300, true);
+    let itemInfo = assets.make('arch', 'test', 200, 300, true);
     app.test = new Item(itemInfo);
   },
 
