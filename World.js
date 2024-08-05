@@ -118,13 +118,13 @@ class World extends Rectangle {
       let itemInfo;
       switch (app.randomItems ? app.rnd(2) : 0) {
         case 0:
-          itemInfo = items.makeTree(key, x, y, true);
+          itemInfo = assets.make('trees', key, x, y, true);
           break;
         case 1:
-          itemInfo = items.makeRock(key, x, y, true);
+          itemInfo = assets.make('rocks', key, x, y, true);
           break;
         case 2:
-          itemInfo = items.makeDiamond(key, x, y, true);
+          itemInfo = assets.make('diamonds', key, x, y, true);
           break;
       }
 
@@ -140,6 +140,19 @@ class World extends Rectangle {
     if (app.showCollision) {
       this.grids['surface'].show();
     }
+  }
+
+  load() {
+    // 
+    const data = [
+      { id: 1, asset: 'tree', x: 100, y: 100 },
+      { id: 2, asset: 'rock', x: 80, y: 150 },
+      { id: 3, asset: 'rock', x: 120, y: 100 },
+    ];
+
+    data.forEach(item => {
+      this.items[item.id] = new Item(item);
+    });
   }
 
   /*

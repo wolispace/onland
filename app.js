@@ -21,7 +21,7 @@ let app = {
     app.scrollable = { div: document.querySelector(".scrollable") };
     app.world = new World({ x: 0, y: 0, w: 3000, h: 3000 });
 
-    const params = items.makeDiamond('me', 100, 100, true);
+    const params = assets.make('diamonds', 'me', 100, 100, true);
     app.me = new Mover(params);
     //this.doTest();
     app.world.populate();
