@@ -1,4 +1,4 @@
-//each asset type (like a tree) can have multiple variations (basic, maple, oak) we default to basic for everything
+//each asset type (like a tree) can have multiple variants (basic, maple, oak) we default to basic for everything
 const assets = {
   /**
    * 
@@ -9,8 +9,8 @@ const assets = {
    * @param {*} autoShow 
    * @returns object defining a unique item to include in the game
    */
-  make(type, id = 'unknown', x = 0, y = 0, autoShow = false) {
-    let params = assets.get(type);
+  make(type, id = 'unknown', x = 0, y = 0, autoShow = false, variant) {
+    let params = assets.get(type, variant);
     params.id = id;
     params.x = x;
     params.y = y;
@@ -22,30 +22,30 @@ const assets = {
   /**
    * 
    * @param {string} type 
-   * @param {string} variation 
+   * @param {string} variant 
    * @returns object with everything we need to render the item
    */
-  get: function (type, variation) {
-    if (!variation) {
+  get: function (type, variant) {
+    if (!variant) {
       // get a random key from the assets[type] object
-      variation = Object.keys(assets.items[type])[Math.floor(Math.random() * Object.keys(assets.items[type]).length)];
+      variant = Object.keys(assets.items[type])[Math.floor(Math.random() * Object.keys(assets.items[type]).length)];
     }
 
-    params = { type, variation, ...assets.items[type][variation] };
+    params = { type, variant, ...assets.items[type][variant] };
     assets.updateStyle(params);
 
     return params;
   },
-  
+
   keys: function () {
     return Object.keys(assets.items);
   },
 
 
-/**
- * stuff the style into the svg
- * @param {object} params 
- */
+  /**
+   * stuff the style into the svg
+   * @param {object} params 
+   */
   updateStyle: function (params) {
     params.svg = params.svg.replace('%style%', `style="left:${params.left}px; top:${params.top}px; width:${params.width}px;"`);
   },
@@ -65,7 +65,7 @@ const assets = {
            </svg>`,
       }
     },
-  
+
     rock: {
       basic: {
         top: -20,
@@ -85,7 +85,7 @@ const assets = {
            </svg>`,
       }
     },
-  
+
     diamond: {
       basic: {
         name: 'basic',
@@ -107,7 +107,7 @@ const assets = {
           </svg>`,
       }
     },
-  
+
     arch: {
       basic: {
         name: 'basic',
@@ -116,16 +116,55 @@ const assets = {
         width: 150,
         onCollide: 'skim',
         collisions: [{ x: 0, y: 0, w: 22, h: 16 }, { x: 96, y: 0, w: 22, h: 16 }], // a list of collision boxes
-        ghosts: [{ x: 0, y: -130, w: 20, h: 130 },{ x: 96, y: -130, w: 20, h: 130 },{ x: 0, y: -130, w: 100, h: 20 }], // a list of ghost collision boxes
+        ghosts: [{ x: 0, y: -130, w: 20, h: 130 }, { x: 96, y: -130, w: 20, h: 130 }, { x: 0, y: -130, w: 100, h: 20 }], // a list of ghost collision boxes
         svg: `<svg viewBox="0 0 200 200" %style%>
-   <path d="m16.617 185.97s7.0711 11.314 17.678 11.314c10.607 0 19.092-10.96 19.092-10.96l-8.1317-168.29-21.92-0.35355z" style="fill:#541010;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.4;stroke:#000"/>
-   <path d="m29.345 184.91 2.1213-157.68v0" style="fill:#541010;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.4462;stroke-width:3.3;stroke:#fff"/>
-   <path d="m143.4 186.39s7.0711 11.314 17.678 11.314 19.092-10.96 19.092-10.96l-8.1317-168.29-21.92-0.35355z" style="fill:#541010;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.4;stroke:#000"/>
-   <path d="m156.12 185.33 2.1213-157.68v0" style="fill:#541010;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.4462;stroke-width:3.3;stroke:#fff"/>
-   <path d="m1.4142 0.70711 1.7678 9.8995 12.728 12.374 166.17 0.35355 15.91-14.496-0.35355-7.4246z" style="fill:#541010;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-width:3.3;stroke:#000"/>
-   <path d="m7.0711 8.8388-0.35355-4.9497 182.43 1.7678v0" style="fill:#541010;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:3.3;stroke:#fff"/>
-  </svg>`,
+          <path d="m16.617 185.97s7.0711 11.314 17.678 11.314c10.607 0 19.092-10.96 19.092-10.96l-8.1317-168.29-21.92-0.35355z" style="fill:#541010;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.4;stroke:#000"/>
+          <path d="m29.345 184.91 2.1213-157.68v0" style="fill:#541010;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.4462;stroke-width:3.3;stroke:#fff"/>
+          <path d="m143.4 186.39s7.0711 11.314 17.678 11.314 19.092-10.96 19.092-10.96l-8.1317-168.29-21.92-0.35355z" style="fill:#541010;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.4;stroke:#000"/>
+          <path d="m156.12 185.33 2.1213-157.68v0" style="fill:#541010;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.4462;stroke-width:3.3;stroke:#fff"/>
+          <path d="m1.4142 0.70711 1.7678 9.8995 12.728 12.374 166.17 0.35355 15.91-14.496-0.35355-7.4246z" style="fill:#541010;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-width:3.3;stroke:#000"/>
+          <path d="m7.0711 8.8388-0.35355-4.9497 182.43 1.7678v0" style="fill:#541010;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:3.3;stroke:#fff"/>
+          </svg>`,
       }
+    },
+
+    river: {
+      basic: {
+        name: 'basic',
+        top: 0,
+        left: 0,
+        width: 150,
+        onCollide: 'skim',
+        collisions: [{ x: 0, y: 0, w: 150, h: 210 }], // a list of collision boxes
+        ghosts: [{ x: 0, y: 0, w: 0, h: 0 }], // a list of ghost collision boxes
+        svg: `<svg viewBox="0 0 139 200" %style%>
+          <path d="m18.031 10.253s-16.263 17.324-16.971 37.123c-0.70711 19.799 6.364 38.184 7.4246 57.276 1.0607 19.092 0.70711 51.619-0.70711 66.822-1.4142 15.203 24.749 21.567 24.749 21.567 39.598 12.728 64.7 1.7678 87.328-5.3033 0 0 17.678-9.5459 18.031-35.002 0.35356-25.456-13.789-46.316-18.385-67.175-4.5962-20.86 0.35355-45.608-0.35356-59.043-0.7071-13.435-19.092-24.395-19.092-24.395s-62.579-8.4853-82.024 8.1317z" style="fill:#3537d8;paint-order:fill markers stroke"/>
+          <path d="m38.052 31.244c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          <path d="m71.378 55.256c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          <path d="m29.652 77.707c7.8459-1.0331 9.1535-6.3461 9.1535-6.3461 1.2436 3.0508 3.3033 4.6615 10.274 5.313" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.5498;stroke:#fff"/>
+          <path d="m51.539 128.29c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          <path d="m75.933 141.81c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          <path d="m21.929 172.41c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          </svg>`,
+      },
+      one: {
+        name: 'one',
+        top: 0,
+        left: 0,
+        width: 150,
+        onCollide: 'skim',
+        collisions: [{ x: 0, y: 0, w: 150, h: 210 }], // a list of collision boxes
+        ghosts: [{ x: 0, y: 0, w: 0, h: 0 }], // a list of ghost collision boxes
+        svg: `<svg viewBox="0 0 139 200" %style%>
+          <path d="m7.7782 17.324s-3.5355 27.577-4.2426 47.376c-0.70711 19.799 8.8388 45.255 9.8995 64.347s-2.1213 32.173-5.6569 46.316c-3.7031 14.813 8.4853 19.092 8.4853 19.092 41.366 9.5459 79.196 5.3033 97.581-0.35355 11.314-5.3033 12.728-38.184 13.081-63.64 0.35356-25.456-13.851-44.077-12.728-65.407 1.0606-20.153 1.4142-28.991 3.8891-43.487 2.2642-13.262-10.607-18.385-10.607-18.385s-89.449-12.728-99.702 14.142z" style="fill:#3537d8;paint-order:fill markers stroke"/>
+          <path d="m41.588 53.518c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          <path d="m67.842 79.298c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          <path d="m23.288 90.081c7.8459-1.0331 9.1535-6.3461 9.1535-6.3461 1.2436 3.0508 3.3033 4.6615 10.274 5.313" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.5498;stroke:#fff"/>
+          <path d="m51.539 142.08c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          <path d="m87.953 126.61c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          <path d="m22.282 154.03c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          </svg>`,
+      },
     },
 
   }

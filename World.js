@@ -143,45 +143,81 @@ class World extends Rectangle {
     let index = 1;
     let data = [];
 
-
-    let maxItems = index + 20;
-    while(index < maxItems) {
-      const wobble = app.rnd(20) - 10;
-      data.push({ id: index, type: 'arch', x: 200 + wobble, y: 200 + index * 30 });
-      index++;
+    let params = {
+      qty: 500,
+      type: 'arch',
+      variant: null,
+      start: new Point(200, 200),
+      step: new Point(0, 30),
+      wobble: new Point(20, 0),
     }
-
-    maxItems = index + 20;
-    while(index < maxItems) {
-      const centre = {
-        x: 100,
-        y: 170
-      }
-      const wobble = {
-        x: app.rnd(100) - 50, 
-        y: app.rnd(100) - 50};
-      data.push({ id: index, type: 'rock', x: centre.x + wobble.x, y: centre.y + wobble.y });
-      index++;
+    index = this.addItem(index, params, data);
+    
+    params = {
+      qty: 20,
+      type: 'rock',
+      variant: null,
+      start: new Point(100, 170),
+      step: new Point(0, 0),
+      wobble: new Point(100, 100),
     }
-
-    maxItems = index + 20;
-    while(index < maxItems) {
-      const centre = {
-        x: 550,
-        y: 150
-      }
-      const wobble = {
-        x: app.rnd(500) - 250, 
-        y: app.rnd(200) - 100};
-      data.push({ id: index, type: 'tree', x: centre.x + wobble.x, y: centre.y + wobble.y });
-      index++;
+    index = this.addItem(index, params, data);
+    
+    params = {
+      qty: 500,
+      type: 'river',
+      variant: null,
+      start: new Point(500, 170),
+      step: new Point(0, 150),
+      wobble: new Point(20, 30),
     }
+    index = this.addItem(index, params, data);
+    
+    params = {
+      qty: 30,
+      type: 'tree',
+      variant: null,
+      start: new Point(750, 150),
+      step: new Point(1, 1),
+      wobble: new Point(700, 200),
+    }
+    index = this.addItem(index, params, data);
 
-
+    
     data.forEach(item => {
       const itemInfo = assets.make(item.type, item.id, item.x, item.y, true);
       this.items[item.id] = new Item(itemInfo);
     });
+  }
+
+
+  /**
+   * 
+   * @param {*} params 
+   * @returns array of items of a specific type for adding to the world
+   */
+  addItem(index, params, data) {
+    let counter = 1;
+    while (counter <= params.qty) {
+      counter++;
+      // make sure we start from the same point
+      let pos = params.start.copy();
+      let step = params.step.copy();
+
+      const wobble = new Point(
+        app.halfRnd(params.wobble.x),
+        app.halfRnd(params.wobble.y)
+      );
+
+      step.multiply(counter);
+      pos.add(step);
+      pos.add(wobble);
+
+      // add into the data array we passed in
+      data.push({ id: index, type: params.type, variant: params.variant, x: pos.x, y: pos.y });
+      index++;
+    }
+    return index;
   }
 
   /*

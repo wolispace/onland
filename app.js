@@ -28,6 +28,7 @@ let app = {
     showSuburbsAsync(app.me);
     app.gameLoop();
     //app.world.grids.suburbs.show();
+    //app.world.grids.surface.show();
   },
 
   gameLoop() {
@@ -38,7 +39,7 @@ let app = {
   },
 
   doTest() {
-    let itemInfo = assets.make('arch', 'test', 200, 300, true);
+    let itemInfo = assets.make('river', 'test', 200, 300, true, 'basic');
     app.test = new Item(itemInfo);
   },
 
@@ -46,6 +47,11 @@ let app = {
   // this a zero based number so rnd(2) gives us 0 or 1, rnd(6) gives us 0...5
   rnd: function (sides) {
     return Math.floor(Math.random() * sides);
+  },
+
+  // returns the random number shifted around zero so 3 = -1, 0, 1
+  halfRnd: function (sides) {
+    return app.rnd(sides) - (sides/2);
   },
 
   msg: function (id, msg, desc = '') {
