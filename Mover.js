@@ -31,9 +31,9 @@ class Mover extends Item {
   }
 
   recordLastSuburbs() {
-    this.postcode = app.world.grids.suburbs.makeKey(this);
+    this.postcode = app.world.layers.suburbs.makeKey(this);
     // find the kings square around it
-    app.lastShown = app.world.grids.suburbs.kingsSquare(suburb);
+    app.lastShown = app.world.layers.suburbs.kingsSquare(suburb);
   }
 
   calcAcceleration() {
@@ -116,7 +116,7 @@ class Mover extends Item {
   checkCollisions(layer) {
     // first collidable for the surface is the thing we are checking.
     let thisCollision = this.myCollisionBox(layer);
-    let inCell = app.world.grids[layer].queryShape(thisCollision);
+    let inCell = app.world.layers[layer].queryShape(thisCollision);
 
     if (inCell && inCell.list && inCell.list.length > 0) {
       inCell.list.forEach((itemId) => {
@@ -156,7 +156,7 @@ class Mover extends Item {
 
   // check the ghosts grid to see what we are colliding with any ghosts
   checkGhosts() {
-    const inCell = app.world.grids.ghosts.queryShape(this);
+    const inCell = app.world.layers.ghosts.queryShape(this);
     // the first collidable part of the player
     const moverRectangle = this.surface[0].copyWithPos(this);
     app.ghosted.clear();

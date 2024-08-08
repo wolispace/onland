@@ -27,8 +27,8 @@ let app = {
     app.world.load();
     showSuburbsAsync(app.me);
     app.gameLoop();
-    //app.world.grids.suburbs.show();
-    //app.world.grids.surface.show();
+    //app.world.layers.suburbs.show();
+    //app.world.layers.surface.show();
   },
 
   gameLoop() {
@@ -41,7 +41,7 @@ let app = {
   doTest() {
     let itemInfo = assets.make('bridge', 'test', 200, 300, true, 'basic');
     app.test = new Item(itemInfo);
-    app.world.addToGrids(app.test);
+    app.world.addToLayers(app.test);
   },
 
   // randoms a random number like a dice roll, with side being the number of sides: rnd(2) is a flip of a coin, rnd(6) is a six sided dice.
@@ -76,7 +76,7 @@ let app = {
 };
 
 async function shiftSuburbsAsync(mover) {
-  let postcode = app.world.grids.suburbs.makeKey(mover);
+  let postcode = app.world.layers.suburbs.makeKey(mover);
   if (mover.postcode !== postcode) {
     await hideSuburbsAsync(mover);
     await showSuburbsAsync(mover);
@@ -85,11 +85,11 @@ async function shiftSuburbsAsync(mover) {
 }
 
 async function showSuburbsAsync(mover) {
-  let suburb = app.world.grids.suburbs.makeKey(mover);
+  let suburb = app.world.layers.suburbs.makeKey(mover);
   // find the kings square around it
-  app.lastShown = app.world.grids.suburbs.kingsSquare(suburb);
+  app.lastShown = app.world.layers.suburbs.kingsSquare(suburb);
 
-  let inSuburbs = app.world.grids.suburbs.queryKingsSquare(mover);
+  let inSuburbs = app.world.layers.suburbs.queryKingsSquare(mover);
   if (inSuburbs && inSuburbs.list && inSuburbs.list.length > 0) {
     for (const itemId of inSuburbs.list) {
       let item = app.world.items[itemId];
@@ -101,13 +101,13 @@ async function showSuburbsAsync(mover) {
 }
 
 async function hideSuburbsAsync(mover) {
-  let postcode = app.world.grids.suburbs.makeKey(mover);
-  let suburbs = app.world.grids.suburbs.kingsSquare(postcode);
+  let postcode = app.world.layers.suburbs.makeKey(mover);
+  let suburbs = app.world.layers.suburbs.kingsSquare(postcode);
   if (app.lastShown && app.lastShown.list && app.lastShown.list.length > 0) {
     let toHide = app.lastShown.outside(suburbs.list);
     if (toHide && toHide.length > 0) {
       for (const postcode of toHide) {
-        const oneSuburb = app.world.grids.suburbs.grid[postcode];
+        const oneSuburb = app.world.layers.suburbs.grid[postcode];
         for (const itemId of oneSuburb.list) {
           let item = app.world.items[itemId];
           if (item) {

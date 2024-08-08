@@ -1,7 +1,7 @@
 // The world is what the game is played on, its a rectangle
 class World extends Rectangle {
   cellSize = new Rectangle({ w: 50, h: 50 }); // size of each cell within a grid
-  grids = {}; // holds all the spacialHashGrids
+  layers = {}; // holds all the spacialHashlayers
 
   constructor(x, y, w, h) {
     super(x, y, w, h);
@@ -12,12 +12,12 @@ class World extends Rectangle {
   setup() {
     this.div = document.querySelector(".world");
     this.styleWorld();
-    this.setupGrids();
+    this.setupLayers();
   }
 
-  gridDefinitions() {
+  layerDefinitions() {
     return {
-      overhead: this.cellSize, // amove we cant bump into
+      overhead: this.cellSize, // amove we cant bump into like clouds
       raised: this.cellSize, // obstacles we can bump into when on a bridge or top of a rock
       surface: this.cellSize, // obstacles we can bump into
       underground: this.cellSize, // things we can dig up
@@ -26,26 +26,26 @@ class World extends Rectangle {
     };
   }
 
-  setupGrids() {
-    for (const [key, cellSize] of Object.entries(this.gridDefinitions())) {
+  setupLayers() {
+    for (const [key, cellSize] of Object.entries(this.layerDefinitions())) {
       const gridRectangle = new Rectangle(this);
-      this.grids[key] = new SpacialHashGrid(key, gridRectangle, cellSize);
+      this.layers[key] = new SpacialHashGrid(key, gridRectangle, cellSize);
     }
   }
 
-  // every item has some uniqueSets they are part of 'ghosts', 'surface' etc..
-  addToGrids(item) {
-    for (const [key, cellSize] of Object.entries(this.gridDefinitions())) {
+  // every item has some uniqueSets they are part of a layer 'ghosts', 'surface' etc..
+  addToLayers(item) {
+    for (const [key, cellSize] of Object.entries(this.layerDefinitions())) {
       if (item[key]) {
-        this.grids[key].addAll(item, key);
+        this.layers[key].addAll(item, key);
       }
     }
     if(item.unsurface) {
-      this.grids['surface'].clearAll(item, 'surface');
+      this.layers['surface'].clearAll(item, 'surface');
       console.log('unsurface');
     }
     
-    this.grids['suburbs'].add(item);
+    this.layers['suburbs'].add(item);
   }
 
   suburbSize(defaultSize) {
@@ -140,7 +140,7 @@ class World extends Rectangle {
       }
     }
     if (app.showCollision) {
-      this.grids['surface'].show();
+      this.layers['surface'].show();
     }
   }
 

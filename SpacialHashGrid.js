@@ -58,7 +58,7 @@ class SpacialHashGrid extends Rectangle{
   }
 
   // work out the bounding box for this shape and add() points into the grid for the corners and all cells between them
-  // the parmas must include a Rectangle and an id
+  // the params must include a Rectangle and an id
   addShape(params) {  
     let keys = [];
     // find 4 corners
