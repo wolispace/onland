@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let app = {
   isDev: true,
-  suburbSize: null,
+  suburbSize: 200,
   showCollision: false,
   contextMenu: true,
   gameLoopSpeed: 50,
@@ -19,11 +19,11 @@ let app = {
     app.ghosted = new UniqueSet();
 
     app.scrollable = { div: document.querySelector(".scrollable") };
-    app.world = new World({ x: 0, y: 0, w: 3000, h: 3000 });
+    app.world = new World({ x: 0, y: 0, w: 30000, h: 30000 });
 
     const params = assets.make('diamond', 'me', 100, 100, true);
     app.me = new Mover(params);
-    //this.doTest();
+    this.doTest();
     app.world.load();
     showSuburbsAsync(app.me);
     app.gameLoop();
@@ -39,8 +39,9 @@ let app = {
   },
 
   doTest() {
-    let itemInfo = assets.make('river', 'test', 200, 300, true, 'basic');
+    let itemInfo = assets.make('bridge', 'test', 200, 300, true, 'basic');
     app.test = new Item(itemInfo);
+    app.world.addToGrids(app.test);
   },
 
   // randoms a random number like a dice roll, with side being the number of sides: rnd(2) is a flip of a coin, rnd(6) is a six sided dice.

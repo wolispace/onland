@@ -166,6 +166,27 @@ const assets = {
           </svg>`,
       },
     },
+    bridge: {
+      basic: {
+        name: 'basic',
+        top: 0,
+        left: 0,
+        width: 150,
+        onCollide: 'skim',
+        collisions: [{ x: 0, y: 0, w: 150, h: 210 }], // a list of collision boxes
+        ghosts: [{ x: 0, y: 0, w: 0, h: 0 }], // a list of ghost collision boxes
+        unsurface: [{ x: 0, y: 0, w: 200, h: 80 }], // a list of anti-collisions - clearing a path
+        svg: `<svg viewBox="0 0 139 200" %style%>
+          <path d="m18.031 10.253s-16.263 17.324-16.971 37.123c-0.70711 19.799 6.364 38.184 7.4246 57.276 1.0607 19.092 0.70711 51.619-0.70711 66.822-1.4142 15.203 24.749 21.567 24.749 21.567 39.598 12.728 64.7 1.7678 87.328-5.3033 0 0 17.678-9.5459 18.031-35.002 0.35356-25.456-13.789-46.316-18.385-67.175-4.5962-20.86 0.35355-45.608-0.35356-59.043-0.7071-13.435-19.092-24.395-19.092-24.395s-62.579-8.4853-82.024 8.1317z" style="fill:#3537d8;paint-order:fill markers stroke"/>
+          <path d="m38.052 31.244c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          <path d="m71.378 55.256c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          <path d="m29.652 77.707c7.8459-1.0331 9.1535-6.3461 9.1535-6.3461 1.2436 3.0508 3.3033 4.6615 10.274 5.313" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.5498;stroke:#fff"/>
+          <path d="m51.539 128.29c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          <path d="m75.933 141.81c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          <path d="m21.929 172.41c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
+          </svg>`,
+      },
+    }
 
   }
 

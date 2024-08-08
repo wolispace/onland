@@ -80,6 +80,27 @@ class SpacialHashGrid extends Rectangle{
     }
   }
 
+  // clear the cells that fall within this rectangle
+  clearShape(params) {  
+    let keys = [];
+    // find 4 corners
+    // add each to the grid, recording the keys for each cell
+    params.corners().forEach((point) => {
+      let corner = point.copy();
+      keys.push(this.add(corner));
+    });
+
+    // read keys[0] (TL) and keys[2] (BR) to get the top, left, bottom right
+    let [left, top] = keys[0].split('_').map(Number);
+    let [right, bottom] = keys[2].split('_').map(Number);
+
+    for (let x = left; x <= right; x++) {
+      for (let y = top; y <= bottom; y++) {
+        this.clearCell(`${x}_${y}`); 
+      }
+    }
+  }
+
   clear() {
     this.grid = {};
   }
@@ -93,6 +114,17 @@ class SpacialHashGrid extends Rectangle{
       this.addShape(collidable);
     });
   }
+
+  clearAll(item, key) {
+    item[key].forEach((collide) => {
+      let collidable = collide.copy();
+      collidable.x += item.x;
+      collidable.y += item.y;
+      this.clearShape(collidable);
+    });
+  }
+
+  // add a new item (its id) to the grid
 
   // add a new item (its id) to the grid
   add(params) {
@@ -109,6 +141,11 @@ class SpacialHashGrid extends Rectangle{
 
     //console.log(this.grid[key], key, id);
     return key;
+  }
+
+  // remove all ids from this cell (eg clear a path through some collidables)
+  clearCell(key) {
+    this.grid[key].clear();
   }
 
   remove(params) {

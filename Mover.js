@@ -20,7 +20,7 @@ class Mover extends Item {
     this.applyFriction();
     this.backupPos();
     this.applyVelocity();
-    this.checkCollisions();
+    this.checkCollisions('surface');
     this.checkGhosts();
     this.removeGhosts();
     shiftSuburbsAsync(this);
@@ -107,16 +107,16 @@ class Mover extends Item {
     this.y = this.oldPos.y;
   }
 
-  myCollisionBox() {
-    let rectangle = this['surface'][0].copyWithPos(this);
+  myCollisionBox(layer) {
+    let rectangle = this[layer][0].copyWithPos(this);
     return rectangle;
   }
 
   // check the grid to see what we are colliding with
-  checkCollisions() {
+  checkCollisions(layer) {
     // first collidable for the surface is the thing we are checking.
-    let thisCollision = this.myCollisionBox();
-    let inCell = app.world.grids['surface'].queryShape(thisCollision);
+    let thisCollision = this.myCollisionBox(layer);
+    let inCell = app.world.grids[layer].queryShape(thisCollision);
 
     if (inCell && inCell.list && inCell.list.length > 0) {
       inCell.list.forEach((itemId) => {
@@ -124,7 +124,7 @@ class Mover extends Item {
         if (!item) return;
         //console.log(item);
 
-        item['surface'].forEach((otherItem) => {
+        item[layer].forEach((otherItem) => {
           let collidable = otherItem.copyWithPos(item);
           let poss = thisCollision.collides(collidable);
           // if x = -1 we are on the left|top of centre, +1 is right|bottom

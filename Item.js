@@ -1,5 +1,7 @@
 class Item extends Rectangle {
   id = '';
+  type = '';
+  variant = '';
   it;  // the element on the screen (in the world)
   qty = 0;
   svg = '';
@@ -11,6 +13,8 @@ class Item extends Rectangle {
   constructor(params) {
     super(params);
     this.id = params.id;
+    this.type = params.type;
+    this.variant = params.variant;
     this.svg = params.svg;
     this.autoShow = params.autoShow;
     this.setup(params);

@@ -17,9 +17,10 @@ class World extends Rectangle {
 
   gridDefinitions() {
     return {
+      overhead: this.cellSize, // amove we cant bump into
+      raised: this.cellSize, // obstacles we can bump into when on a bridge or top of a rock
       surface: this.cellSize, // obstacles we can bump into
       underground: this.cellSize, // things we can dig up
-      overhead: this.cellSize, // amove we cant bump into
       ghosts: this.cellSize, // items to ghost when we move behind
       suburbs: this.suburbSize(app.suburbSize), // screen spaces/zones that are loaded dynamically
     };
@@ -36,10 +37,14 @@ class World extends Rectangle {
   addToGrids(item) {
     for (const [key, cellSize] of Object.entries(this.gridDefinitions())) {
       if (item[key]) {
-        //console.log(item);
         this.grids[key].addAll(item, key);
       }
     }
+    if(item.unsurface) {
+      this.grids['surface'].clearAll(item, 'surface');
+      console.log('unsurface');
+    }
+    
     this.grids['suburbs'].add(item);
   }
 
@@ -144,7 +149,7 @@ class World extends Rectangle {
     let data = [];
 
     let params = {
-      qty: 500,
+      qty: 2,
       type: 'arch',
       variant: null,
       start: new Point(200, 200),
@@ -154,7 +159,7 @@ class World extends Rectangle {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 20,
+      qty: 2,
       type: 'rock',
       variant: null,
       start: new Point(100, 170),
@@ -164,7 +169,7 @@ class World extends Rectangle {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 500,
+      qty: 2,
       type: 'river',
       variant: null,
       start: new Point(500, 170),
@@ -174,7 +179,7 @@ class World extends Rectangle {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 30,
+      qty: 2,
       type: 'tree',
       variant: null,
       start: new Point(750, 150),

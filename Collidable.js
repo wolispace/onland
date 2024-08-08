@@ -6,7 +6,6 @@ class Collidable extends Rectangle {
   constructor(params) {
     super(params);
     this.id = params.id;
-    this.onCollide = params.onCollide;
     this.onCollide = params.onCollide ?? this.onCollide;
   }
 
