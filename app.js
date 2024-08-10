@@ -17,25 +17,26 @@ let app = {
   start() {
     app.input = new Input();
     app.ghosted = new UniqueSet();
-
+    
+    
     app.scrollable = { div: document.querySelector(".scrollable") };
     app.world = new World({ x: 0, y: 0, w: 30000, h: 30000 });
-
+    
     const params = assets.make('diamond', 'me', 100, 100, true);
     app.me = new Mover(params);
     this.doTest();
     app.world.load();
     showSuburbsAsync(app.me);
-    app.gameLoop();
+    
+    app.gameLoop = new GameLoop(app.update, app.me.move);
+    app.gameLoop.start();
     //app.world.layers.suburbs.show();
     //app.world.layers.surface.show();
   },
 
-  gameLoop() {
-    app.gameTimer = setInterval(() => {
-      // find all the movable items and move them.
-      app.me.move();
-    }, app.gameLoopSpeed);
+  
+  update(deltaTime) {
+    //console.log('deltaTime', deltaTime);
   },
 
   doTest() {

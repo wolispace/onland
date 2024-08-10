@@ -173,6 +173,9 @@ const assets = {
         left: 0,
         width: 150,
         onCollide: 'skim',
+        // if we collide with a transition rectangle the moving item's layer is changed
+        // each move checks if we are still colliding with
+        transitions: [{}],
         collisions: [{ x: 0, y: 0, w: 150, h: 210 }], // a list of collision boxes
         ghosts: [{ x: 0, y: 0, w: 0, h: 0 }], // a list of ghost collision boxes
         unsurface: [{ x: 0, y: 0, w: 200, h: 80 }], // a list of anti-collisions - clearing a path

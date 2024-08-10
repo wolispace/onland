@@ -3,10 +3,10 @@ class Mover extends Item {
   velocity = new Vector();
   acceleration = new Vector();
   maxSpeed = 10;
-  friction = 0.7;
+  friction = 0.4;
   precision = 1;
   postcode = '0_0';
-  moveStep = 1;
+  moveStep = 0.1;
   endTouchZone = 20;
   collisionSlide = 0.5;
 
@@ -14,7 +14,7 @@ class Mover extends Item {
     super(params);
   }
 
-  move() {
+  move = () => {
     this.calcAcceleration();
     this.applyMomentum();
     this.applyFriction();
@@ -108,7 +108,7 @@ class Mover extends Item {
   }
 
   myCollisionBox(layer) {
-    let rectangle = this[layer][0].copyWithPos(this);
+    let rectangle = this.layers[layer][0].copyWithPos(this);
     return rectangle;
   }
 
@@ -124,7 +124,7 @@ class Mover extends Item {
         if (!item) return;
         //console.log(item);
 
-        item[layer].forEach((otherItem) => {
+        item.layers[layer].forEach((otherItem) => {
           let collidable = otherItem.copyWithPos(item);
           let poss = thisCollision.collides(collidable);
           // if x = -1 we are on the left|top of centre, +1 is right|bottom
@@ -158,7 +158,7 @@ class Mover extends Item {
   checkGhosts() {
     const inCell = app.world.layers.ghosts.queryShape(this);
     // the first collidable part of the player
-    const moverRectangle = this.surface[0].copyWithPos(this);
+    const moverRectangle = this.layers['surface'][0].copyWithPos(this);
     app.ghosted.clear();
     app.msg(3, app.ghosted.count());
     if (inCell && inCell.list && inCell.list.length > 0) {

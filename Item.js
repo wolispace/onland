@@ -5,8 +5,12 @@ class Item extends Rectangle {
   it;  // the element on the screen (in the world)
   qty = 0;
   svg = '';
-  surface = [];
-  ghosts = [];
+  layer = 'surface'; // what layer are we currently on
+  // collidables for layers
+  layers = {
+    surface: [],
+    ghosts: []
+  }
   autoShow = false;
 
 
@@ -15,6 +19,7 @@ class Item extends Rectangle {
     this.id = params.id;
     this.type = params.type;
     this.variant = params.variant;
+    this.layer = params.layer ?? 'surface';
     this.svg = params.svg;
     this.autoShow = params.autoShow;
     this.setup(params);
@@ -33,7 +38,7 @@ class Item extends Rectangle {
     // make the collision boxes
     params.collisions.forEach((collisionParams) => {
       const collision = new Collidable(collisionParams);
-      this.surface.push(collision);
+      this.layers['surface'].push(collision);
     });
   }
 
@@ -41,7 +46,7 @@ class Item extends Rectangle {
     // make the ghost collision boxes
     params.ghosts.forEach((ghostParams) => {
       const ghost = new Collidable(ghostParams);
-      this.ghosts.push(ghost);
+      this.layers['ghosts'].push(ghost);
     });
   }
 
