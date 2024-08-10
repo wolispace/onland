@@ -5,14 +5,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let app = {
   isDev: true,
-  suburbSize: 200,
+  suburbSize: null,
   showCollision: false,
   contextMenu: true,
   gameLoopSpeed: 50,
   scrollBrowser: true,
   randomItems: true,
   doGhosting: true,
-  itemQty: 3,
+  itemQty: 30000,
 
   start() {
     app.input = new Input();
@@ -25,6 +25,7 @@ let app = {
     const params = assets.make('diamond', 'me', 100, 100, true);
     app.me = new Mover(params);
     this.doTest();
+    app.world.populate();
     app.world.load();
     showSuburbsAsync(app.me);
     
@@ -40,7 +41,7 @@ let app = {
   },
 
   doTest() {
-    let itemInfo = assets.make('bridge', 'test', 200, 300, true, 'basic');
+    let itemInfo = assets.make('bridge', 'test', 500, 500, true, 'basic');
     app.test = new Item(itemInfo);
     app.world.addToLayers(app.test);
   },

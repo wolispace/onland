@@ -2,11 +2,11 @@ class Mover extends Item {
 
   velocity = new Vector();
   acceleration = new Vector();
-  maxSpeed = 10;
-  friction = 0.4;
+  maxSpeed = 6;
+  friction = 0.9;
   precision = 1;
   postcode = '0_0';
-  moveStep = 0.1;
+  moveStep = 1;
   endTouchZone = 20;
   collisionSlide = 0.5;
 
@@ -108,8 +108,7 @@ class Mover extends Item {
   }
 
   myCollisionBox(layer) {
-    let rectangle = this.layers[layer][0].copyWithPos(this);
-    return rectangle;
+    return this.layers[layer][0].copyWithPos(this);
   }
 
   // check the grid to see what we are colliding with
