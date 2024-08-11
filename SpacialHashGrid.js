@@ -106,7 +106,7 @@ class SpacialHashGrid extends Rectangle{
   }
 
   addAll(item, key) {
-    item[key].forEach((collide) => {
+    item.layers[key].forEach((collide) => {
       let collidable = collide.copy();
       collidable.x += item.x;
       collidable.y += item.y;
@@ -116,7 +116,7 @@ class SpacialHashGrid extends Rectangle{
   }
 
   clearAll(item, key) {
-    item[key].forEach((collide) => {
+    item.layers[key].forEach((collide) => {
       let collidable = collide.copy();
       collidable.x += item.x;
       collidable.y += item.y;

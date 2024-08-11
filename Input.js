@@ -157,10 +157,12 @@ class Input {
       app.world.add(`<div id="touchId">`);
       this.touchPointDiv = document.querySelector('#touchId');
     }
+    this.touchPointDiv.style.display = 'block';
     const touchPos = this.touchPoint.copy();
     const centre = this.touchPoint.center();
     touchPos.take(centre);
     app.world.setPos(this.touchPointDiv, touchPos);
+    app.animate(this.touchPointDiv, 'shrink', 1, () => { this.touchPointDiv.style.display = 'none';});
   }
 
   /**

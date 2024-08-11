@@ -36,13 +36,12 @@ class World extends Rectangle {
   // every item has some uniqueSets they are part of a layer 'ghosts', 'surface' etc..
   addToLayers(item) {
     for (const [key, cellSize] of Object.entries(this.layerDefinitions())) {
-      if (item[key]) {
+      if (item.layers[key]) {
         this.layers[key].addAll(item, key);
       }
     }
     if(item.unsurface) {
       this.layers['surface'].clearAll(item, 'surface');
-      console.log('unsurface');
     }
     
     this.layers['suburbs'].add(item);

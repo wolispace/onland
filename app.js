@@ -12,30 +12,31 @@ let app = {
   scrollBrowser: true,
   randomItems: true,
   doGhosting: true,
-  itemQty: 30000,
+  itemQty: 10000,
+  showTouchPoint: true,
 
   start() {
     app.input = new Input();
     app.ghosted = new UniqueSet();
-    
-    
+
+
     app.scrollable = { div: document.querySelector(".scrollable") };
-    app.world = new World({ x: 0, y: 0, w: 30000, h: 30000 });
-    
+    app.world = new World({ x: 0, y: 0, w: 50000, h: 50000 });
+
     const params = assets.make('diamond', 'me', 100, 100, true);
     app.me = new Mover(params);
     this.doTest();
     app.world.populate();
     app.world.load();
     showSuburbsAsync(app.me);
-    
+
     app.gameLoop = new GameLoop(app.update, app.me.move);
     app.gameLoop.start();
     //app.world.layers.suburbs.show();
     //app.world.layers.surface.show();
   },
 
-  
+
   update(deltaTime) {
     //console.log('deltaTime', deltaTime);
   },
@@ -54,7 +55,7 @@ let app = {
 
   // returns the random number shifted around zero so 3 = -1, 0, 1
   halfRnd: function (sides) {
-    return app.rnd(sides) - (sides/2);
+    return app.rnd(sides) - (sides / 2);
   },
 
   msg: function (id, msg, desc = '') {
@@ -74,6 +75,24 @@ let app = {
   // return true if the key code is a valid direction (otherwise its space, esc, enter etc..)
   isDirection: function (keyCode) {
     return typeof app.directions[keyCode] === 'object';
+  },
+
+  // remember to wrap functions in functions before passing them as onEnd
+  animate: (element, type, duration, onEnd) => {
+    if (element && element.style) {
+      element.style.animation = `${type} ${duration}s ease-in-out 0s 1 normal forwards`;
+      element.addEventListener("animationstart", function handler() {
+        this.removeEventListener("animationstart", handler);
+      });
+
+      element.addEventListener("animationend", function handler() {
+        element.style.animation = "";
+        if (typeof onEnd == "function") {
+          onEnd();
+        }
+        this.removeEventListener("animationend", handler);
+      });
+    }
   },
 };
 

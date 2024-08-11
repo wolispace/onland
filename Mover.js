@@ -165,7 +165,7 @@ class Mover extends Item {
         const item = app.world.items[itemId];
         if (!item) return;
         if (!app.doGhosting) return;
-        item.ghosts.forEach((ghost) => {
+        item.layers['ghosts'].forEach((ghost) => {
           const ghostRectangle = ghost.copyWithPos(item);
           const poss = moverRectangle.collides(ghostRectangle);
           if (poss.x != 0 || poss.y != 0) {

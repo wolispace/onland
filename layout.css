@@ -85,6 +85,7 @@ body {
   position: absolute;
   background-color: yellow;
   border:2px solid maroon;
+  border-radius: 50%;
   opacity: 50%;
   width: 20px;
   height: 20px;
@@ -112,3 +113,20 @@ body {
   top: 2rem;
   left: 0;
 }
+
+@keyframes shrink {
+  0% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.5, 0.5);
+    opacity: 0;
+  }
+}
+
