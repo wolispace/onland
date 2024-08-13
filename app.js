@@ -12,7 +12,7 @@ let app = {
   scrollBrowser: true,
   randomItems: true,
   doGhosting: true,
-  itemQty: 10000,
+  itemQty: 3,
   showTouchPoint: true,
 
   start() {
@@ -30,15 +30,26 @@ let app = {
     app.world.load();
     showSuburbsAsync(app.me);
 
-    app.gameLoop = new GameLoop(app.update, app.me.move);
+    app.gameLoop = new GameLoop(app.update, app.show);
     app.gameLoop.start();
     //app.world.layers.suburbs.show();
     //app.world.layers.surface.show();
   },
 
 
+  /**
+   * Update the position and state of everything in the world
+   * @param {int} deltaTime 
+   */
   update(deltaTime) {
     //console.log('deltaTime', deltaTime);
+  },
+
+  /**
+   * Show the world and all of its children
+   */
+  show() {
+    app.me.move();
   },
 
   doTest() {

@@ -4,15 +4,10 @@ class Item extends Rectangle {
   variant = '';
   it;  // the element on the screen (in the world)
   qty = 0;
-  svg = '';
   layer = 'surface'; // what layer are we currently on
-  // collidables for layers
-  layers = {
-    surface: [],
-    ghosts: []
-  }
+  parent = new Point(0, 0); // default if there is no parent item
   autoShow = false;
-
+  children = [];
 
   constructor(params) {
     super(params);
@@ -20,42 +15,27 @@ class Item extends Rectangle {
     this.type = params.type;
     this.variant = params.variant;
     this.layer = params.layer ?? 'surface';
-    this.svg = params.svg;
     this.autoShow = params.autoShow;
-    this.setup(params);
+    this.setup();
   }
 
-  setup(params) {
+  setup() {
     this.setPostcode();
-    this.setupCollisions(params);
-    this.setupGhosts(params);
     if (this.autoShow) {
       this.show();
     }
   }
 
-  setupCollisions(params) {
-    // make the collision boxes
-    params.collisions.forEach((collisionParams) => {
-      const collision = new Collidable(collisionParams);
-      this.layers['surface'].push(collision);
-    });
-  }
-
-  setupGhosts(params) {
-    // make the ghost collision boxes
-    params.ghosts.forEach((ghostParams) => {
-      const ghost = new Collidable(ghostParams);
-      this.layers['ghosts'].push(ghost);
-    });
-  }
-
+  /**
+   * Record the current suburb (postcode) for this item
+   * This is used to know if the item (player) has moved suburb
+   */
   setPostcode() {
     this.postcode = app.world.layers.suburbs.makeKey(this);
   }
 
   /**
-   * 
+   * Compares suburbs
    * @returns is the item in view of the player
    */
   isVisible() {
@@ -63,11 +43,8 @@ class Item extends Rectangle {
     if (this.id !== 'me') {
       // which suburb will this item be in
       let currentPostcode = app.world.layers.suburbs.makeKey(app.me);
-      let itemPostcode = app.world.layers.suburbs.makeKey(this);
       let kingsSquare = app.world.layers.suburbs.kingsSquare(currentPostcode);
-
-      //console.log('inKingsSquare?', itemPostcode, kingsSquare);
-      if (!kingsSquare.has(itemPostcode)) {
+      if (!kingsSquare.has(this.postcode)) {
         isVisible = false;
       };
     }
@@ -75,10 +52,13 @@ class Item extends Rectangle {
   }
 
   // add the item to the world div
+  /**
+   * Show the item in the world
+   * @returns nothing
+   */
   show() {
     // its already here..
     if (this.it) {
-      //console.log('it exists', this);
       return;
     }
 
@@ -86,16 +66,33 @@ class Item extends Rectangle {
     // if its outside of our current view
     if (!this.isVisible()) return;
 
-    let newSvg = `<div id="i${this.id}" class="item">${this.svg}</div>`;
-    app.world.add(newSvg);
+    let assetInfo = assets.get(this.type, this.variant);
+    let newDiv = `<div id="i${this.id}" class="item">${assetInfo.svg}</div>`;
+    app.world.add(newDiv);
     this.it = document.querySelector(`#i${this.id}`);
     this.size();
     this.position();
+    this.showChildren();
+  }
+
+  /**
+   * All bits of this item (shadow, hats, collision boarders)
+   */
+  showChildren() {
+    this.children.forEach(child => {
+      child.show();
+    });
   }
 
   hide() {
     app.world.remove(this.id);
     delete this.it;
+  }
+
+  hideChildren() {
+    this.children.forEach(child => {
+      child.hide();
+    });
   }
 
   size() {
@@ -105,32 +102,34 @@ class Item extends Rectangle {
     }
   }
 
+  /**
+   * Change the position of this item relative to its parent
+   * @returns 
+   */
   position() {
     if (!this.it) return;
-    this.it.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
-    this.it.style.zIndex = parseInt(this.y);
-    if (app.showCollision) {
-      this.showCollision();
+    let itemPos = this.copy();
+    // every item is relative to its parent
+    if (this.parent) {
+      itemPos.add(this.parent);
     }
+    this.it.style.transform = `translate3d(${itemPos.x}px, ${itemPos.y}px, 0)`;
+    // z index based on vertical position
+    this.it.style.zIndex = parseInt(itemPos.y);
+    this.setPostcode();
   }
 
-  /**
- * Add the html into the items div at the end - eg collision boxes
- * @param {string} html 
- */
-  addChild(html) {
-    if (!this.it) return;
-    this.it.insertAdjacentHTML('beforeend', html);
+  // all items can have child items so showing this one also shows all its children, and their children etc..
+  addChild(item) {
+    this.children.add(item);
   }
 
-  /**
-   * Remove all child items from this item that match the childSelector
-   * @param {string} childrenSelector 
-   */
-  removeChildren(childrenSelector) {
-    if (!this.it) return;
-    let children = this.it.querySelectorAll(childrenSelector);
-    children.forEach(child => this.it.removeChild(child));
+  removeChild(item) {
+    this.children.take(item);
+  }
+
+  removeChildren() {
+    this.children.clear();
   }
 
   addClass(className) {
@@ -143,17 +142,4 @@ class Item extends Rectangle {
     this.it.classList.remove(className);
   }
 
-
-  // add a shape that defines the collision boarders and ghost borders
-  showCollision() {
-    this.removeChildren('.collideZone');
-
-    this.surface.forEach((collider) => {
-      this.addChild(collider.html());
-    });
-
-    this.ghosts.forEach((collider) => {
-      this.addChild(collider.html());
-    });
-  }
 }

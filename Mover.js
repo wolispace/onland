@@ -14,6 +14,13 @@ class Mover extends Item {
     super(params);
   }
 
+  /**
+   * Update the movable items position
+   */
+  update = () => {
+    
+  }
+
   move = () => {
     this.calcAcceleration();
     this.applyMomentum();
@@ -108,12 +115,14 @@ class Mover extends Item {
   }
 
   myCollisionBox(layer) {
-    return this.layers[layer][0].copyWithPos(this);
+    // TODO; get the first collider from the asset and add this movers pos
+    //return this.layers[layer][0].copyWithPos(this);
   }
 
   // check the grid to see what we are colliding with
   checkCollisions(layer) {
     // first collidable for the surface is the thing we are checking.
+    return;
     let thisCollision = this.myCollisionBox(layer);
     let inCell = app.world.layers[layer].queryShape(thisCollision);
 
@@ -155,6 +164,7 @@ class Mover extends Item {
 
   // check the ghosts grid to see what we are colliding with any ghosts
   checkGhosts() {
+    return;
     const inCell = app.world.layers.ghosts.queryShape(this);
     // the first collidable part of the player
     const moverRectangle = this.layers['surface'][0].copyWithPos(this);

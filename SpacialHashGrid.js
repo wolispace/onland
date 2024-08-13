@@ -105,8 +105,8 @@ class SpacialHashGrid extends Rectangle{
     this.grid = {};
   }
 
-  addAll(item, key) {
-    item.layers[key].forEach((collide) => {
+  addAll(item, colliders) {
+    colliders.forEach((collide) => {
       let collidable = collide.copy();
       collidable.x += item.x;
       collidable.y += item.y;
@@ -115,8 +115,8 @@ class SpacialHashGrid extends Rectangle{
     });
   }
 
-  clearAll(item, key) {
-    item.layers[key].forEach((collide) => {
+  clearAll(item, colliders) {
+    colliders.forEach((collide) => {
       let collidable = collide.copy();
       collidable.x += item.x;
       collidable.y += item.y;
@@ -215,10 +215,7 @@ class SpacialHashGrid extends Rectangle{
       // Check if the new row and column are within the grid
       if (newRow >= 0 && newRow < this.rowCols.y && newCol >= 0 && newCol < this.rowCols.x) {
         var newPoint = newRow + "_" + newCol;
-        // Check if the new point exists in the grid
-        if (this.grid[newPoint]) {
-          cells.add(newPoint);
-        }
+        cells.add(newPoint);
       }
     });
 

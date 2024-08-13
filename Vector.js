@@ -9,15 +9,19 @@ class Vector extends Point{
     return new Vector(this.x, this.y);
   }
 
-
-
-  // how long is the vector?
+  /**
+   * 
+   * @returns the length of the vector
+   */
   magnitude() {
     return Math.sqrt(this.x ** 2 + this.y ** 2);
   }
 
-  // Normalises the vector to have a magnitude of 1
-  // If the vector has a magnitude of 0, it remains unchanged
+  /**
+   * Normalises the vector to have a magnitude of 1
+   * If the vector has a magnitude of 0, it remains unchanged
+   * 
+   */
   normalise() {
     const magnitude = this.magnitude();
     if (magnitude > 0) {
@@ -26,26 +30,7 @@ class Vector extends Point{
     }
   }
 
-  /**
-   * 
-   * @param {*} vector 
-   * @returns 
-   */
-  distance(vector) {
-    const dx = this.x - vector.x;
-    const dy = this.y - vector.y;
-    return Math.sqrt(dx ** 2 + dy ** 2);
-  }
 
-  round(decimals = 2) {
-    this.x = parseFloat(this.x.toFixed(decimals));
-    this.y = parseFloat(this.y.toFixed(decimals));
-  }
-
-  set(x, y) {
-    this.x = x;
-    this.y = y;
-  }
 
   limit(maxMagnitude) {
     // this.x = Math.abs(this.x) > maxMagnitude ? Math.sign(this.x) * maxMagnitude : this.x;
@@ -56,12 +41,4 @@ class Vector extends Point{
     }
   }
 
-  backup() {
-    this.backupPoint = { x: this.x, y: this.y };
-  }
-
-  restore() {
-    this.x = this.backupPoint.x;
-    this.y = this.backupPoint.y;
-  }
 }

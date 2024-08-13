@@ -35,16 +35,18 @@ class World extends Rectangle {
 
   // every item has some uniqueSets they are part of a layer 'ghosts', 'surface' etc..
   addToLayers(item) {
+    const layerInfo = assets.get(item.type, item.variant);
     for (const [key, cellSize] of Object.entries(this.layerDefinitions())) {
-      if (item.layers[key]) {
-        this.layers[key].addAll(item, key);
+      if (layerInfo[key]) {
+        this.layers[key].addAll(item, layerInfo[key]);
       }
     }
-    if(item.unsurface) {
-      this.layers['surface'].clearAll(item, 'surface');
+    let location = layerInfo['surface'][0];
+    if (location) {
+      location.id = item.id;
     }
-    
-    this.layers['suburbs'].add(item);
+
+    this.layers['suburbs'].add(location);
   }
 
   suburbSize(defaultSize) {
@@ -130,7 +132,6 @@ class World extends Rectangle {
       const itemInfo = assets.make(itemType, key, x, y, true);
 
       this.items[i] = new Item(itemInfo);
-
       // increment pos grid
       lastPos.x += stepPos.x;
       if (lastPos.x > this.x) {
