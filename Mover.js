@@ -12,13 +12,26 @@ class Mover extends Item {
 
   constructor(params) {
     super(params);
+    this.setupCollideInfo();
+  }
+
+  /**
+   * One off process to get the collision box for this movable item.
+   * We just the the first one defined
+   * Then we add this to your current position to know where the collision is
+   * @returns 
+   */
+  setupCollideInfo() {
+    if (this.collideInfo) return;
+    const assetInfo = assets.get(this.type, this.variant);
+    this.collideInfo = assetInfo['surface'][0];
   }
 
   /**
    * Update the movable items position
    */
   update = () => {
-    
+
   }
 
   move = () => {
@@ -114,27 +127,27 @@ class Mover extends Item {
     this.y = this.oldPos.y;
   }
 
-  myCollisionBox(layer) {
-    // TODO; get the first collider from the asset and add this movers pos
-    //return this.layers[layer][0].copyWithPos(this);
+  updateCollisionBox() {
+    if (!this.collideInfo) return;
+    this.collisionBox = this.collideInfo.copy().add(this);
   }
 
   // check the grid to see what we are colliding with
   checkCollisions(layer) {
-    // first collidable for the surface is the thing we are checking.
-    return;
-    let thisCollision = this.myCollisionBox(layer);
-    let inCell = app.world.layers[layer].queryShape(thisCollision);
+    // first collidable for the surface is the item we are checking against all other items
+    this.updateCollisionBox();
+    let inCell = app.world.layers[layer].queryShape(this.collisionBox);
 
     if (inCell && inCell.list && inCell.list.length > 0) {
       inCell.list.forEach((itemId) => {
         let item = app.world.items[itemId];
         if (!item) return;
-        //console.log(item);
 
-        item.layers[layer].forEach((otherItem) => {
-          let collidable = otherItem.copyWithPos(item);
-          let poss = thisCollision.collides(collidable);
+        const assetInfo = assets.get(item.type, item.variant);
+
+        assetInfo[layer].forEach((otherItem) => {
+          let collidable = otherItem.copy().add(item);
+          let poss = this.collisionBox.collides(collidable);
           // if x = -1 we are on the left|top of centre, +1 is right|bottom
 
           if (poss.x != 0 || poss.y != 0) {
@@ -164,20 +177,21 @@ class Mover extends Item {
 
   // check the ghosts grid to see what we are colliding with any ghosts
   checkGhosts() {
-    return;
-    const inCell = app.world.layers.ghosts.queryShape(this);
-    // the first collidable part of the player
-    const moverRectangle = this.layers['surface'][0].copyWithPos(this);
+    if (!app.doGhosting) return;
+    this.updateCollisionBox();
+    const inCell = app.world.layers.ghosts.queryShape(this.collisionBox);
     app.ghosted.clear();
     app.msg(3, app.ghosted.count());
     if (inCell && inCell.list && inCell.list.length > 0) {
       inCell.list.forEach((itemId) => {
         const item = app.world.items[itemId];
         if (!item) return;
-        if (!app.doGhosting) return;
-        item.layers['ghosts'].forEach((ghost) => {
-          const ghostRectangle = ghost.copyWithPos(item);
-          const poss = moverRectangle.collides(ghostRectangle);
+        const assetInfo = assets.get(item.type, item.variant);
+        const collideInfo = assetInfo['ghosts'];
+
+        collideInfo.forEach((ghost) => {
+          const ghostCollidable = ghost.copy().add(item);
+          const poss = this.collisionBox.collides(ghostCollidable);
           if (poss.x != 0 || poss.y != 0) {
             app.ghosted.add(itemId);
             // add ghost class to this item
