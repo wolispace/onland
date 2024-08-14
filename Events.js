@@ -8,7 +8,11 @@ class Events {
   callbacks = [];
   nextId = 0;
 
-  // emit event
+  /**
+   * Emit an event stating the event name and all the values of interest to any listeners
+   * @param {string} eventName 
+   * @param {any} value 
+   */
   emit(eventName, value) {
     this.callbacks.forEach(stored => {
       if (stored.eventName === eventName) {
@@ -17,7 +21,13 @@ class Events {
     })
   }
 
-  // subscribe to something happening
+  /**
+   * Listen for a specific event and execute the function when it happens
+   * @param {string} eventName 
+   * @param {object} caller 
+   * @param {function} callback 
+   * @returns 
+   */
   on(eventName, caller, callback) {
     this.nextId += 1;
     this.callbacks.push({

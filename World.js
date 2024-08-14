@@ -13,6 +13,11 @@ class World extends Rectangle {
     this.div = document.querySelector(".world");
     this.styleWorld();
     this.setupLayers();
+
+    app.events.on("MOVER_STOPPED", this, info => {
+      app.msg(3, '', 'stopped');
+      //console.log('mover stopped', info);
+    });
   }
 
   layerDefinitions() {

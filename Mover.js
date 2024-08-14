@@ -84,6 +84,7 @@ class Mover extends Item {
     this.velocity.multiply(this.friction);
     if (this.velocity.magnitude() < this.friction) {
       this.velocity.clear();
+      app.events.emit("MOVER_STOPPED", this);
     }
   }
 
@@ -114,7 +115,7 @@ class Mover extends Item {
     }
     this.velocity.round(this.precision);
     this.add(this.velocity);
-    this.position();
+    //this.position();
   }
 
   // backup the current position before applying the velocity and potentially colliding with something
@@ -181,7 +182,7 @@ class Mover extends Item {
     this.updateCollisionBox();
     const inCell = app.world.layers.ghosts.queryShape(this.collisionBox);
     app.ghosted.clear();
-    app.msg(3, app.ghosted.count());
+    //app.msg(3, app.ghosted.count());
     if (inCell && inCell.list && inCell.list.length > 0) {
       inCell.list.forEach((itemId) => {
         const item = app.world.items[itemId];

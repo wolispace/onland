@@ -29,7 +29,7 @@ class Input {
       if (directionVector) {
         this.keys.add(keyCode);
         this.active = true;
-        //app.msg(1, this.keys, 'keyDown');
+        app.msg(3, '', '');
       } else if (event.code == 'Space') {
         console.log('digging');
       } else if (event.code == 'Enter') {
@@ -64,6 +64,7 @@ class Input {
     });
 
     document.addEventListener('mousedown', (event) => {
+      app.msg(3, '', '');
       if (this.mousedown) return;
       this.active = true;
       app.world.showCursor();
@@ -78,7 +79,7 @@ class Input {
       // Get the click coordinates
       this.setTouchPoint(event);
       //app.msg(1, this.touchPoint, 'mousedown');
-      app.me.move();
+      //app.me.move();
     });
 
     document.addEventListener('mouseup', (event) => {
@@ -92,14 +93,14 @@ class Input {
       if (!this.mousedown) return;
       this.endInput();
       this.setTouchPoint(event);
-      app.me.move();
+      //app.me.move();
     });
   }
 
   // use () => {} so we can access this.
   handleTouchEvent = (event) => {
     let touch = event.touches[0];
-
+    app.msg(3, '', '');
     if (touch) {
       if (touch.target.classList.contains('control')) {
         console.log('its a control button');

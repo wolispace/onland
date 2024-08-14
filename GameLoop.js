@@ -7,7 +7,7 @@ class GameLoop {
     this.isRunning = false;
     this.lastFrameTime = 0;
     this.accumulatedFrameTime = 0;
-    this.timeStep = 1000 / 1; // 60fps
+    this.timeStep = 1000 / 60; // 60fps
 
     // Bind mainLoop to the instance
     //this.mainLoop = this.mainLoop.bind(this);

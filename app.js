@@ -18,7 +18,7 @@ let app = {
   start() {
     app.input = new Input();
     app.ghosted = new UniqueSet();
-
+    app.events = new Events();
 
     app.scrollable = { div: document.querySelector(".scrollable") };
     app.world = new World({ x: 0, y: 0, w: 50000, h: 50000 });
@@ -43,13 +43,14 @@ let app = {
    */
   update(deltaTime) {
     //console.log('deltaTime', deltaTime);
+    app.me.move();
   },
 
   /**
    * Show the world and all of its children
    */
   show() {
-    app.me.move();
+    app.me.position();
   },
 
   doTest() {
@@ -140,10 +141,12 @@ async function hideSuburbsAsync(mover) {
     if (toHide && toHide.length > 0) {
       for (const postcode of toHide) {
         const oneSuburb = app.world.layers.suburbs.grid[postcode];
-        for (const itemId of oneSuburb.list) {
-          let item = app.world.items[itemId];
-          if (item) {
-            item.hide();
+        if (oneSuburb && oneSuburb.list) {
+          for (const itemId of oneSuburb.list) {
+            let item = app.world.items[itemId];
+            if (item) {
+              item.hide();
+            }
           }
         }
       }
