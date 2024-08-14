@@ -5,10 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let app = {
   isDev: true,
-  suburbSize: null,
+  suburbSize: 200,
   showCollision: false,
   contextMenu: true,
-  gameLoopSpeed: 50,
   scrollBrowser: true,
   randomItems: true,
   doGhosting: true,
@@ -26,13 +25,13 @@ let app = {
     const params = assets.make('diamond', 'me', 100, 100, true);
     app.me = new Mover(params);
     this.doTest();
-    app.world.populate();
+    //app.world.populate();
     app.world.load();
     showSuburbsAsync(app.me);
 
     app.gameLoop = new GameLoop(app.update, app.show);
     app.gameLoop.start();
-    //app.world.layers.suburbs.show();
+    app.world.layers.suburbs.show();
     //app.world.layers.surface.show();
   },
 
@@ -109,7 +108,8 @@ let app = {
 };
 
 async function shiftSuburbsAsync(mover) {
-  let postcode = app.world.layers.suburbs.makeKey(mover);
+  mover.updateCollisionBox();
+  let postcode = app.world.layers.suburbs.makeKey(mover.collisionBox);
   if (mover.postcode !== postcode) {
     await hideSuburbsAsync(mover);
     await showSuburbsAsync(mover);
@@ -118,23 +118,26 @@ async function shiftSuburbsAsync(mover) {
 }
 
 async function showSuburbsAsync(mover) {
-  let suburb = app.world.layers.suburbs.makeKey(mover);
+  mover.updateCollisionBox();
+  let suburb = app.world.layers.suburbs.makeKey(mover.collisionBox);
   // find the kings square around it
   app.lastShown = app.world.layers.suburbs.kingsSquare(suburb);
 
-  let inSuburbs = app.world.layers.suburbs.queryKingsSquare(mover);
+  let inSuburbs = app.world.layers.suburbs.queryKingsSquare(mover.collisionBox);
   if (inSuburbs && inSuburbs.list && inSuburbs.list.length > 0) {
     for (const itemId of inSuburbs.list) {
       let item = app.world.items[itemId];
       if (item) {
         item.show();
+        console.log('show', item);
       }
     }
   }
 }
 
 async function hideSuburbsAsync(mover) {
-  let postcode = app.world.layers.suburbs.makeKey(mover);
+  mover.updateCollisionBox();
+  let postcode = app.world.layers.suburbs.makeKey(mover.collisionBox);
   let suburbs = app.world.layers.suburbs.kingsSquare(postcode);
   if (app.lastShown && app.lastShown.list && app.lastShown.list.length > 0) {
     let toHide = app.lastShown.outside(suburbs.list);
@@ -146,6 +149,7 @@ async function hideSuburbsAsync(mover) {
             let item = app.world.items[itemId];
             if (item) {
               item.hide();
+              console.log('hide', item);
             }
           }
         }
