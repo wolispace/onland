@@ -35,5 +35,13 @@ class Rectangle extends Vector {
     ];
   }
 
+  equals(rectangle) {
+    return (
+      this.x === rectangle.x &&
+      this.y === rectangle.y &&
+      this.w === rectangle.w &&
+      this.h === rectangle.h
+    );
+  }
 
 }

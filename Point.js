@@ -77,4 +77,8 @@ class Point {
     return Math.sqrt(dx ** 2 + dy ** 2);
   }
 
+  equals(point) {
+    return this.x === point.x && this.y === point.y;
+  }
+
 }

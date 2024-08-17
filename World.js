@@ -43,15 +43,19 @@ class World extends Rectangle {
     const layerInfo = assets.get(item.type, item.variant);
     for (const [key, cellSize] of Object.entries(this.layerDefinitions())) {
       if (layerInfo[key]) {
+        //console.log('layerInfo',key, layerInfo);
         this.layers[key].addAll(item, layerInfo[key]);
       }
     }
+    // we just use the x,y of the first surface collidable to locate this within a suburb
     let location = layerInfo['surface'][0];
     if (location) {
-      location.id = item.id;
+      let collidable = location.copy().add(item);
+      collidable.id = item.id;
+      this.layers['suburbs'].add(collidable);
     }
-
-    this.layers['suburbs'].add(location);
+   //console.log('location', location );
+   
   }
 
   suburbSize(defaultSize) {
@@ -154,7 +158,7 @@ class World extends Rectangle {
     let data = [];
 
     let params = {
-      qty: 3,
+      qty: 0,
       type: 'arch',
       variant: null,
       start: new Point(200, 200),
@@ -164,17 +168,17 @@ class World extends Rectangle {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 1,
+      qty: 4,
       type: 'rock',
       variant: null,
-      start: new Point(100, 170),
-      step: new Point(0, 0),
-      wobble: new Point(100, 100),
+      start: new Point(50, 150),
+      step: new Point(100, 0),
+      wobble: new Point(0, 0),
     }
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 1,
+      qty: 0,
       type: 'river',
       variant: null,
       start: new Point(500, 170),
@@ -184,7 +188,7 @@ class World extends Rectangle {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 2,
+      qty: 0,
       type: 'tree',
       variant: null,
       start: new Point(750, 150),

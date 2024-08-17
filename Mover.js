@@ -47,13 +47,7 @@ class Mover extends Item {
     if (app.scrollBrowser) {
       app.world.centerPlayer();
     }
-    app.msg(1, { x: Math.round(this.x, 0), y: Math.round(this.y, 0) }, 'pos');
-  }
-
-  recordLastSuburbs() {
-    this.postcode = app.world.layers.suburbs.makeKey(this);
-    // find the kings square around it
-    app.lastShown = app.world.layers.suburbs.kingsSquare(suburb);
+    app.msg(1, { x: Math.round(this.x, 0), y: Math.round(this.y, 0), p:this.postcode }, 'pos');
   }
 
   calcAcceleration() {

@@ -1,4 +1,4 @@
-class SpacialHashGrid extends Rectangle{
+class SpacialHashGrid extends Rectangle {
   grid = {};
 
   constructor(name, rectangle, cellSize) {
@@ -9,16 +9,16 @@ class SpacialHashGrid extends Rectangle{
   }
 
   setup() {
-    // the whole area divided up into a cellSize grid give is a point of x,y rows and cols
+    // the whole area divided up into a cellSize grid given as a point of x,y rows and cols
     const area = new Point(this.w, this.h);
-    this.rowCols = this.makeRowCols(area, this.cellSize);
+    this.rowCols = this.makeRowCols(area);
   }
 
   // show the grid
   show() {
     Object.keys(this.grid).forEach(key => {
       //const thisValue = this.surface[key];
-      let parts = key.split("_");
+      let parts = this.breakKey(key);
       let left = Number(parts[0]) * this.cellSize.w;
       let top = Number(parts[1]) * this.cellSize.h;
 
@@ -30,36 +30,54 @@ class SpacialHashGrid extends Rectangle{
 
   // 1000 x 1000 with a 10 x 10 cellSize gives us a 100 rows x 100 cols grid
   // a rectangles x, y given a cell size results in the rows and cols to that point
-  makeRowCols(pos, cellSize) {
+  makeRowCols(pos) {
     return new Point(
-      Math.floor(pos.x / cellSize.w), 
-      Math.floor(pos.y / cellSize.h)
+      Math.floor(pos.x / this.cellSize.w), 
+      Math.floor(pos.y / this.cellSize.h)
     );
   }
 
   // the top left corner of a given cell eg '4_6'
   cellTopLeft(key) {
-    const [x, y] = key.split('_').map(Number);
+    const [x, y] = this.breakKey(key);
     return new Point(
       x * this.cellSize.w,
       y * this.cellSize.h
     );
   }
 
-  hash(params) {
-    const rowCols = this.makeRowCols(params, this.cellSize);
-    return `${rowCols.x}_${rowCols.y}`;
+  /**
+   * 
+   * @param {int} x 
+   * @param {int} y 
+   * @returns {string} has being a combination of x and y to make a unique key for a grid cell
+   */
+  buildKey(x, y) {
+    return `${x}_${y}`;
   }
 
-  // returns the key and confirms the cell exists
+  /**
+   * 
+   * @param {object} params has x and y in world coords that need mapping into the grid 
+   * @returns {string} key key eg x=100, y= 200 returns [1,2] if the cellSize is 100
+   */
   makeKey(params) {
-    const key = this.hash(params);
-    return key;
+    const rowCols = this.makeRowCols(params, this.cellSize);
+    return this.buildKey(rowCols.x, rowCols.y);
+  }
+
+  /**
+   * 
+   * @param {string} key 
+   * @returns {array} if key = '4-6' return [4,6]
+   */
+  breakKey(key) {
+    return key.split('_').map(Number);
   }
 
   // work out the bounding box for this shape and add() points into the grid for the corners and all cells between them
   // the params must include a Rectangle and an id
-  addShape(params) {  
+  addShape(params) {
     let keys = [];
     // find 4 corners
     // add each to the grid, recording the keys for each cell
@@ -70,18 +88,18 @@ class SpacialHashGrid extends Rectangle{
     });
 
     // read keys[0] (TL) and keys[2] (BR) to get the top, left, bottom right
-    let [left, top] = keys[0].split('_').map(Number);
-    let [right, bottom] = keys[2].split('_').map(Number);
+    let [left, top] = this.breakKey(keys[0]);
+    let [right, bottom] = this.breakKey(keys[2]);
 
     for (let x = left; x <= right; x++) {
       for (let y = top; y <= bottom; y++) {
-        this.addToCell(`${x}_${y}`, params.id); 
+        this.addToCell(this.buildKey(x, y), params.id);
       }
     }
   }
 
   // clear the cells that fall within this rectangle
-  clearShape(params) {  
+  clearShape(params) {
     let keys = [];
     // find 4 corners
     // add each to the grid, recording the keys for each cell
@@ -91,12 +109,12 @@ class SpacialHashGrid extends Rectangle{
     });
 
     // read keys[0] (TL) and keys[2] (BR) to get the top, left, bottom right
-    let [left, top] = keys[0].split('_').map(Number);
-    let [right, bottom] = keys[2].split('_').map(Number);
+    let [left, top] = this.breakKey(keys[0]);
+    let [right, bottom] = this.breakKey(keys[2]);
 
     for (let x = left; x <= right; x++) {
       for (let y = top; y <= bottom; y++) {
-        this.clearCell(`${x}_${y}`); 
+        this.clearCell(this.buildKey(x, y));
       }
     }
   }
@@ -107,9 +125,7 @@ class SpacialHashGrid extends Rectangle{
 
   addAll(item, colliders) {
     colliders.forEach((collide) => {
-      let collidable = collide.copy();
-      collidable.x += item.x;
-      collidable.y += item.y;
+      let collidable = collide.copy().add(item);
       collidable.id = item.id;
       this.addShape(collidable);
     });
@@ -117,14 +133,10 @@ class SpacialHashGrid extends Rectangle{
 
   clearAll(item, colliders) {
     colliders.forEach((collide) => {
-      let collidable = collide.copy();
-      collidable.x += item.x;
-      collidable.y += item.y;
+      let collidable = collide.copy().add(item);
       this.clearShape(collidable);
     });
   }
-
-  // add a new item (its id) to the grid
 
   // add a new item (its id) to the grid
   add(params) {
@@ -150,6 +162,8 @@ class SpacialHashGrid extends Rectangle{
 
   remove(params) {
     const key = this.makeKey(params);
+    let cell = this.grid[key];
+    if (!cell) return;
     this.grid[key].take(params.id);
   }
 
@@ -175,10 +189,8 @@ class SpacialHashGrid extends Rectangle{
   }
 
   // return all items found in the kings square around the center suburb
-  queryKingsSquare(params) {
-    let suburb = this.makeKey(params);
-    // find the kings square around it
-    let cells = this.kingsSquare(suburb);
+  queryKingsSquare(key) {
+    let cells = this.kingsSquare(key);
     return this.query(cells.list);
   }
 
@@ -186,9 +198,10 @@ class SpacialHashGrid extends Rectangle{
   query(cells) {
     let found = new UniqueSet();
     cells.forEach((key) => {
+      //console.log('looking in ', key, this.grid[key]);
       found.merge(this.grid[key]);
     });
-    //app.msg(1, `cells=${JSON.stringify(cells)} inCells=${JSON.stringify(found)}`);
+    app.msg(2, `cells=${JSON.stringify(cells)} inCells=${JSON.stringify(found)}`);
     return found;
   }
 
@@ -214,7 +227,7 @@ class SpacialHashGrid extends Rectangle{
 
       // Check if the new row and column are within the grid
       if (newRow >= 0 && newRow < this.rowCols.y && newCol >= 0 && newCol < this.rowCols.x) {
-        var newPoint = newRow + "_" + newCol;
+        var newPoint = this.buildKey(newCol, newRow);
         cells.add(newPoint);
       }
     });

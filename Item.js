@@ -21,6 +21,7 @@ class Item extends Rectangle {
 
   setup() {
     this.setPostcode();
+    app.world.addToLayers(this);
     if (this.autoShow) {
       this.show();
     }
@@ -47,9 +48,11 @@ class Item extends Rectangle {
       if (!kingsSquare.has(this.postcode)) {
         isVisible = false;
       };
+      console.log('isVisible', isVisible, currentPostcode, this.postcode, this.id);
     }
     return isVisible;
   }
+
 
   // add the item to the world div
   /**
@@ -57,14 +60,17 @@ class Item extends Rectangle {
    * @returns nothing
    */
   show() {
+    // if its outside of our current view
+    if (!this.isVisible()) {
+      console.log('out of view');
+      return;
+    }
     // its already here..
     if (this.it) {
+      console.log('allReady here', this.id)
       return;
     }
 
-    app.world.addToLayers(this);
-    // if its outside of our current view
-    if (!this.isVisible()) return;
 
     let assetInfo = assets.get(this.type, this.variant);
     let newDiv = `<div id="i${this.id}" class="item">${assetInfo.svg}</div>`;

@@ -24,10 +24,10 @@ let app = {
 
     const params = assets.make('diamond', 'me', 100, 100, true);
     app.me = new Mover(params);
-    this.doTest();
+    //this.doTest();
     //app.world.populate();
     app.world.load();
-    showSuburbsAsync(app.me);
+    shiftSuburbsAsync(app.me);
 
     app.gameLoop = new GameLoop(app.update, app.show);
     app.gameLoop.start();
@@ -111,19 +111,17 @@ async function shiftSuburbsAsync(mover) {
   mover.updateCollisionBox();
   let postcode = app.world.layers.suburbs.makeKey(mover.collisionBox);
   if (mover.postcode !== postcode) {
-    await hideSuburbsAsync(mover);
-    await showSuburbsAsync(mover);
+    //await hideSuburbsAsync(mover);
+    await showSuburbsAsync(postcode, mover.collisionBox);
     mover.postcode = postcode;
   }
 }
 
-async function showSuburbsAsync(mover) {
-  mover.updateCollisionBox();
-  let suburb = app.world.layers.suburbs.makeKey(mover.collisionBox);
-  // find the kings square around it
-  app.lastShown = app.world.layers.suburbs.kingsSquare(suburb);
+async function showSuburbsAsync(postcode, collisionBox) {
+  app.lastShown = app.world.layers.suburbs.kingsSquare(postcode);
 
-  let inSuburbs = app.world.layers.suburbs.queryKingsSquare(mover.collisionBox);
+  let inSuburbs = app.world.layers.suburbs.queryKingsSquare(postcode);
+  console.log('inSuburbs', inSuburbs, collisionBox);
   if (inSuburbs && inSuburbs.list && inSuburbs.list.length > 0) {
     for (const itemId of inSuburbs.list) {
       let item = app.world.items[itemId];
