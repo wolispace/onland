@@ -48,7 +48,7 @@ class Item extends Rectangle {
       if (!kingsSquare.has(this.postcode)) {
         isVisible = false;
       };
-      console.log('isVisible', isVisible, currentPostcode, this.postcode, this.id);
+      //console.log('isVisible', isVisible, currentPostcode, this.postcode, this.id);
     }
     return isVisible;
   }
@@ -62,15 +62,12 @@ class Item extends Rectangle {
   show() {
     // if its outside of our current view
     if (!this.isVisible()) {
-      console.log('out of view');
       return;
     }
     // its already here..
     if (this.it) {
-      console.log('allReady here', this.id)
       return;
     }
-
 
     let assetInfo = assets.get(this.type, this.variant);
     let newDiv = `<div id="i${this.id}" class="item">${assetInfo.svg}</div>`;

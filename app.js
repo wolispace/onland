@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let app = {
   isDev: true,
-  suburbSize: 200,
+  suburbSize: null,
   showCollision: false,
   contextMenu: true,
   scrollBrowser: true,
@@ -31,7 +31,7 @@ let app = {
 
     app.gameLoop = new GameLoop(app.update, app.show);
     app.gameLoop.start();
-    app.world.layers.suburbs.show();
+    //app.world.layers.suburbs.show();
     //app.world.layers.surface.show();
   },
 
@@ -111,7 +111,7 @@ async function shiftSuburbsAsync(mover) {
   mover.updateCollisionBox();
   let postcode = app.world.layers.suburbs.makeKey(mover.collisionBox);
   if (mover.postcode !== postcode) {
-    //await hideSuburbsAsync(mover);
+    await hideSuburbsAsync(mover);
     await showSuburbsAsync(postcode, mover.collisionBox);
     mover.postcode = postcode;
   }
@@ -121,13 +121,11 @@ async function showSuburbsAsync(postcode, collisionBox) {
   app.lastShown = app.world.layers.suburbs.kingsSquare(postcode);
 
   let inSuburbs = app.world.layers.suburbs.queryKingsSquare(postcode);
-  console.log('inSuburbs', inSuburbs, collisionBox);
   if (inSuburbs && inSuburbs.list && inSuburbs.list.length > 0) {
     for (const itemId of inSuburbs.list) {
       let item = app.world.items[itemId];
       if (item) {
         item.show();
-        console.log('show', item);
       }
     }
   }
@@ -147,7 +145,6 @@ async function hideSuburbsAsync(mover) {
             let item = app.world.items[itemId];
             if (item) {
               item.hide();
-              console.log('hide', item);
             }
           }
         }

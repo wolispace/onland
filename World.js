@@ -158,7 +158,7 @@ class World extends Rectangle {
     let data = [];
 
     let params = {
-      qty: 0,
+      qty: 10,
       type: 'arch',
       variant: null,
       start: new Point(200, 200),
@@ -168,7 +168,7 @@ class World extends Rectangle {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 4,
+      qty: 444,
       type: 'rock',
       variant: null,
       start: new Point(50, 150),
@@ -178,7 +178,7 @@ class World extends Rectangle {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 0,
+      qty: 10000,
       type: 'river',
       variant: null,
       start: new Point(500, 170),
@@ -188,7 +188,7 @@ class World extends Rectangle {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 0,
+      qty: 30,
       type: 'tree',
       variant: null,
       start: new Point(750, 150),

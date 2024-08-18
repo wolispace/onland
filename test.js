@@ -55,7 +55,7 @@ let app = {
     let id = 'test_001';
     let placedKey = app.testGrid.addToCell(key, id);
     app.compare(`addToCell`, key, placedKey);
-        
+
     result = app.testGrid.grid[key];
     expected = {list:["test_001"]}; 
     app.compare(`addToCell`, expected, app.testGrid.grid[key]);
@@ -65,8 +65,16 @@ let app = {
     expected = {list:["test_001","test_002"]};
     app.compare(`addToCell`, expected, app.testGrid.grid[key]);
 
+    key = ["4_6"];
+    app.compare('query', expected, app.testGrid.query(key));
+
 
     params = {id: 'test_001', x: 410, y: 1210};
+    key = '4_6';
+    expected = {list:["test_001","test_002"]};
+    app.compare('queryKingsSquare', expected, app.testGrid.queryKingsSquare(key));
+
+
     expected = {list:["test_002"]};
     app.testGrid.remove(params);
     app.compare(`remove`, expected, app.testGrid.grid[key]);
@@ -75,6 +83,17 @@ let app = {
     expected = {list:[]};
     app.testGrid.remove(params);
     app.compare(`remove`, expected, app.testGrid.grid[key]);
+
+    expected = {list:["3_5","4_5","5_5","3_6","4_6","5_6","3_7","4_7","5_7"]};
+    app.compare('kingsSquare', expected, app.testGrid.kingsSquare(key));
+
+    key = '0_0';
+    expected = {list:["0_0","1_0","0_1","1_1"]};
+    app.compare('kingsSquare', expected, app.testGrid.kingsSquare(key));
+
+    key = '4_6';
+    expected = {list:[]};
+    app.compare('queryKingsSquare', expected, app.testGrid.queryKingsSquare(key));
 
 
   },
@@ -87,6 +106,10 @@ let app = {
     } else {
       console.log(`${name} fail`, expected, result);
     }
+  },
+
+  msg (key, msg) {
+    //console.log(`${key}, ${msg}`);
   }
 
 }

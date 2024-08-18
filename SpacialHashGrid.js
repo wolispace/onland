@@ -201,14 +201,13 @@ class SpacialHashGrid extends Rectangle {
       //console.log('looking in ', key, this.grid[key]);
       found.merge(this.grid[key]);
     });
-    app.msg(2, `cells=${JSON.stringify(cells)} inCells=${JSON.stringify(found)}`);
     return found;
   }
 
   // return an array of kings square around and including this key
   kingsSquare(key) {
     // Split the point into row and column
-    var [row, col] = key.split("_").map(Number);
+    var [col, row] = this.breakKey(key);
 
     // Define the directions
     var directions = [
