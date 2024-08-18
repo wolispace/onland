@@ -168,7 +168,7 @@ class World extends Rectangle {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 444,
+      qty: 44,
       type: 'rock',
       variant: null,
       start: new Point(50, 150),
@@ -178,7 +178,7 @@ class World extends Rectangle {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 10000,
+      qty: 10,
       type: 'river',
       variant: null,
       start: new Point(500, 170),

@@ -2,8 +2,8 @@ class Mover extends Item {
 
   velocity = new Vector();
   acceleration = new Vector();
-  maxSpeed = 6;
-  friction = 0.9;
+  maxSpeed = 5;
+  friction = 0.85;
   precision = 1;
   postcode = '0_0';
   moveStep = 1;

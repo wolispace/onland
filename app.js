@@ -24,6 +24,8 @@ let app = {
 
     const params = assets.make('diamond', 'me', 100, 100, true);
     app.me = new Mover(params);
+    app.controls = new Overlay({id: 'ctls', type: 'controls', x: 10, y: 10, w: 200, h: 200});
+    app.controls.addChild();
     //this.doTest();
     //app.world.populate();
     app.world.load();

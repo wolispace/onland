@@ -50,6 +50,35 @@ const assets = {
     params.svg = params.svg.replace('%style%', `style="left:${params.left}px; top:${params.top}px; width:${params.width}px;"`);
   },
 
+  getOverlayHtml(type) {
+    let overlayInfo = assets.overlays[type];
+    let html = overlayInfo.html;
+    html = html.replace(`%x%`, overlayInfo.x);
+    html = html.replace(`%y%`, overlayInfo.y);
+    html = html.replace(`%w%`, overlayInfo.w);
+    html = html.replace(`%h%`, overlayInfo.h);
+    return html;
+  },
+
+  overlays: {
+    controls: {
+      x: 10,
+      y: 10,
+      w: 200,
+      h: 200,
+      html: `<div class="controls" 
+        style="left: %x%px; bottom: %y%px; width: %w%px; height: %h%px;"></div>`,
+    },
+    button: {
+      x: 2,
+      y: 2,
+      w: 75,
+      h: 75,
+      html: `<div class="button" 
+      style="left: %x%px; top: %y%px; width: %w%px; height: %h%px;"></div>`,
+    }
+  },
+
   items: {
     tree: {
       basic: {
