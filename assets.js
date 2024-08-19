@@ -50,13 +50,20 @@ const assets = {
     params.svg = params.svg.replace('%style%', `style="left:${params.left}px; top:${params.top}px; width:${params.width}px;"`);
   },
 
-  getOverlayHtml(type) {
-    let overlayInfo = assets.overlays[type];
+  getOverlayHtml(params) {
+    let overlayInfo = assets.overlays[params.type];
     let html = overlayInfo.html;
-    html = html.replace(`%x%`, overlayInfo.x);
-    html = html.replace(`%y%`, overlayInfo.y);
+
+    // Maybe use something like this
+    //html = html.replace(/%(x|y|w|h|type|id)%/g, (match, p1) => params[p1] || overlayInfo[p1]);
+
+    html = html.replace(`%x%`, params.x);
+    html = html.replace(`%y%`, params.y);
     html = html.replace(`%w%`, overlayInfo.w);
     html = html.replace(`%h%`, overlayInfo.h);
+    html = html.replace(`%type%`, params.type);
+    html = html.replace(`%id%`, params.id);
+
     return html;
   },
 
@@ -66,7 +73,7 @@ const assets = {
       y: 10,
       w: 200,
       h: 200,
-      html: `<div class="controls" 
+      html: `<div id="o%id%" class="%type%" 
         style="left: %x%px; bottom: %y%px; width: %w%px; height: %h%px;"></div>`,
     },
     button: {
@@ -74,7 +81,7 @@ const assets = {
       y: 2,
       w: 75,
       h: 75,
-      html: `<div class="button" 
+      html: `<div id="o%id%" class="%type%" 
       style="left: %x%px; top: %y%px; width: %w%px; height: %h%px;"></div>`,
     }
   },

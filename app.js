@@ -24,8 +24,37 @@ let app = {
 
     const params = assets.make('diamond', 'me', 100, 100, true);
     app.me = new Mover(params);
-    app.controls = new Overlay({id: 'ctls', type: 'controls', x: 10, y: 10, w: 200, h: 200});
-    app.controls.addChild();
+    app.controls = new Overlay({
+      id: 'ctls', type: 'controls', x: 20, y: 10
+      , onclick: () => {
+        console.log('clicked on control area');
+      }
+    } );
+    app.controls.show();
+
+    const buttonUp = new Overlay({
+      id: 'up', 
+      type: 'button', 
+      x: 0, 
+      y: 0, onclick: (event) => {
+        event.stopPropagation();
+        console.log('clicked on a button - app.me.moveUp()??');
+      }    
+    });
+    
+    const buttonRight = new Overlay({
+      id: 'Right', 
+      type: 'button', 
+      x: 100, 
+      y: 0, onclick: (event) => {
+        event.stopPropagation();
+        console.log('clicked on a button - app.me.moveRight()??');
+      }    
+    });
+    
+    app.controls.addChild(buttonUp);
+    app.controls.addChild(buttonRight);
+
     //this.doTest();
     //app.world.populate();
     app.world.load();
