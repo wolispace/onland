@@ -1,11 +1,6 @@
-class Item extends Rectangle {
-  id = '';
-  type = '';
-  variant = '';
-  it;  // the element on the screen (in the world)
+class Item extends Drawable {
   qty = 0;
   layer = 'surface'; // what layer are we currently on
-  parent = new Point(0, 0); // default if there is no parent item
   autoShow = false;
   children = [];
 
@@ -59,20 +54,20 @@ class Item extends Rectangle {
    * Show the item in the world
    * @returns nothing
    */
-  show() {
+  OLD_show() {
     // if its outside of our current view
     if (!this.isVisible()) {
       return;
     }
     // its already here..
-    if (this.it) {
+    if (this.div) {
       return;
     }
 
     let assetInfo = assets.get(this.type, this.variant);
     let newDiv = `<div id="i${this.id}" class="item">${assetInfo.svg}</div>`;
     app.world.add(newDiv);
-    this.it = document.querySelector(`#i${this.id}`);
+    this.div = document.querySelector(`#i${this.id}`);
     this.size();
     this.position();
     this.showChildren();
@@ -81,27 +76,27 @@ class Item extends Rectangle {
   /**
    * All bits of this item (shadow, hats, collision boarders)
    */
-  showChildren() {
+  OLD_showChildren() {
     this.children.forEach(child => {
       child.show();
     });
   }
 
-  hide() {
+  OLD_hide() {
     app.world.remove(this.id);
-    delete this.it;
+    delete this.div;
   }
 
-  hideChildren() {
+  OLD_hideChildren() {
     this.children.forEach(child => {
       child.hide();
     });
   }
 
   size() {
-    if (this.it) {
-      this.it.style.width = `${this.w}px`;
-      this.it.style.height = `${this.h}px`;
+    if (this.div) {
+      this.div.style.width = `${this.w}px`;
+      this.div.style.height = `${this.h}px`;
     }
   }
 
@@ -110,15 +105,17 @@ class Item extends Rectangle {
    * @returns 
    */
   position() {
-    if (!this.it) return;
+    if (!this.div) return;
     let itemPos = this.copy();
-    // every item is relative to its parent
+    // every item is relative to its parent. since the world is 0,0 we are not changing am.me x,y
     if (this.parent) {
       itemPos.add(this.parent);
     }
-    this.it.style.transform = `translate3d(${itemPos.x}px, ${itemPos.y}px, 0)`;
+    this.div.style.transform = `translate3d(${itemPos.x}px, ${itemPos.y}px, 0)`;
+    //console.log('position', this.parent, this);
+    
     // z index based on vertical position
-    this.it.style.zIndex = parseInt(itemPos.y);
+    this.div.style.zIndex = parseInt(itemPos.y);
     this.setPostcode();
   }
 
@@ -136,13 +133,13 @@ class Item extends Rectangle {
   }
 
   addClass(className) {
-    if (!this.it) return;
-    this.it.classList.add(className);
+    if (!this.div) return;
+    this.div.classList.add(className);
   }
 
   removeClass(className) {
-    if (!this.it) return;
-    this.it.classList.remove(className);
+    if (!this.div) return;
+    this.div.classList.remove(className);
   }
 
 }

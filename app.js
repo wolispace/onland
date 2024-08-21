@@ -20,37 +20,26 @@ let app = {
     app.events = new Events();
 
     app.scrollable = { div: document.querySelector(".scrollable") };
-    app.world = new World({ x: 0, y: 0, w: 50000, h: 50000 });
+    app.world = new World({ w: 50000, h: 50000});
+    app.world.div = document.querySelector(`#world`);
 
-    const params = assets.make('diamond', 'me', 100, 100, true);
+    let params = assets.make('diamond', 'me', 100, 100, true);
+    params.parent = app.world;
+
     app.me = new Mover(params);
-    app.controls = new Overlay({
-      id: 'ctls', type: 'controls', x: 20, y: 10
-      , onclick: () => {
-        console.log('clicked on control area');
-      }
-    } );
+    //app.me.show();
+
+    params = assets.make('controls', 'controls', 20, 20, true, 'basic');
+    params.parent = app.world;
+    app.controls = new Drawable( params );
     app.controls.show();
 
-    const buttonUp = new Overlay({
-      id: 'up', 
-      type: 'button', 
-      x: 0, 
-      y: 0, onclick: (event) => {
-        event.stopPropagation();
-        console.log('clicked on a button - app.me.moveUp()??');
-      }    
-    });
+    params = assets.make('buttons', 'up', 10, 10, true, 'up');
+    const buttonUp = new Drawable(params);
     
-    const buttonRight = new Overlay({
-      id: 'Right', 
-      type: 'button', 
-      x: 100, 
-      y: 0, onclick: (event) => {
-        event.stopPropagation();
-        console.log('clicked on a button - app.me.moveRight()??');
-      }    
-    });
+    params = assets.make('buttons', 'right', 10, 10, true, 'right');
+    const buttonRight = new Drawable(params);
+   
     
     app.controls.addChild(buttonUp);
     app.controls.addChild(buttonRight);

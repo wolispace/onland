@@ -1,16 +1,17 @@
 // The world is what the game is played on, its a rectangle
-class World extends Rectangle {
+class World extends Drawable {
   cellSize = new Rectangle({ w: 50, h: 50 }); // size of each cell within a grid
   layers = {}; // holds all the spacialHashlayers
+  items = [];
 
-  constructor(x, y, w, h) {
-    super(x, y, w, h);
-    this.items = [];
-    this.setup();
+  constructor(params) {
+    let drawable = { id: 'world', type: 'world', w:params.w, h: params.h, parent:document.querySelector("body") };
+    super(drawable);
+    this.setupWorld();
   }
 
-  setup() {
-    this.div = document.querySelector(".world");
+  setupWorld() {
+    this.div = document.querySelector("#world");
     this.styleWorld();
     this.setupLayers();
 
@@ -139,7 +140,7 @@ class World extends Rectangle {
         }
       }
       const itemInfo = assets.make(itemType, key, x, y, true);
-
+      itemInfo.parent = this.div;
       this.items[i] = new Item(itemInfo);
       // increment pos grid
       lastPos.x += stepPos.x;
@@ -158,7 +159,7 @@ class World extends Rectangle {
     let data = [];
 
     let params = {
-      qty: 10,
+      qty: 0,
       type: 'arch',
       variant: null,
       start: new Point(200, 200),
@@ -168,7 +169,7 @@ class World extends Rectangle {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 44,
+      qty: 2,
       type: 'rock',
       variant: null,
       start: new Point(50, 150),
@@ -178,7 +179,7 @@ class World extends Rectangle {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 10,
+      qty: 0,
       type: 'river',
       variant: null,
       start: new Point(500, 170),
@@ -188,7 +189,7 @@ class World extends Rectangle {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 30,
+      qty: 0,
       type: 'tree',
       variant: null,
       start: new Point(750, 150),
@@ -200,6 +201,7 @@ class World extends Rectangle {
     
     data.forEach(item => {
       const itemInfo = assets.make(item.type, item.id, item.x, item.y, true);
+      itemInfo.parent = this;
       this.items[item.id] = new Item(itemInfo);
     });
   }
