@@ -57,7 +57,7 @@ const assets = {
    */
   buildHtml(params) {
     let html = `<div id="i%id%" class="%type% item" 
-          style="left: %x%px; top: %y%px; width: %w%px; height: %h%px;">%content%</div>`;
+          style="width: %w%px; height: %h%px;">%content%</div>`;
     assets.replacables.forEach((word) => {
       if (params[word]) {
         html = html.replace(`%${word}%`, params[word]);

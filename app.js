@@ -70,6 +70,7 @@ let app = {
    */
   show() {
     app.me.position();
+    app.me.setPostcode();
   },
 
   doTest() {

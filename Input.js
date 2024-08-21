@@ -78,14 +78,13 @@ class Input {
 
       // Get the click coordinates
       this.setTouchPoint(event);
-      //app.msg(1, this.touchPoint, 'mousedown');
-      //app.me.move();
+      app.msg(2, this.touchPoint, 'mousedown');
     });
 
     document.addEventListener('mouseup', (event) => {
       this.mousedown = false;
       this.endInput();
-      //app.msg(1, this.touchPoint, 'mouseup');
+      //app.msg(2, this.touchPoint, 'mouseup');
     });
 
     document.addEventListener('mousemove', (event) => {
@@ -93,7 +92,6 @@ class Input {
       if (!this.mousedown) return;
       this.endInput();
       this.setTouchPoint(event);
-      //app.me.move();
     });
   }
 
