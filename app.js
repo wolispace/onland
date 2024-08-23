@@ -23,21 +23,24 @@ let app = {
     app.world = new World({ w: 50000, h: 50000});
     app.world.div = document.querySelector(`#world`);
 
-    let params = assets.make('diamond', 'me', 100, 100, true);
+    let params = assets.make({type: 'diamond', id:'me', x:100, y:100, autoShow: true});
     params.parent = app.world;
 
     app.me = new Mover(params);
     //app.me.show();
 
-    params = assets.make('controls', 'controls', 20, 20, true, 'basic');
-    params.parent = app.world;
+    params = assets.make({type:'controls', id:'controls', x:10, y:10, autoShow:true, variant:'basic'});
+    app.overlay = {
+      div: document.querySelector(`#overlay`),
+    };
+    params.parent = app.overlay;
     app.controls = new Drawable( params );
     app.controls.show();
 
-    params = assets.make('buttons', 'up', 10, 10, true, 'up');
+    params = assets.make({type:'buttons', id:'up', x:0, y:0, autoShow:true, variant:'up'});
     const buttonUp = new Drawable(params);
     
-    params = assets.make('buttons', 'right', 10, 10, true, 'right');
+    params = assets.make({type: 'buttons', id:'right', x:50, y:0, autoShow:true, variant:'right'});
     const buttonRight = new Drawable(params);
    
     

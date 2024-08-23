@@ -200,7 +200,8 @@ class World extends Drawable {
 
     
     data.forEach(item => {
-      const itemInfo = assets.make(item.type, item.id, item.x, item.y, true);
+      item.autoShow = true;
+      const itemInfo = assets.make(item);
       itemInfo.parent = this;
       this.items[item.id] = new Item(itemInfo);
     });

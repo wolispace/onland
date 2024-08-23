@@ -14,12 +14,8 @@ const assets = {
    * @param {string} variant if undefined returns a random variant of this type
    * @returns object defining a unique item to include in the game
    */
-  make(type, id = 'unknown', x = 0, y = 0, autoShow = false, variant) {
-    let params = assets.get(type, variant);
-    params.id = id;
-    params.x = x;
-    params.y = y;
-    params.autoShow = autoShow;
+  make(params) {
+    params = {...params, ...assets.get(params.type, params.variant)};
     params.html = assets.buildHtml(params);
     return params;
   },
@@ -56,20 +52,27 @@ const assets = {
    * @param {object} params 
    */
   buildHtml(params) {
-    let html = `<div id="i%id%" class="%type% item" 
-          style="width: %w%px; height: %h%px;">%content%</div>`;
+    let html = assets.html ?? assets.htmlSets[params.type] ?? assets.htmlSets['items'];
+    console.log(html, params);
     assets.replacables.forEach((word) => {
-      if (params[word]) {
+      if (params[word] === '' || params[word]) {
         html = html.replace(`%${word}%`, params[word]);
       } else {
-       // console.log(`no ${word} in ${JSON.stringify(params)}`);
+        // console.log(`no ${word} in ${JSON.stringify(params)}`);
       }
     });
+    console.log({html});
     return html;
   },
 
+  htmlSets: {
+    items: `<div id="i%id%" class="%type% item" style="width: %w%px; height: %h%px;">%content%</div>`,
+    controls: `<div id="i%id%" class="%type% overlay" style="left:%x%px; bottom:%y%px; width: %w%px; height: %h%px;">%content%</div>`,
+    buttons: `<div id="i%id%" class="%type% overlay" style="left:%x%px; top:%y%px; width: %w%px; height: %h%px;">%content%</div>`
+  },
 
-// all the items
+
+  // all the items
   items: {
     tree: {
       basic: {
@@ -252,6 +255,7 @@ const assets = {
         top: 0,
         w: 5000,
         h: 5000,
+        html: '',
         content: '',
       },
     },
@@ -263,6 +267,7 @@ const assets = {
         w: 200,
         h: 200,
         content: '',
+        overlay: true,
       },
     },
     buttons: {
@@ -272,8 +277,8 @@ const assets = {
         top: 0,
         w: 75,
         h: 75,
-
         content: `UP`,
+        overlay: true,
       },
       down: {
         name: 'down',
@@ -282,6 +287,8 @@ const assets = {
         w: 75,
         h: 75,
         content: `DOWN`,
+        overlay: true,
+
       },
       left: {
         name: 'left',
@@ -290,6 +297,7 @@ const assets = {
         w: 75,
         h: 75,
         content: `LEFT`,
+        overlay: true,
       },
       right: {
         name: 'right',
@@ -298,6 +306,7 @@ const assets = {
         w: 75,
         h: 75,
         content: `RIGHT`,
+        overlay: true,
       }
     }
   }

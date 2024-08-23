@@ -93,11 +93,13 @@ body {
   cursor: pointer;
 }
 
-.button {
+.buttons {
   position: absolute;
   border:3px solid maroon;
-  background-color: silver;
-  opacity: 0.5;
+  background-color: rgb(128, 97, 97);
+  opacity: 1;
+  color: white;
+  font-weight: bold;
   border-radius: .5rem;
 }
 
