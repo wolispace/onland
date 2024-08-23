@@ -64,21 +64,22 @@ class Input {
     });
 
     document.addEventListener('mousedown', (event) => {
-      app.msg(3, '', '');
+      console.log('mousedown', event.target.tagName, event.target.classList);
+      //app.msg(3, '', '');
       if (this.mousedown) return;
       this.active = true;
       app.world.showCursor();
       event.preventDefault();
 
       // Check if the click target is a control button
-      if (event.target.classList.contains('control')) {
+      if (event.target.classList.contains('buttons')) {
         console.log('a control button');
         return;
       }
 
       // Get the click coordinates
       this.setTouchPoint(event);
-      app.msg(2, this.touchPoint, 'mousedown');
+      //app.msg(2, this.touchPoint, 'mousedown');
     });
 
     document.addEventListener('mouseup', (event) => {

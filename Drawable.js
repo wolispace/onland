@@ -14,7 +14,7 @@ class Drawable extends Rectangle{
    * @param {object} params 
    */
   setupEvents(params) {
-    this.onclick = params.onclick || function () { console.log('no click defined')};
+    this.onclick = params.onclick;
   }
   
   /**
@@ -24,8 +24,8 @@ class Drawable extends Rectangle{
     //console.log('showing', this);
     this.parent.div.insertAdjacentHTML('beforeend', this.html);
     this.div = document.querySelector(`#i${this.id}`);
-    if (this.div) {
-      this.div.onclick = this.onclick || function () { console.log('no click defined2')};
+    if (this.div && this.onclick) {
+      this.div.onclick = this.onclick;
     }    
     this.position();
   }

@@ -53,22 +53,18 @@ const assets = {
    */
   buildHtml(params) {
     let html = assets.html ?? assets.htmlSets[params.type] ?? assets.htmlSets['items'];
-    console.log(html, params);
     assets.replacables.forEach((word) => {
       if (params[word] === '' || params[word]) {
         html = html.replace(`%${word}%`, params[word]);
-      } else {
-        // console.log(`no ${word} in ${JSON.stringify(params)}`);
       }
     });
-    console.log({html});
     return html;
   },
 
   htmlSets: {
     items: `<div id="i%id%" class="%type% item" style="width: %w%px; height: %h%px;">%content%</div>`,
-    controls: `<div id="i%id%" class="%type% overlay" style="left:%x%px; bottom:%y%px; width: %w%px; height: %h%px;">%content%</div>`,
-    buttons: `<div id="i%id%" class="%type% overlay" style="left:%x%px; top:%y%px; width: %w%px; height: %h%px;">%content%</div>`
+    controls: `<div id="i%id%" class="%type%" style="left:%x%px; bottom:%y%px; width: %w%px; height: %h%px;">%content%</div>`,
+    buttons: `<div id="i%id%" class="%type%" style="left:%x%px; top:%y%px; width: %w%px; height: %h%px;">%content%</div>`
   },
 
 
@@ -265,9 +261,8 @@ const assets = {
         left: 0,
         top: 0,
         w: 200,
-        h: 200,
+        h: 140,
         content: '',
-        overlay: true,
       },
     },
     buttons: {
@@ -275,38 +270,34 @@ const assets = {
         name: 'up',
         left: 0,
         top: 0,
-        w: 75,
-        h: 75,
+        w: 50,
+        h: 50,
         content: `UP`,
-        overlay: true,
       },
       down: {
         name: 'down',
         left: 0,
         top: 0,
-        w: 75,
-        h: 75,
+        w: 50,
+        h: 50,
         content: `DOWN`,
-        overlay: true,
 
       },
       left: {
         name: 'left',
         left: 0,
         top: 0,
-        w: 75,
-        h: 75,
+        w: 50,
+        h: 50,
         content: `LEFT`,
-        overlay: true,
       },
       right: {
         name: 'right',
         left: 0,
         top: 0,
-        w: 75,
-        h: 75,
+        w: 50,
+        h: 50,
         content: `RIGHT`,
-        overlay: true,
       }
     }
   }

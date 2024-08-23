@@ -20,31 +20,42 @@ let app = {
     app.events = new Events();
 
     app.scrollable = { div: document.querySelector(".scrollable") };
-    app.world = new World({ w: 50000, h: 50000});
+    app.world = new World({ w: 50000, h: 50000 });
     app.world.div = document.querySelector(`#world`);
 
-    let params = assets.make({type: 'diamond', id:'me', x:100, y:100, autoShow: true});
+    let params = assets.make({ type: 'diamond', id: 'me', x: 100, y: 100, autoShow: true });
     params.parent = app.world;
 
     app.me = new Mover(params);
     //app.me.show();
 
-    params = assets.make({type:'controls', id:'controls', x:10, y:10, autoShow:true, variant:'basic'});
+    params = assets.make({ type: 'controls', id: 'controls', x: 10, y: 10, autoShow: true, variant: 'basic' });
     app.overlay = {
       div: document.querySelector(`#overlay`),
     };
     params.parent = app.overlay;
-    app.controls = new Drawable( params );
+    app.controls = new Drawable(params);
     app.controls.show();
 
-    params = assets.make({type:'buttons', id:'up', x:0, y:0, autoShow:true, variant:'up'});
+    params = assets.make({ type: 'buttons', id: 'left', x: 0, y: 30, autoShow: true, variant: 'left' });
+    params.onclick = (e) => { console.log('move LEFT') };
+    const buttonLeft = new Drawable(params);
+
+    params = assets.make({ type: 'buttons', id: 'up', x: 30, y: 0, autoShow: true, variant: 'up' });
+    params.onclick = (e) => { console.log('move UP'); };
     const buttonUp = new Drawable(params);
-    
-    params = assets.make({type: 'buttons', id:'right', x:50, y:0, autoShow:true, variant:'right'});
+
+    params = assets.make({ type: 'buttons', id: 'down', x: 30, y: 30, autoShow: true, variant: 'down' });
+    params.onclick = (e) => { console.log('move DOWN'); };
+    const buttonDown = new Drawable(params);
+
+    params = assets.make({ type: 'buttons', id: 'right', x: 60, y: 30, autoShow: true, variant: 'right' });
+    params.onclick = (e) => { console.log('move RIGHT') };
     const buttonRight = new Drawable(params);
-   
-    
+
+    app.controls.addChild(buttonLeft);
     app.controls.addChild(buttonUp);
+    app.controls.addChild(buttonDown);
     app.controls.addChild(buttonRight);
 
     //this.doTest();
