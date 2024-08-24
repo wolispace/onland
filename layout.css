@@ -2,6 +2,7 @@ body {
   margin: 0;
   overflow: hidden;
   background-color: black;
+  user-select: none;
 }
 
 .scrollable {
@@ -73,9 +74,6 @@ body {
   border:3px solid red;
 }
 
-.overlays {
-}
-
 .controls {
   position: absolute;
   border:3px solid black;
@@ -99,8 +97,14 @@ body {
   background-color: rgb(128, 97, 97);
   opacity: 1;
   color: white;
+  cursor:pointer;
   font-weight: bold;
   border-radius: .5rem;
+}
+
+.buttons:hover {
+  background-color: white;
+  color: black;
 }
 
 #touchId {

@@ -3,6 +3,7 @@ class Input {
   keys = new UniqueSet(); // the direction keys currently held down
   touchPoint = new Rectangle({ x: 0, y: 0, w: 20, h: 20 });  // where the user has touched
   active = false;
+  ignoreClasses = ['controls', 'buttons'];
 
   constructor() {
     this.setupEvents();
@@ -29,7 +30,6 @@ class Input {
       if (directionVector) {
         this.keys.add(keyCode);
         this.active = true;
-        app.msg(3, '', '');
       } else if (event.code == 'Space') {
         console.log('digging');
       } else if (event.code == 'Enter') {
@@ -45,12 +45,6 @@ class Input {
       this.keys.take(keyCode);
 
       this.endInput();
-      //app.msg(1, this.keys, 'keyUp');
-    });
-
-    // if they touched something
-    ['touchstart', 'touchmove', 'touchend', 'touchcancel'].forEach(eventName => {
-      document.addEventListener(eventName, this.handleTouchEvent, { passive: false });
     });
 
     window.addEventListener('resize', (event) => {
@@ -63,58 +57,35 @@ class Input {
       }, 200); // 200ms delay
     });
 
-    document.addEventListener('mousedown', (event) => {
-      console.log('mousedown', event.target.tagName, event.target.classList);
-      //app.msg(3, '', '');
-      if (this.mousedown) return;
+    /** handle both mouse and touch events as one */
+    document.addEventListener('pointerdown', (event) => {
+      if (this.pointerdown) return;
+      if (event.button === 2) return;
       this.active = true;
       app.world.showCursor();
       event.preventDefault();
 
-      // Check if the click target is a control button
-      if (event.target.classList.contains('buttons')) {
-        console.log('a control button');
+      const targetClassList = event.target.classList;
+      // ignore the event if the target has one of the ignore classes 
+      if (this.ignoreClasses.some(className => targetClassList.contains(className))) {
         return;
       }
 
       // Get the click coordinates
       this.setTouchPoint(event);
-      //app.msg(2, this.touchPoint, 'mousedown');
     });
 
-    document.addEventListener('mouseup', (event) => {
+    document.addEventListener('pointerup', (event) => {
       this.mousedown = false;
       this.endInput();
-      //app.msg(2, this.touchPoint, 'mouseup');
     });
 
-    document.addEventListener('mousemove', (event) => {
+    document.addEventListener('pointermove', (event) => {
       app.world.showCursor();
       if (!this.mousedown) return;
       this.endInput();
       this.setTouchPoint(event);
     });
-  }
-
-  // use () => {} so we can access this.
-  handleTouchEvent = (event) => {
-    let touch = event.touches[0];
-    app.msg(3, '', '');
-    if (touch) {
-      if (touch.target.classList.contains('control')) {
-        console.log('its a control button');
-        return;
-      }
-    }
-
-    if (['touchend'].includes(event.type)) {
-      this.endInput();
-    }
-
-    // if its not something we want touched, prevent defaults
-    if (!['BUTTON', 'INPUT', 'LABEL', 'DIV', 'svg', 'path', 'rect', 'ellipse', 'text'].includes(event.target.tagName)) {
-      event.preventDefault();
-    }
   }
 
   // returns true when no keys are pressed - then we clear the timer
@@ -162,7 +133,7 @@ class Input {
     const centre = this.touchPoint.center();
     touchPos.take(centre);
     app.world.setPos(this.touchPointDiv, touchPos);
-    app.animate(this.touchPointDiv, 'shrink', 1, () => { this.touchPointDiv.style.display = 'none';});
+    app.animate(this.touchPointDiv, 'shrink', 1, () => { this.touchPointDiv.style.display = 'none'; });
   }
 
   /**

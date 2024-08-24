@@ -1,4 +1,4 @@
-class Drawable extends Rectangle{
+class Drawable extends Rectangle {
   children = [];
   constructor(params) {
     super(params);
@@ -15,8 +15,11 @@ class Drawable extends Rectangle{
    */
   setupEvents(params) {
     this.onclick = params.onclick;
+    this.onpointerdown = params.onpointerdown;
+    this.onpointerup = params.onpointerup;
+
   }
-  
+
   /**
    * Add this drawable object to the dom within its parent and setup interaction(?)
    */
@@ -24,9 +27,18 @@ class Drawable extends Rectangle{
     //console.log('showing', this);
     this.parent.div.insertAdjacentHTML('beforeend', this.html);
     this.div = document.querySelector(`#i${this.id}`);
-    if (this.div && this.onclick) {
-      this.div.onclick = this.onclick;
-    }    
+    if (this.div) {
+      if (this.onclick) {
+        this.div.onclick = this.onclick;
+      }
+      if (this.onpointerdown) {
+        this.div.onpointerdown = this.onpointerdown;
+      }
+      if (this.onpointerup) {
+        this.div.onpointerup = this.onpointerup;
+      }
+    }
+
     this.position();
   }
 
@@ -39,18 +51,18 @@ class Drawable extends Rectangle{
     }
     this.div.style.transform = `translate3d(${itemPos.x}px, ${itemPos.y}px, 0)`;
     //console.log('position', this.parent, this);
-    
+
     // z index based on vertical position
     this.div.style.zIndex = parseInt(itemPos.y);
     this.setPostcode();
   }
-    /**
-   * Record the current suburb (postcode) for this item
-   * This is used to know if the item (player) has moved suburb
-   */
-    setPostcode() {
-      this.postcode = app.world.layers.suburbs.makeKey(this);
-    }
+  /**
+ * Record the current suburb (postcode) for this item
+ * This is used to know if the item (player) has moved suburb
+ */
+  setPostcode() {
+    this.postcode = app.world.layers.suburbs.makeKey(this);
+  }
 
 
   hide() {
@@ -86,5 +98,5 @@ class Drawable extends Rectangle{
   hideChild(child) {
 
   }
-  
+
 }

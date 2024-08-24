@@ -8,6 +8,18 @@ class UniqueSet {
   copy() {
     return new UniqueSet([...this.list]);
   }
+
+  addAll(newList) {
+    newList.forEach((key => {
+      this.add(key);
+    }))
+  }
+
+  takeAll(newList) {
+    newList.forEach((key => {
+      this.take(key);
+    }))
+  }
   
   // only add the item to the list if it does not exist
   add(item) {

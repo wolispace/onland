@@ -247,8 +247,6 @@ const assets = {
     world: {
       basic: {
         name: 'world',
-        left: 0,
-        top: 0,
         w: 5000,
         h: 5000,
         html: '',
@@ -258,26 +256,20 @@ const assets = {
     controls: {
       basic: {
         name: 'controls',
-        left: 0,
-        top: 0,
         w: 200,
-        h: 140,
+        h: 200,
         content: '',
       },
     },
     buttons: {
       up: {
         name: 'up',
-        left: 0,
-        top: 0,
         w: 50,
         h: 50,
         content: `UP`,
       },
       down: {
         name: 'down',
-        left: 0,
-        top: 0,
         w: 50,
         h: 50,
         content: `DOWN`,
@@ -285,20 +277,40 @@ const assets = {
       },
       left: {
         name: 'left',
-        left: 0,
-        top: 0,
         w: 50,
         h: 50,
         content: `LEFT`,
       },
       right: {
         name: 'right',
-        left: 0,
-        top: 0,
         w: 50,
         h: 50,
         content: `RIGHT`,
-      }
+      },
+      lu: {
+        name: 'lu',
+        w: 50,
+        h: 50,
+        content: `LU`,
+      },
+      ld: {
+        name: 'ld',
+        w: 50,
+        h: 50,
+        content: `LD`,
+      },
+      ru: {
+        name: 'ru',
+        w: 50,
+        h: 50,
+        content: `RU`,
+      },
+      rd: {
+        name: 'rd',
+        w: 50,
+        h: 50,
+        content: `RD`,
+      },
     }
   }
 
