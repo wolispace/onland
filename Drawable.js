@@ -53,6 +53,7 @@ class Drawable extends Rectangle {
     //console.log('position', this.parent, this);
 
     // z index based on vertical position
+    if (this.type == 'buttons') return;
     this.div.style.zIndex = parseInt(itemPos.y);
     this.setPostcode();
   }

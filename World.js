@@ -159,7 +159,7 @@ class World extends Drawable {
     let data = [];
 
     let params = {
-      qty: 0,
+      qty: 20,
       type: 'arch',
       variant: null,
       start: new Point(200, 200),
@@ -169,7 +169,7 @@ class World extends Drawable {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 2,
+      qty: 200,
       type: 'rock',
       variant: null,
       start: new Point(50, 150),
@@ -179,7 +179,7 @@ class World extends Drawable {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 0,
+      qty: 100,
       type: 'river',
       variant: null,
       start: new Point(500, 170),
@@ -189,7 +189,7 @@ class World extends Drawable {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 0,
+      qty: 50,
       type: 'tree',
       variant: null,
       start: new Point(750, 150),

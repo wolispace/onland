@@ -24,6 +24,7 @@ const controls = {
     params.parent = app.overlay;
     app.controls = new Drawable(params);
     app.controls.show();
+    app.controls.div.style.zIndex = 999999999;
 
     // all child buttons..
     Object.keys(controls.buttonList).forEach(buttonName => {

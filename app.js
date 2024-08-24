@@ -7,7 +7,7 @@ let app = {
   isDev: true,
   suburbSize: null,
   showCollision: false,
-  contextMenu: false,
+  contextMenu: true,
   scrollBrowser: true,
   randomItems: true,
   doGhosting: true,
@@ -37,6 +37,8 @@ let app = {
     shiftSuburbsAsync(app.me);
 
     controls.setup();
+    document.querySelector('.buttons').style.zIndex = 999999999;
+
 
     app.gameLoop = new GameLoop(app.update, app.show);
     app.gameLoop.start();
