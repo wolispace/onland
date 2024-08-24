@@ -159,7 +159,7 @@ class World extends Drawable {
     let data = [];
 
     let params = {
-      qty: 20,
+      qty: 100,
       type: 'arch',
       variant: null,
       start: new Point(200, 200),
@@ -179,7 +179,7 @@ class World extends Drawable {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 100,
+      qty: 200,
       type: 'river',
       variant: null,
       start: new Point(500, 170),

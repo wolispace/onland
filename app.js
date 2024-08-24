@@ -37,7 +37,7 @@ let app = {
     shiftSuburbsAsync(app.me);
 
     controls.setup();
-    document.querySelector('.buttons').style.zIndex = 999999999;
+    app.overlay.div.style.top = "200px";
 
 
     app.gameLoop = new GameLoop(app.update, app.show);

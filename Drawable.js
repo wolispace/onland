@@ -24,10 +24,10 @@ class Drawable extends Rectangle {
    * Add this drawable object to the dom within its parent and setup interaction(?)
    */
   show() {
-    //console.log('showing', this);
-    this.parent.div.insertAdjacentHTML('beforeend', this.html);
-    this.div = document.querySelector(`#i${this.id}`);
-    if (this.div) {
+    if (!this.div) {
+      this.parent.div.insertAdjacentHTML('beforeend', this.html);
+      this.div = document.querySelector(`#i${this.id}`);
+
       if (this.onclick) {
         this.div.onclick = this.onclick;
       }
@@ -37,6 +37,7 @@ class Drawable extends Rectangle {
       if (this.onpointerup) {
         this.div.onpointerup = this.onpointerup;
       }
+
     }
 
     this.position();
@@ -69,6 +70,7 @@ class Drawable extends Rectangle {
   hide() {
     if (this.div) {
       this.div.remove();
+      this.div = null;
     }
     this.children.forEach(child => child.hide());
     this.children = [];

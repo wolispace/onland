@@ -19,6 +19,8 @@ class Input {
       }
     });
 
+
+
     document.addEventListener("keydown", (event) => {
       app.world.hideCursor();
       event.preventDefault();
