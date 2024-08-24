@@ -72,6 +72,9 @@ class World extends Drawable {
     this.div.style.width = `${this.w}px`;
     this.div.style.height = `${this.h}px`;
     this.div.style.backgroundColor = 'seagreen';
+    // make sure scrollable are is op, left as mobile tends to remember previous scroll offset
+    app.scrollable.div.scrollLeft = 0;
+    app.scrollable.div.scrollTop = 0;
   }
 
   add(html) {
@@ -97,6 +100,7 @@ class World extends Drawable {
   hideCursor() {
     this.div.style.cursor = "none";
   }
+  
 
   // scroll the world div so the player is in the middle of the screen if possible
   centerPlayer() {
@@ -159,7 +163,7 @@ class World extends Drawable {
     let data = [];
 
     let params = {
-      qty: 100,
+      qty: 2,
       type: 'arch',
       variant: null,
       start: new Point(200, 200),
@@ -169,7 +173,7 @@ class World extends Drawable {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 200,
+      qty: 2,
       type: 'rock',
       variant: null,
       start: new Point(50, 150),
@@ -179,7 +183,7 @@ class World extends Drawable {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 200,
+      qty: 2,
       type: 'river',
       variant: null,
       start: new Point(500, 170),
@@ -189,7 +193,7 @@ class World extends Drawable {
     index = this.addItem(index, params, data);
     
     params = {
-      qty: 50,
+      qty: 2,
       type: 'tree',
       variant: null,
       start: new Point(750, 150),
