@@ -158,7 +158,29 @@ class World extends Drawable {
     }
   }
 
+  /**
+   * decodes a string of data (a set of 9 suburbs) and adds them to the world
+   * also populating app.world.items
+   * 
+   */
   load() {
+
+    const encodedData = "1|arch|||198|400^2|rock|||250|150^3|rock|||350|150^4|river|||494|478^5|river|||491|615^6|river|||499|772^7|tree|||788|166^8|tree|||626|221^9|tree|||1064|178^10|tree|||1048|178";
+    //const encodedData = "1|arch|||198|400^2|rock|||250|150";
+    let decodedData = this.decodeDate(encodedData);
+    decodedData.forEach(item => {
+      item.autoShow = true;
+      const itemInfo = assets.make(item);
+      itemInfo.parent = this;
+      this.items[item.id] = new Item(itemInfo);
+    });
+  }
+
+
+  /**
+   * build up some item to put on the world. can extract this as encoded data
+   */
+  generateSampleItems() {
     let index = 1;
     let data = [];
 

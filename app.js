@@ -144,7 +144,14 @@ let app = {
     let decoded = {};
     const decodedValues = encodedString.split('|');
     app.encodeKeys.forEach((key, index) => {
-      decoded[key] = decodedValues[index];
+      let value = decodedValues[index];
+      if (value) {
+        if (key === 'x' || key === 'y') {
+          decoded[key] = parseInt(value);
+        } else {
+          decoded[key] = value;
+        }
+      }
     });
     return decoded;
 
