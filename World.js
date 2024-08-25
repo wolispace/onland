@@ -5,7 +5,7 @@ class World extends Drawable {
   items = [];
 
   constructor(params) {
-    let drawable = { id: 'world', type: 'world', w:params.w, h: params.h, parent:document.querySelector("body") };
+    let drawable = { id: 'world', type: 'world', w: params.w, h: params.h, parent: document.querySelector("body") };
     super(drawable);
     this.setupWorld();
   }
@@ -55,8 +55,8 @@ class World extends Drawable {
       collidable.id = item.id;
       this.layers['suburbs'].add(collidable);
     }
-   //console.log('location', location );
-   
+    //console.log('location', location );
+
   }
 
   suburbSize(defaultSize) {
@@ -100,7 +100,7 @@ class World extends Drawable {
   hideCursor() {
     this.div.style.cursor = "none";
   }
-  
+
 
   // scroll the world div so the player is in the middle of the screen if possible
   centerPlayer() {
@@ -163,7 +163,7 @@ class World extends Drawable {
     let data = [];
 
     let params = {
-      qty: 2,
+      qty: 1,
       type: 'arch',
       variant: null,
       start: new Point(200, 200),
@@ -171,7 +171,7 @@ class World extends Drawable {
       wobble: new Point(20, 0),
     }
     index = this.addItem(index, params, data);
-    
+
     params = {
       qty: 2,
       type: 'rock',
@@ -181,9 +181,9 @@ class World extends Drawable {
       wobble: new Point(0, 0),
     }
     index = this.addItem(index, params, data);
-    
+
     params = {
-      qty: 2,
+      qty: 3,
       type: 'river',
       variant: null,
       start: new Point(500, 170),
@@ -191,9 +191,9 @@ class World extends Drawable {
       wobble: new Point(20, 30),
     }
     index = this.addItem(index, params, data);
-    
+
     params = {
-      qty: 2,
+      qty: 4,
       type: 'tree',
       variant: null,
       start: new Point(750, 150),
@@ -202,15 +202,40 @@ class World extends Drawable {
     }
     index = this.addItem(index, params, data);
 
-    
+
     data.forEach(item => {
       item.autoShow = true;
       const itemInfo = assets.make(item);
       itemInfo.parent = this;
       this.items[item.id] = new Item(itemInfo);
     });
+
+    let encodedData = this.encodeData(data);
+    console.log('encodedData', encodedData);
+
+    let decodedData = this.decodeDate(encodedData);
+    console.log(decodedData);
   }
 
+  encodeData(data) {
+    let encodedData = [];
+    for (const item of data) {
+      encodedData.push(app.encode(item));
+    }
+    return encodedData.join('^');
+  }
+
+  decodeDate(encodedString) {
+    let decodedData = [];
+    let itemStrings = encodedString.split('^');
+    for (const item of itemStrings) {
+      let decoded = app.decode(item);
+      decodedData.push(decoded);
+    }
+
+    return decodedData;
+
+  }
 
   /**
    * 

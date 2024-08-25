@@ -13,6 +13,8 @@ let app = {
   doGhosting: true,
   itemQty: 3,
   showTouchPoint: true,
+  
+  encodeKeys: ['id', 'type', 'variant', 'layer', 'x', 'y'],
 
   start() {
     app.input = new Input();
@@ -117,6 +119,37 @@ let app = {
       });
     }
   },
+
+  
+  encode(item) {
+    console.log(item);
+    let encoded = [];
+    app.encodeKeys.forEach((key) => {
+      let value = item[key];
+      console.log(value);
+      if (value === null || value === undefined || value === ' basic' || value === 'surface') {
+       value = '';
+      }
+      encoded.push(value);
+    });
+    return encoded.join('|');
+  },
+
+  /**
+   * 
+   * @param {string} encodedString 
+   * @returns {object} decoded object {id, type, variant, layer, x, y}
+   */
+  decode(encodedString) {
+    let decoded = {};
+    const decodedValues = encodedString.split('|');
+    app.encodeKeys.forEach((key, index) => {
+      decoded[key] = decodedValues[index];
+    });
+    return decoded;
+
+  }
+
 };
 
 async function shiftSuburbsAsync(mover) {
