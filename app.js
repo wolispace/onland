@@ -41,6 +41,8 @@ let app = {
     controls.setup();
     app.overlay.div.style.top = "200px";
 
+    app.testLoadScript();
+
 
     app.gameLoop = new GameLoop(app.update, app.show);
     app.gameLoop.start();
@@ -155,6 +157,19 @@ let app = {
     });
     return decoded;
 
+  },
+
+  testLoadScript() {
+    loadScript('testData.js')
+  .then(() => {
+    // File loaded successfully, you can now use its functions/variables
+     console.log('Script loaded successfully so call its setup()');
+     testData.setup();
+  })
+  .catch((error) => {
+    console.error('Error loading script:', error);
+  });
+
   }
 
 };
@@ -203,4 +218,19 @@ async function hideSuburbsAsync(mover) {
       }
     }
   }
+}
+
+/**
+ * Loads the js file ie one that has a js data object with more world data
+ * @param {string} src path to a js file
+ * @returns 
+ */
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
 }
