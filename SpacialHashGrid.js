@@ -36,6 +36,33 @@ class SpacialHashGrid extends Rectangle {
       Math.floor(pos.y / this.cellSize.h)
     );
   }
+/**
+ * Returns an array of {top: right:, bottom: left:} being the distance this point is from the grids edge
+ * NOT IN USE. Using Kings square logic
+ * @param {Point} pos 
+ * @returns 
+ */
+  distanceToEdgesOfCell(pos) {
+    // which cell are we in
+    const rowCols = this.makeRowCols(pos, this.cellSize);
+    // What are the absolute positions of the cell edges
+    const cellBox = {
+      top: rowCols.y * this.cellSize.h,
+      right: rowCols.x * this.cellSize.w + this.cellSize.w,
+      bottom: rowCols.y * this.cellSize.h + this.cellSize.h,
+      left: rowCols.x * this.cellSize.h 
+    };
+    // return the distance the point is from each edge
+    const distance = {
+      top: pos.y - cellBox.top,
+      right: cellBox.right - pos.x,
+      bottom: cellBox.bottom - pos.y,
+      left: pos.x - cellBox.left,
+    }
+    return distance;
+  }
+
+  // add a point to the grid
 
   // the top left corner of a given cell eg '4_6'
   cellTopLeft(key) {
