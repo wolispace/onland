@@ -7,14 +7,16 @@ let app = {
 
   start() {
     app.setup();
-    app.runTests();
+    //app.runLocationTests();
+    app.runStorageTests();
   },
 
   setup() {
-    const cellSize = new Rectangle({ w: 100, h: 200 });
-    const gridRectangle = new Rectangle({ w: 1000, h: 2000 });
-
-    app.testGrid = new SpacialHashGrid('test', gridRectangle, cellSize);
+    // const cellSize = new Rectangle({ w: 100, h: 200 });
+    // const gridRectangle = new Rectangle({ w: 1000, h: 2000 });
+    
+    // app.testGrid = new SpacialHashGrid('test', gridRectangle, cellSize);
+    app.store = new Store();
   },
 
   runTests() {
@@ -95,6 +97,16 @@ let app = {
     expected = {list:[]};
     app.compare('queryKingsSquare', expected, app.testGrid.queryKingsSquare(key));
 
+    
+  },
+  
+  runStorageTests() {
+    for (let i = 0; i < 10000000; i++) {
+      app.store.newId();
+
+      //console.log();
+    }
+    console.log(app.store.lastId);
 
   },
 
