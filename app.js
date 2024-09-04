@@ -4,11 +4,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 const settings = {
   test: {
-    suburbSize: 1000, // need a fixed suburb size as it will match data loaded from disk
-    landSize: 5000, // how big each land (logically grouped items saved to disk) is 
-    worldSize: { w: 500, h: 500 },
+    suburbSize: 500, // need a fixed suburb size as it will match data loaded from disk
+    landSize: new Rectangle({ w: 500, h: 500 }), // how big each land (logically grouped items saved to disk) is 
+    worldSize: { w: 1000, h: 1000 },
     start: { x: 100, y: 100 },
     itemQty: 10,
+    lands: 'test',
   }
 }
 
@@ -51,14 +52,14 @@ let app = {
 
     // load in some data from a js file
     const encodedData = "a|tree|||352|480^b|rock|||37|249^c|tree|||69|303^d|arch|||254|344^e|tree|||495|245^f|rock|||29|24^g|rock|||282|103^h|tree|||220|316^i|rock|||167|39";    //const encodedData = "1|arch|||198|400^2|rock|||250|150";
-    app.world.load(encodedData);
+    //app.world.load(encodedData);
 
+    app.loadData('0_0');
     shiftSuburbsAsync(app.me);
 
     controls.setup();
-    app.overlay.div.style.top = "200px";
+    //app.overlay.div.style.top = "200px";
 
-    //app.loadData('testData.js');
 
     setTimeout(app.world.extract, 2000);
 
@@ -179,18 +180,26 @@ let app = {
   /** when we are in a new land, clear previous item info and load the kings square of land data
    * @params {string} land key eg '0_0' or 4_6' lands are bigger than suburbs
    */
-  loadData(fileKey) {
-    loadScript(`lands/land_${fileKey}.js`)
-      .then(() => {
-        // File loaded successfully, you can now use its functions/variables
-        console.log('Script loaded successfully');
-        if (defaultData) {
-          app.world.load(defaultData);
-        }
-      })
-      .catch((error) => {
-        console.error('Error loading script:', error);
-      });
+  loadData(landKey) {
+
+    const surrounds = app.world.layers.lands.kingsSquare(landKey);
+
+    console.log({ surrounds });
+
+    surrounds.list.forEach((land => {
+      loadScript(`lands/${settings[mode].lands}_${land}.js`)
+        .then(() => {
+          // File loaded successfully, you can now use its functions/variables
+          console.log('Script loaded successfully');
+          if (app.defaultData) {
+            app.world.load(app.defaultData.surface.join('^'));
+          }
+        })
+        .catch((error) => {
+          console.error('Error loading script:', error);
+        });
+
+    }));
 
   }
 
@@ -204,7 +213,7 @@ async function shiftSuburbsAsync(mover) {
     let currentLand = app.world.layers.lands.makeKey(mover.collisionBox);
     if (mover.land !== currentLand) {
       // switched lands so load and hide
-      loadData(currentLand);
+      app.loadData(currentLand);
       mover.land = currentLand;
     }
     await hideSuburbsAsync(mover);
@@ -265,7 +274,6 @@ async function hideSuburbsAsync(mover) {
  */
 function loadScript(src) {
   console.log(`attempting to load`, src);
-  return;
 
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
