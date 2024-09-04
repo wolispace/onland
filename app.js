@@ -2,46 +2,65 @@
 document.addEventListener("DOMContentLoaded", function () {
   app.start();
 });
+const settings = {
+  test: {
+    suburbSize: 1000, // need a fixed suburb size as it will match data loaded from disk
+    landSize: 5000, // how big each land (logically grouped items saved to disk) is 
+    worldSize: { w: 500, h: 500 },
+    start: { x: 100, y: 100 },
+    itemQty: 10,
+  }
+}
+
+const mode = 'test';
 
 let app = {
   isDev: true,
-  suburbSize: null,
+  suburbSize: settings[mode].suburbSize, // need a fixed suburb size as it will match data loaded from disk
+  landSize: settings[mode].landSize, // how big each land (logically grouped items saved to disk) is 
   showCollision: false,
   contextMenu: true,
   scrollBrowser: true,
   randomItems: true,
   doGhosting: true,
-  itemQty: 3,
+  itemQty: settings[mode].itemQty,
   showTouchPoint: true,
-  
+
   encodeKeys: ['id', 'type', 'variant', 'layer', 'x', 'y'],
 
   start() {
     app.input = new Input();
     app.ghosted = new UniqueSet();
     app.events = new Events();
+    app.store = new Store();
 
     app.scrollable = { div: document.querySelector(".scrollable") };
-    app.world = new World({ w: 50000, h: 50000 });
+    app.world = new World(settings[mode].worldSize);
     app.world.div = document.querySelector(`#world`);
 
-    let params = assets.make({ type: 'diamond', id: 'me', x: 100, y: 100, autoShow: true });
+    let params = assets.make({ type: 'diamond', id: 'i01', x: settings[mode].start.x, y: settings[mode].start.y, autoShow: true });
     params.parent = app.world;
 
     app.me = new Mover(params);
-    
+
     // set up the overlay
     app.overlay = { div: document.querySelector(`#overlay`) };
-    
+
     //this.doTest();
     //app.world.populate();
-    app.world.load();
+
+    // load in some data from a js file
+    const encodedData = "a|tree|||352|480^b|rock|||37|249^c|tree|||69|303^d|arch|||254|344^e|tree|||495|245^f|rock|||29|24^g|rock|||282|103^h|tree|||220|316^i|rock|||167|39";    //const encodedData = "1|arch|||198|400^2|rock|||250|150";
+    app.world.load(encodedData);
+
     shiftSuburbsAsync(app.me);
 
     controls.setup();
     app.overlay.div.style.top = "200px";
 
-    app.testLoadScript();
+    //app.loadData('testData.js');
+
+    setTimeout(app.world.extract, 2000);
 
 
     app.gameLoop = new GameLoop(app.update, app.show);
@@ -122,15 +141,13 @@ let app = {
     }
   },
 
-  
+
   encode(item) {
-    console.log(item);
     let encoded = [];
     app.encodeKeys.forEach((key) => {
       let value = item[key];
-      console.log(value);
-      if (value === null || value === undefined || value === ' basic' || value === 'surface') {
-       value = '';
+      if (value === null || value === undefined || value === 'basic' || value === 'surface') {
+        value = '';
       }
       encoded.push(value);
     });
@@ -159,16 +176,21 @@ let app = {
 
   },
 
-  testLoadScript() {
-    loadScript('testData.js')
-  .then(() => {
-    // File loaded successfully, you can now use its functions/variables
-     console.log('Script loaded successfully so call its setup()');
-     testData.setup();
-  })
-  .catch((error) => {
-    console.error('Error loading script:', error);
-  });
+  /** when we are in a new land, clear previous item info and load the kings square of land data
+   * @params {string} land key eg '0_0' or 4_6' lands are bigger than suburbs
+   */
+  loadData(fileKey) {
+    loadScript(`lands/land_${fileKey}.js`)
+      .then(() => {
+        // File loaded successfully, you can now use its functions/variables
+        console.log('Script loaded successfully');
+        if (defaultData) {
+          app.world.load(defaultData);
+        }
+      })
+      .catch((error) => {
+        console.error('Error loading script:', error);
+      });
 
   }
 
@@ -178,6 +200,13 @@ async function shiftSuburbsAsync(mover) {
   mover.updateCollisionBox();
   let postcode = app.world.layers.suburbs.makeKey(mover.collisionBox);
   if (mover.postcode !== postcode) {
+    // we have changed suburbs to check if we have also changed lands
+    let currentLand = app.world.layers.lands.makeKey(mover.collisionBox);
+    if (mover.land !== currentLand) {
+      // switched lands so load and hide
+      loadData(currentLand);
+      mover.land = currentLand;
+    }
     await hideSuburbsAsync(mover);
     await showSuburbsAsync(postcode, mover.collisionBox);
     mover.postcode = postcode;
@@ -185,9 +214,17 @@ async function shiftSuburbsAsync(mover) {
 }
 
 async function showSuburbsAsync(postcode, collisionBox) {
-  app.lastShown = app.world.layers.suburbs.kingsSquare(postcode);
 
-  let inSuburbs = app.world.layers.suburbs.queryKingsSquare(postcode);
+  const currentSuburbs = app.world.layers.suburbs.kingsSquare(postcode);
+  let newSuburbs = null;
+  // compare current suburbs with last show and only add the missing ones
+  if (app.lastShown) {
+    newSuburbs = app.lastShown.notIn(currentSuburbs.list);
+  } else {
+    newSuburbs = currentSuburbs.list;
+  }
+
+  let inSuburbs = app.world.layers.suburbs.query(newSuburbs);
   if (inSuburbs && inSuburbs.list && inSuburbs.list.length > 0) {
     for (const itemId of inSuburbs.list) {
       let item = app.world.items[itemId];
@@ -196,6 +233,7 @@ async function showSuburbsAsync(postcode, collisionBox) {
       }
     }
   }
+  app.lastShown = currentSuburbs;
 }
 
 async function hideSuburbsAsync(mover) {
@@ -226,6 +264,9 @@ async function hideSuburbsAsync(mover) {
  * @returns 
  */
 function loadScript(src) {
+  console.log(`attempting to load`, src);
+  return;
+
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.src = src;

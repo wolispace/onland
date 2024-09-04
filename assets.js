@@ -62,9 +62,9 @@ const assets = {
   },
 
   htmlSets: {
-    items: `<div id="i%id%" class="%type% item" style="width: %w%px; height: %h%px;">%content%</div>`,
-    controls: `<div id="i%id%" class="%type%" style="left:%x%px; bottom:%y%px; width: %w%px; height: %h%px;">%content%</div>`,
-    buttons: `<div id="i%id%" class="%type%" style="left:%x%px; top:%y%px; width: %w%px; height: %h%px;">%content%</div>`
+    items: `<div id="%id%" class="%type% item" style="width: %w%px; height: %h%px;">%content%</div>`,
+    controls: `<div id="%id%" class="%type%" style="left:%x%px; bottom:%y%px; width: %w%px; height: %h%px;">%content%</div>`,
+    buttons: `<div id="%id%" class="%type%" style="left:%x%px; top:%y%px; width: %w%px; height: %h%px;">%content%</div>`
   },
 
 

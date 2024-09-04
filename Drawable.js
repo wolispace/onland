@@ -32,7 +32,7 @@ class Drawable extends Rectangle {
       this.parent.div.insertAdjacentHTML('beforeend', this.html);
       // clear this from memory as we dont need it any more
       this.html = null;
-      this.div = document.querySelector(`#i${this.id}`);
+      this.div = document.querySelector(`#${this.id}`);
 
       if (this.onclick) {
         this.div.onclick = this.onclick;

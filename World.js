@@ -29,6 +29,7 @@ class World extends Drawable {
       underground: this.cellSize, // things we can dig up
       ghosts: this.cellSize, // items to ghost when we move behind
       suburbs: this.suburbSize(app.suburbSize), // screen spaces/zones that are loaded dynamically
+      lands: app.landSize, // 
     };
   }
 
@@ -133,7 +134,7 @@ class World extends Drawable {
 
       let x = app.randomItems ? app.rnd(app.world.w) : lastPos.x;
       let y = app.randomItems ? app.rnd(app.world.h) : lastPos.y;
-      let key = i;
+      let key = app.store.newId();
 
       let itemType = 'rock';
       if (app.rnd(20) == 1) {
@@ -143,9 +144,10 @@ class World extends Drawable {
           itemType = 'tree';
         }
       }
-      const itemInfo = assets.make(itemType, key, x, y, true);
-      itemInfo.parent = this.div;
-      this.items[i] = new Item(itemInfo);
+      let itemParams = { id: key, type: itemType, x: x, y: y, autoShow: true };
+      const itemInfo = assets.make(itemParams);
+      itemInfo.parent = this;
+      this.items[key] = new Item(itemInfo);
       // increment pos grid
       lastPos.x += stepPos.x;
       if (lastPos.x > this.x) {
@@ -163,10 +165,8 @@ class World extends Drawable {
    * also populating app.world.items
    * 
    */
-  load() {
-
-    const encodedData = "1|arch|||198|400^2|rock|||250|150^3|rock|||350|150^4|river|||494|478^5|river|||491|615^6|river|||499|772^7|tree|||788|166^8|tree|||626|221^9|tree|||1064|178^10|tree|||1048|178";
-    //const encodedData = "1|arch|||198|400^2|rock|||250|150";
+  load(encodedData) {
+    if (!encodedData) return;
     let decodedData = this.decodeDate(encodedData);
     decodedData.forEach(item => {
       item.autoShow = true;
@@ -174,6 +174,23 @@ class World extends Drawable {
       itemInfo.parent = this;
       this.items[item.id] = new Item(itemInfo);
     });
+  }
+
+  extract() {
+    //loop through all suburbs and build an array of exportable data
+    let exportData = {};
+    for (const [key, items] of Object.entries(app.world.layers.suburbs.grid)) {
+      let suburbContents = [];
+      items.list.forEach(itemId => {
+        const item = app.world.items[itemId];
+        if (item) {
+          suburbContents.push(app.encode(item));
+        }
+      }); 
+      exportData[key] = suburbContents.join('^');
+
+    }
+    console.log({exportData});
   }
 
 
@@ -281,8 +298,10 @@ class World extends Drawable {
       pos.add(step);
       pos.add(wobble);
 
+      let key = app.store.newId();
+
       // add into the data array we passed in
-      data.push({ id: index, type: params.type, variant: params.variant, x: pos.x, y: pos.y });
+      data.push({ id: key, type: params.type, variant: params.variant, x: pos.x, y: pos.y });
       index++;
     }
     return index;
