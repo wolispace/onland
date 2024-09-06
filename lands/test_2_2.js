@@ -1,6 +1,6 @@
 app.defaultData = {
   "surface": [
-    "d|rock|||750|250",
+    "i|river|||1250|1250",
   ],
   "underground": [""],
 
