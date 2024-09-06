@@ -134,7 +134,7 @@ class World extends Drawable {
 
       let x = app.randomItems ? app.rnd(app.world.w) : lastPos.x;
       let y = app.randomItems ? app.rnd(app.world.h) : lastPos.y;
-      let key = app.store.newId();
+      let key = app.uniqueId.next();
 
       let itemType = 'rock';
       if (app.rnd(20) == 1) {
@@ -298,7 +298,7 @@ class World extends Drawable {
       pos.add(step);
       pos.add(wobble);
 
-      let key = app.store.newId();
+      let key = app.uniqueId.next();
 
       // add into the data array we passed in
       data.push({ id: key, type: params.type, variant: params.variant, x: pos.x, y: pos.y });

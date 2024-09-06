@@ -17,6 +17,7 @@ let app = {
     
     // app.testGrid = new SpacialHashGrid('test', gridRectangle, cellSize);
     app.store = new Store();
+    app.uniqueId = new UniqueId();
   },
 
   runTests() {
@@ -104,11 +105,11 @@ let app = {
 
   runStorageTests() {
     for (let i = 0; i < 100000; i++) {
-      app.store.newId();
+      app.uniqueId.next();
 
-      //console.log(app.store.lastId, i);
+      //console.log(app.uniqueId.lastId, i);
     }
-    console.log(app.store.lastId);
+    console.log(app.uniqueId.lastId);
 
   },
 
