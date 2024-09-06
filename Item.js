@@ -28,7 +28,7 @@ class Item extends Drawable {
    */
   isVisible() {
     let isVisible = true;
-    if (this.id !== 'me') {
+    if (this.id !== '_me') {
       // which suburb will this item be in
       let currentPostcode = app.world.layers.suburbs.makeKey(app.me);
       let kingsSquare = app.world.layers.suburbs.kingsSquare(currentPostcode);

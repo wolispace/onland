@@ -31,6 +31,7 @@ let app = {
 
   start() {
     app.input = new Input();
+    app.uniqueId = new UniqueId();
     app.ghosted = new UniqueSet();
     app.events = new Events();
     app.store = new Store();
@@ -39,22 +40,19 @@ let app = {
     app.world = new World(settings[mode].worldSize);
     app.world.div = document.querySelector(`#world`);
 
-    let params = assets.make({ type: 'diamond', id: 'i01', x: settings[mode].start.x, y: settings[mode].start.y, autoShow: true });
+    let params = assets.make({ type: 'diamond', id: '_me', x: settings[mode].start.x, y: settings[mode].start.y, autoShow: true });
     params.parent = app.world;
 
     app.me = new Mover(params);
 
-    // set up the overlay
+    // set up the overlay that holds the controls and other overlay things like dialogs
     app.overlay = { div: document.querySelector(`#overlay`) };
 
     //this.doTest();
-    //app.world.populate();
+    app.world.populate();
 
-    // load in some data from a js file
-    const encodedData = "a|tree|||352|480^b|rock|||37|249^c|tree|||69|303^d|arch|||254|344^e|tree|||495|245^f|rock|||29|24^g|rock|||282|103^h|tree|||220|316^i|rock|||167|39";    //const encodedData = "1|arch|||198|400^2|rock|||250|150";
-    //app.world.load(encodedData);
-
-    app.loadData('0_0');
+    
+    //app.loadData('0_0');
     shiftSuburbsAsync(app.me);
 
     controls.setup();

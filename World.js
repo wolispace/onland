@@ -170,6 +170,7 @@ class World extends Drawable {
     let decodedData = this.decodeDate(encodedData);
     decodedData.forEach(item => {
       item.autoShow = true;
+      item.id = app.uniqueId.next();
       const itemInfo = assets.make(item);
       itemInfo.parent = this;
       this.items[item.id] = new Item(itemInfo);
