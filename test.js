@@ -100,11 +100,13 @@ let app = {
     
   },
   
+  // 51 = 'Z', 3275 = 'ZZ', 100,000,000 = 'fUJIn' 1B = 'aeP2Pp'
+
   runStorageTests() {
-    for (let i = 0; i < 10000000; i++) {
+    for (let i = 0; i < 100000; i++) {
       app.store.newId();
 
-      //console.log();
+      //console.log(app.store.lastId, i);
     }
     console.log(app.store.lastId);
 

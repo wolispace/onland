@@ -1,9 +1,25 @@
 class Store {
   compression = false;
-  lastId = '`'; // the first key in our unique leys
+  reel = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+  lastId = '9'; // the first key in our unique leys
 
   constructor(type = 'localStorage') {
     this.type = type;
+  }
+
+  /**
+   * Returns the next char so if I pass in 'c' it gives me 'd' and if I pass in 'Z' it gives me '0' rolling around to the start
+   * @param {string} char 
+   * @returns {string} next char
+   */
+  nextInReelX(char) {
+    let nextChar = this.reel[0];
+    const index = this.reel.indexOf(char);
+    if (index !== -1) {
+      nextChar =  this.reel[index + 1];
+    }
+    return nextChar;
   }
 
   save(key, data) {
@@ -31,17 +47,27 @@ class Store {
    * Then we reach 'aaa' then 'aaaa' etc..
    * This means 10,000,000 = 'uvxwj' which takes less space and can be used as a <div id="">
    */
+
+  nextInReel(char) {
+    const index = this.reel.indexOf(char);
+    if (index === this.reel.length - 1) {
+      return this.reel[0];
+    }
+    return this.reel[index + 1];
+  }
+  
   newId() {
     let id = this.lastId;
     let index = id.length - 1;
   
     while (index >= 0) {
-      const charCode = id.charCodeAt(index);
-      if (charCode === 122) { // 'z'
-        id = id.slice(0, index) + 'a' + id.slice(index + 1);
+      const currentChar = id[index];
+      if (currentChar === 'Z') {
+        id = id.slice(0, index) + this.reel[0] + id.slice(index + 1);
         index--;
       } else {
-        id = id.slice(0, index) + String.fromCharCode(charCode + 1) + id.slice(index + 1);
+        const nextChar = this.nextInReel(currentChar);
+        id = id.slice(0, index) + nextChar + id.slice(index + 1);
         break;
       }
     }
@@ -53,6 +79,7 @@ class Store {
     this.lastId = id;
     return id;
   }
+  
 
  
 } 
