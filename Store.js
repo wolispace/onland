@@ -23,6 +23,26 @@ class Store {
     localStorage.removeItem(key);
     return this;
   }
+
+  encodeData(data) {
+    let encodedData = [];
+    for (const item of data) {
+      encodedData.push(app.encode(item));
+    }
+    return encodedData.join('^');
+  }
+
+  decodeData(encodedString) {
+    let decodedData = [];
+    let itemStrings = encodedString.split('^');
+    for (const item of itemStrings) {
+      let decoded = app.decode(item);
+      decodedData.push(decoded);
+    }
+
+    return decodedData;
+
+  }
   
 
  

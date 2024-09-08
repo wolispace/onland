@@ -23,6 +23,7 @@ class Items {
     this.list = {};
   }
 
+  load(land) {}
   /**
    * Adds all items we know about that are in the selected lands
    * @param {array|strings} lands array ['0_0', '0_1' ...] 

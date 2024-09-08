@@ -192,6 +192,7 @@ let app = {
           // File loaded successfully, you can now use its functions/variables
           console.log('Script loaded successfully');
           if (app.defaultData) {
+            app.items.setDefault(app.defaultData.surface.join('^'));
             app.world.load(app.defaultData.surface.join('^'));
           }
         })
@@ -200,6 +201,8 @@ let app = {
         });
 
     }));
+
+    //now default is loaded, check for local store and add/replace that
 
   }
 

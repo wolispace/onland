@@ -168,7 +168,7 @@ class World extends Drawable {
    */
   load(encodedData) {
     if (!encodedData) return;
-    let decodedData = this.decodeDate(encodedData);
+    let decodedData = app.store.decodeData(encodedData);
     decodedData.forEach(item => {
       item.autoShow = true;
       item.id = app.uniqueId.next();
@@ -254,31 +254,11 @@ class World extends Drawable {
       app.items.add(tempItem);
     });
 
-    let encodedData = this.encodeData(data);
+    let encodedData = app.store.encodeData(data);
     console.log('encodedData', encodedData);
 
-    let decodedData = this.decodeDate(encodedData);
+    let decodedData = app.store.decodeData(encodedData);
     console.log(decodedData);
-  }
-
-  encodeData(data) {
-    let encodedData = [];
-    for (const item of data) {
-      encodedData.push(app.encode(item));
-    }
-    return encodedData.join('^');
-  }
-
-  decodeDate(encodedString) {
-    let decodedData = [];
-    let itemStrings = encodedString.split('^');
-    for (const item of itemStrings) {
-      let decoded = app.decode(item);
-      decodedData.push(decoded);
-    }
-
-    return decodedData;
-
   }
 
   /**
