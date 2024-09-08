@@ -135,7 +135,7 @@ class Mover extends Item {
 
     if (inCell && inCell.list && inCell.list.length > 0) {
       inCell.list.forEach((itemId) => {
-        let item = app.world.items[itemId];
+        let item = app.items.get(itemId);
         if (!item) return;
 
         const assetInfo = assets.get(item.type, item.variant);
@@ -179,7 +179,7 @@ class Mover extends Item {
     //app.msg(3, app.ghosted.count());
     if (inCell && inCell.list && inCell.list.length > 0) {
       inCell.list.forEach((itemId) => {
-        const item = app.world.items[itemId];
+        const item = app.items.get(itemId);
         if (!item) return;
         const assetInfo = assets.get(item.type, item.variant);
         const collideInfo = assetInfo['ghosts'];

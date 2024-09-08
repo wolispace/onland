@@ -35,6 +35,8 @@ let app = {
     app.ghosted = new UniqueSet();
     app.events = new Events();
     app.store = new Store();
+    app.items = new Items();
+    
 
     app.scrollable = { div: document.querySelector(".scrollable") };
     app.world = new World(settings[mode].worldSize);
@@ -234,7 +236,7 @@ async function showSuburbsAsync(postcode, collisionBox) {
   let inSuburbs = app.world.layers.suburbs.query(newSuburbs);
   if (inSuburbs && inSuburbs.list && inSuburbs.list.length > 0) {
     for (const itemId of inSuburbs.list) {
-      let item = app.world.items[itemId];
+      let item = app.items.get(itemId);
       if (item) {
         item.show();
       }
@@ -254,7 +256,7 @@ async function hideSuburbsAsync(mover) {
         const oneSuburb = app.world.layers.suburbs.grid[postcode];
         if (oneSuburb && oneSuburb.list) {
           for (const itemId of oneSuburb.list) {
-            let item = app.world.items[itemId];
+            let item = app.items.get(itemId);
             if (item) {
               item.hide();
             }

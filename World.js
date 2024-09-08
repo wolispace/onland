@@ -147,7 +147,8 @@ class World extends Drawable {
       let itemParams = { id: key, type: itemType, x: x, y: y, autoShow: true };
       const itemInfo = assets.make(itemParams);
       itemInfo.parent = this;
-      this.items[key] = new Item(itemInfo);
+      const tempItem = new Item(itemInfo);
+      app.items.set(tempItem);
       // increment pos grid
       lastPos.x += stepPos.x;
       if (lastPos.x > this.x) {
@@ -162,7 +163,7 @@ class World extends Drawable {
 
   /**
    * decodes a string of data (a set of 9 suburbs) and adds them to the world
-   * also populating app.world.items
+   * also populating app.items
    * 
    */
   load(encodedData) {
@@ -173,7 +174,10 @@ class World extends Drawable {
       item.id = app.uniqueId.next();
       const itemInfo = assets.make(item);
       itemInfo.parent = this;
-      this.items[item.id] = new Item(itemInfo);
+      const tempItem = new Item(itemInfo);
+
+      app.items.set(tempItem);
+    
     });
   }
 
@@ -183,7 +187,7 @@ class World extends Drawable {
     for (const [key, items] of Object.entries(app.world.layers.suburbs.grid)) {
       let suburbContents = [];
       items.list.forEach(itemId => {
-        const item = app.world.items[itemId];
+        const item = app.items.get(itemId);
         if (item) {
           suburbContents.push(app.encode(item));
         }
@@ -242,12 +246,12 @@ class World extends Drawable {
     }
     index = this.addItem(index, params, data);
 
-
     data.forEach(item => {
       item.autoShow = true;
       const itemInfo = assets.make(item);
       itemInfo.parent = this;
-      this.items[item.id] = new Item(itemInfo);
+      const tempItem = new Item(itemInfo);
+      app.items.add(tempItem);
     });
 
     let encodedData = this.encodeData(data);
