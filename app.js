@@ -193,17 +193,23 @@ let app = {
           console.log('Script loaded successfully');
           if (app.defaultData) {
             app.items.setDefault(app.defaultData.surface.join('^'));
-            app.world.load(app.defaultData.surface.join('^'));
+            app.items.load(app.defaultData.surface.join('^'));
           }
         })
         .catch((error) => {
           console.error('Error loading script:', error);
         });
-
     }));
 
     //now default is loaded, check for local store and add/replace that
+    let userData = app.store.get("allItems");
+    app.items.load(userData);
 
+    // not remove any that are not in the current surrounds
+    app.items.removeNotIn(surrounds.list);
+
+    // allocate only these items to suburbs
+    app.item.addToLayers();
   }
 
 };

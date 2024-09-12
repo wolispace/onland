@@ -32,16 +32,16 @@ class SpacialHashGrid extends Rectangle {
   // a rectangles x, y given a cell size results in the rows and cols to that point
   makeRowCols(pos) {
     return new Point(
-      Math.floor(pos.x / this.cellSize.w), 
+      Math.floor(pos.x / this.cellSize.w),
       Math.floor(pos.y / this.cellSize.h)
     );
   }
-/**
- * Returns an array of {top: right:, bottom: left:} being the distance this point is from the grids edge
- * NOT IN USE. Using Kings square logic
- * @param {Point} pos 
- * @returns 
- */
+  /**
+   * Returns an array of {top: right:, bottom: left:} being the distance this point is from the grids edge
+   * NOT IN USE. Using Kings square logic
+   * @param {Point} pos 
+   * @returns 
+   */
   distanceToEdgesOfCell(pos) {
     // which cell are we in
     const rowCols = this.makeRowCols(pos, this.cellSize);
@@ -50,7 +50,7 @@ class SpacialHashGrid extends Rectangle {
       top: rowCols.y * this.cellSize.h,
       right: rowCols.x * this.cellSize.w + this.cellSize.w,
       bottom: rowCols.y * this.cellSize.h + this.cellSize.h,
-      left: rowCols.x * this.cellSize.h 
+      left: rowCols.x * this.cellSize.h
     };
     // return the distance the point is from each edge
     const distance = {
@@ -187,11 +187,26 @@ class SpacialHashGrid extends Rectangle {
     this.grid[key].clear();
   }
 
+  /**
+   * 
+   * @param {Object} params with id and x,y so we can remove it from its current grid 
+   * @returns 
+   */
   remove(params) {
     const key = this.makeKey(params);
     let cell = this.grid[key];
     if (!cell) return;
     this.grid[key].take(params.id);
+  }
+
+  /**
+   * remove the id from every list in our grid
+   * @param {string} id of the item to remove  
+   */
+  removeEverywhere(id) {
+    for (const key in this.grid) {
+      this.grid[key] = this.grid[key].filter(item => item !== id);
+    }
   }
 
   // update 

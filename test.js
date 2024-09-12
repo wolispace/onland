@@ -7,20 +7,20 @@ let app = {
 
   start() {
     app.setup();
-    //app.runLocationTests();
+    app.runLocationTests();
     app.runStorageTests();
   },
 
   setup() {
-    // const cellSize = new Rectangle({ w: 100, h: 200 });
-    // const gridRectangle = new Rectangle({ w: 1000, h: 2000 });
+    const cellSize = new Rectangle({ w: 100, h: 200 });
+    const gridRectangle = new Rectangle({ w: 1000, h: 2000 });
     
-    // app.testGrid = new SpacialHashGrid('test', gridRectangle, cellSize);
+    app.testGrid = new SpacialHashGrid('test', gridRectangle, cellSize);
     app.store = new Store();
     app.uniqueId = new UniqueId();
   },
 
-  runTests() {
+  runLocationTests() {
     let params = null;
     let expected = new Point(10, 10);
     let result = app.testGrid.rowCols;
@@ -94,11 +94,10 @@ let app = {
     expected = {list:["0_0","1_0","0_1","1_1"]};
     app.compare('kingsSquare', expected, app.testGrid.kingsSquare(key));
 
-    key = '4_6';
-    expected = {list:[]};
-    app.compare('queryKingsSquare', expected, app.testGrid.queryKingsSquare(key));
-
-    
+    app.testGrid.grid = {'0_0': ['a', 'b', 'c'], '0_1': ['d', 'a', 'c']};
+    expected = {"0_0":["b","c"],"0_1":["d","c"]};
+    app.testGrid.removeEverywhere("a");
+    app.compare('removeEverywhere', expected, app.testGrid.grid);
   },
   
   // 51 = 'Z', 3275 = 'ZZ', 100,000,000 = 'fUJIn' 1B = 'aeP2Pp'
