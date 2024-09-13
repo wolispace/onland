@@ -167,6 +167,7 @@ class SpacialHashGrid extends Rectangle {
 
   // add a new item (its id) to the grid
   add(params) {
+    // do we want to removeById(params.id) before adding to make sure its unique?
     const key = this.makeKey(params);
     return this.addToCell(key, params.id);
   }
@@ -200,10 +201,10 @@ class SpacialHashGrid extends Rectangle {
   }
 
   /**
-   * remove the id from every list in our grid
+   * remove the id from every cell in our grid
    * @param {string} id of the item to remove  
    */
-  removeEverywhere(id) {
+  removeById(id) {
     for (const key in this.grid) {
       this.grid[key] = this.grid[key].filter(item => item !== id);
     }

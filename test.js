@@ -96,8 +96,8 @@ let app = {
 
     app.testGrid.grid = {'0_0': ['a', 'b', 'c'], '0_1': ['d', 'a', 'c']};
     expected = {"0_0":["b","c"],"0_1":["d","c"]};
-    app.testGrid.removeEverywhere("a");
-    app.compare('removeEverywhere', expected, app.testGrid.grid);
+    app.testGrid.removeById("a");
+    app.compare('removeById', expected, app.testGrid.grid);
   },
   
   // 51 = 'Z', 3275 = 'ZZ', 100,000,000 = 'fUJIn' 1B = 'aeP2Pp'
