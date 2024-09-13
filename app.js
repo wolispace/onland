@@ -36,7 +36,7 @@ let app = {
     app.events = new Events();
     app.store = new Store();
     app.items = new Items();
-    
+
 
     app.scrollable = { div: document.querySelector(".scrollable") };
     app.world = new World(settings[mode].worldSize);
@@ -51,10 +51,10 @@ let app = {
     app.overlay = { div: document.querySelector(`#overlay`) };
 
     //this.doTest();
-    app.world.populate();
+    //app.world.populate();
 
-    
-    //app.loadData('0_0');
+
+    app.loadData('0_0');
     shiftSuburbsAsync(app.me);
 
     controls.setup();
@@ -181,35 +181,41 @@ let app = {
    * @params {string} land key eg '0_0' or 4_6' lands are bigger than suburbs
    */
   loadData(landKey) {
-
+    const layer = 'surface';
     const surrounds = app.world.layers.lands.kingsSquare(landKey);
 
     console.log({ surrounds });
 
     surrounds.list.forEach((land => {
-      loadScript(`lands/${settings[mode].lands}_${land}.js`)
-        .then(() => {
-          // File loaded successfully, you can now use its functions/variables
-          console.log('Script loaded successfully');
-          if (app.defaultData) {
-            app.items.setDefault(app.defaultData.surface.join('^'));
-            app.items.load(app.defaultData.surface.join('^'));
-          }
-        })
-        .catch((error) => {
-          console.error('Error loading script:', error);
-        });
+
+      if (!app.store.has(land)) {
+        loadScript(`lands/${settings[mode].lands}_${land}.js`)
+          .then(() => {
+            // File loaded successfully, you can now use its functions/variables
+            console.log('Script loaded successfully');
+            if (app.defaultData) {
+              app.store.saveLand(layer, land, app.defaultData[layer].join('^'));
+            }
+          })
+          .catch((error) => {
+            console.error('Error loading script:', error);
+          });
+      }
+      const encodedData = app.store.loadLand(layer, land);
+      if (encodedData) {
+        app.items.setAll(encodedData);
+      }
     }));
 
     //now default is loaded, check for local store and add/replace that
-    let userData = app.store.get("allItems");
-    app.items.load(userData);
+    let userData = app.store.load("allItems");
+    app.items.setAll(userData);
 
-    // not remove any that are not in the current surrounds
-    app.items.removeNotIn(surrounds.list);
+    // now remove any that are not in the current surrounds
+    //app.items.removeNotIn(surrounds.list);
 
     // allocate only these items to suburbs
-    app.item.addToLayers();
+    //app.item.addToLayers();
   }
 
 };

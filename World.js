@@ -21,6 +21,12 @@ class World extends Drawable {
     });
   }
 
+  /**
+   * 
+   * @returns The first letter of each layer must be unique as its used when storing data in local storage
+   * eg: surface is store in 's_0_0'
+   * suburbs and lands are specual so dont worry about their first letters clashing
+   */
   layerDefinitions() {
     return {
       overhead: this.cellSize, // amove we cant bump into like clouds

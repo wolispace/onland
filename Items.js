@@ -15,6 +15,7 @@ class Items {
     this.list[item.id] = item;
   }
 
+  // remove an item from the current list
   /**
    * Clear the current list of items
    */
@@ -27,14 +28,14 @@ class Items {
    * 
   *  @param {string} encodedData eg "rock|||100|200^tree|||200,350^..."
   * */
-  setDefault(encodedData) {
+  setAll(encodedData) {
     if (!encodedData) return;
     let decodedData = app.store.decodeData(encodedData);
     decodedData.forEach(item => {
       item.autoShow = true;
       item.id = app.uniqueId.next();
       const itemInfo = assets.make(item);
-      itemInfo.parent = this;
+      itemInfo.parent = app.world;
       const tempItem = new Item(itemInfo);
 
       this.set(tempItem);

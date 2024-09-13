@@ -5,7 +5,18 @@ class Store {
     this.type = type;
   }
 
-  
+  makeKey(layer, land) {
+    return `${layer[0]}_${land}`;
+  }
+
+  saveLand(layer, land, encodedData) {
+    this.save(this.makeKey(layer, land), encodedData);
+  }
+
+  loadLand(layer, land) {
+    return this.load(this.makeKey(layer, land));
+  }
+
   save(key, data) {
     localStorage.setItem(key, data);
     return this;
