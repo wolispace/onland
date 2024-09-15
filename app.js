@@ -36,6 +36,8 @@ let app = {
     app.events = new Events();
     app.store = new Store();
     app.items = new Items();
+    app.allItems = new Items();
+    app.tempItems = new Items();
 
 
     app.scrollable = { div: document.querySelector(".scrollable") };
@@ -183,42 +185,49 @@ let app = {
   loadData(landKey) {
     const layer = 'surface';
     const surrounds = app.world.layers.lands.kingsSquare(landKey);
-
-    console.log({ surrounds });
-
-    surrounds.list.forEach((land => {
-
-      if (!app.store.has(land)) {
-        loadScript(`lands/${settings[mode].lands}_${land}.js`)
-          .then(() => {
-            // File loaded successfully, you can now use its functions/variables
-            console.log('Script loaded successfully');
-            if (app.defaultData) {
-              app.store.saveLand(layer, land, app.defaultData[layer].join('^'));
-            }
-          })
-          .catch((error) => {
-            console.error('Error loading script:', error);
-          });
-      }
-      const encodedData = app.store.loadLand(layer, land);
-      if (encodedData) {
-        app.items.setAll(encodedData);
-      }
+    const filePromises = [];
+    
+    surrounds.list.forEach((land => {  
+      const filePromise = loadScript(`lands/${settings[mode].lands}_${land}.js`)
+        .then(() => {
+          // File loaded successfully, you can now use its functions/variables
+          console.log('Script loaded successfully');
+          if (app.defaultData) {            
+            app.store.addToTempList(app.defaultData[layer].join('^'));
+          }
+        })
+        .catch((error) => {
+          console.error('Error loading script:', error);
+        });
+        filePromises.push(filePromise);
     }));
 
-    //now default is loaded, check for local store and add/replace that
-    let userData = app.store.load("allItems");
-    app.items.setAll(userData);
+    Promise.all(filePromises)
+    .then(() => {
+        // All files have been read from disk
+        // Handle the data as a whole here
+        processAllData(surrounds);
+    })
+    .catch((error) => {
+        console.error('Error loading scripts:', error);
+    });
+  },
 
-    // now remove any that are not in the current surrounds
-    //app.items.removeNotIn(surrounds.list);
-
-    // allocate only these items to suburbs
-    //app.item.addToLayers();
-  }
-
+  
 };
+
+function processAllData(surrounds) {
+      // now app.store.tempList has all default items in basic form
+  // update with all known/moved items from local storage
+  // all that are in tempList now get turned into real items and allocated into layers
+
+  let movedItems = app.store.load("movedItems");
+  app.store.updateTempList(movedItems);
+  app.store.pruneTempList(surrounds);
+  
+  // now we have a list of basic objects we can turn into Item() and fill the grids and draw on screen
+  app.items.setItems(app.store.tempList);
+}
 
 async function shiftSuburbsAsync(mover) {
   mover.updateCollisionBox();

@@ -1,20 +1,48 @@
 class Store {
   compression = false;
+  tempList = {};
  
   constructor(type = 'localStorage') {
     this.type = type;
   }
-
-  makeKey(layer, land) {
-    return `${layer[0]}_${land}`;
+  
+  /**
+   * Add all items into a temp list {'a': {id:a, x: 100, y: 200, etc..}}
+   * @param {string} encodedData 'a|||100|200^etc..
+   */
+  addToTempList(encodedData) {
+    const decodedData = this.decodeData(encodedData);
+    decodedData.forEach((itemData) => {
+      //add to a temp list of item info to turn into  real item
+      this.tempList[itemData.id] = itemData;
+    });
   }
 
-  saveLand(layer, land, encodedData) {
-    this.save(this.makeKey(layer, land), encodedData);
+  /**
+   * Updates or adds items in our temp list {'a': {id:a, x: 150, y: 250, etc..}}
+   * @param {string} encodedData 'a|||150|250^etc..
+
+   */
+  updateTempList(encodedData) {
+    const decodedData = this.decodeData(encodedData);
+    decodedData.forEach((itemData) => {
+      //add to a temp list of item info to turn into  real item
+      this.tempList[itemData.id] = itemData;
+    });
   }
 
-  loadLand(layer, land) {
-    return this.load(this.makeKey(layer, land));
+  /**
+   * 
+   * @param {array} surrounds array of land key ['0_0', '0_1', etc..] 
+   */
+  pruneTempList(surrounds) {
+    for (const key in this.tempList) {
+      const params = this.tempList[key];
+      const land = app.world.layers.lands.makeKey(params);
+      if (!surrounds.has(land)) {
+        delete this.tempList[key];
+      }
+    }
   }
 
   save(key, data) {
@@ -44,6 +72,7 @@ class Store {
   }
 
   decodeData(encodedString) {
+    if (!encodedString) return [];
     let decodedData = [];
     let itemStrings = encodedString.split('^');
     for (const item of itemStrings) {

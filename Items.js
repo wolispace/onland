@@ -15,6 +15,25 @@ class Items {
     this.list[item.id] = item;
   }
 
+  setItem(parent, item, autoShow) {
+    item.autoShow = autoShow;
+    item.id = item.id ?? app.uniqueId.next();
+    const itemInfo = assets.make(item);
+    itemInfo.parent = parent;
+    const tempItem = new Item(itemInfo);
+    this.set(tempItem);
+    return tempItem;
+  }
+
+  setItems(itemList) {
+    const parent = app.world;
+    const autoShow = true;
+    for (const itemId in itemList) {
+      const params = itemList[itemId];
+      this.setItem(parent, params, autoShow);
+    }
+  }
+
   // remove an item from the current list
   /**
    * Clear the current list of items

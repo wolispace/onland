@@ -7,26 +7,27 @@
 Each item has a unique ID within the world
 We have pre-defined grid lands 0_0, 0_1 etc..
 An item is first defined in one of these land files
-When we read it we store the item in local storage
-It is stored by its id
 
-When the world starts we read all current land files to work out the default items to show
+Read all item from the default files
+read allItems from storage
+Loop through allItems:
+- Update any items that are in the current surrounds
+- Remove any items that are not in the current surrounds
+- Add any items that are in the current surrounds
 
-Then we read all local storage items and make one list of known items
+Render items in current list
 
-We put each item in a land and a suburb in app temp storage
+When a tree is chopped it is removed from 
+- the land 
+- the suburb
+- the world html
+- wood is added as a new item into app.items and put in our inventory
 
-When we move lands we clear our list of items and repeat: load lands, update with all known items, index each into a land and a suburb
+When a rock is moved is is updated in
+- the land 
+- the suburb
+- the world html 
 
-When we move suburbs we are only looking at items within our temp storage
-
-- load a set of land files and build a list of items
-
-- loop through all store items, calc their land and either update or add to our current temp list of items
-
-- loop through all temp items and allocate to suburbs
-
-- show we have something to show
-
-- when an item is moved, we calc its land and update it in local storage
-
+We need a temp list of items we have read from file but not processed yet
+We process this temp list with items we know have moved
+We use the temp list to populate the grids 
