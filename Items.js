@@ -16,8 +16,10 @@ class Items {
   }
 
   setItem(parent, item, autoShow) {
-    item.autoShow = autoShow;
     item.id = item.id ?? app.uniqueId.next();
+    if (this.list[item.id]) return;
+    item.autoShow = autoShow;
+
     const itemInfo = assets.make(item);
     itemInfo.parent = parent;
     const tempItem = new Item(itemInfo);

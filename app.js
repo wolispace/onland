@@ -10,7 +10,8 @@ const settings = {
     start: { x: 100, y: 100 },
     itemQty: 10,
     lands: 'test',
-  }
+  },
+  MOVED_ITEMS: "moved",
 }
 
 const mode = 'test';
@@ -52,7 +53,7 @@ let app = {
     // set up the overlay that holds the controls and other overlay things like dialogs
     app.overlay = { div: document.querySelector(`#overlay`) };
 
-    //this.doTest();
+    this.doTest();
     //app.world.populate();
 
 
@@ -91,9 +92,13 @@ let app = {
   },
 
   doTest() {
-    let itemInfo = assets.make('bridge', 'test', 500, 500, true, 'basic');
-    app.test = new Item(itemInfo);
-    app.world.addToLayers(app.test);
+    const id = 'z';
+    const movedItems = `${id}|rock|||50|50^a|tree|||200|50`;
+    app.store.save(settings.MOVED_ITEMS, movedItems);
+
+    // let itemInfo = assets.make('bridge', 'test', 500, 500, true, 'basic');
+    // app.test = new Item(itemInfo);
+    // app.world.addToLayers(app.test);
   },
 
   // randoms a random number like a dice roll, with side being the number of sides: rnd(2) is a flip of a coin, rnd(6) is a six sided dice.
@@ -221,7 +226,7 @@ function processAllData(surrounds) {
   // update with all known/moved items from local storage
   // all that are in tempList now get turned into real items and allocated into layers
 
-  let movedItems = app.store.load("movedItems");
+  let movedItems = app.store.load(settings.MOVED_ITEMS);
   app.store.updateTempList(movedItems);
   app.store.pruneTempList(surrounds);
   
