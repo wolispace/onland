@@ -190,7 +190,7 @@ class Mover extends Item {
           if (poss.x != 0 || poss.y != 0) {
             app.ghosted.add(itemId);
             // add ghost class to this item
-            if (item.it) {
+            if (item.div) {
               item.addClass('ghost');
             }
           }
