@@ -25,7 +25,7 @@ class World extends Drawable {
    * 
    * @returns The first letter of each layer must be unique as its used when storing data in local storage
    * eg: surface is store in 's_0_0'
-   * suburbs and lands are specual so dont worry about their first letters clashing
+   * suburbs and lands are special so don't worry about their first letters clashing
    */
   layerDefinitions() {
     return {
@@ -34,8 +34,8 @@ class World extends Drawable {
       surface: this.cellSize, // obstacles we can bump into
       underground: this.cellSize, // things we can dig up
       ghosts: this.cellSize, // items to ghost when we move behind
-      suburbs: this.suburbSize(app.suburbSize), // screen spaces/zones that are loaded dynamically
-      lands: app.landSize, // 
+      suburbs: this.gridSize(app.suburbSize), // screen spaces/zones that are loaded dynamically
+      lands: this.gridSize(app.landSize), // 
     };
   }
 
@@ -66,7 +66,12 @@ class World extends Drawable {
 
   }
 
-  suburbSize(defaultSize) {
+  /**
+   * Returns a rectangle: square x/y
+   * @param {int} defaultSize 
+   * @returns 
+   */
+  gridSize(defaultSize) {
     let size = window.innerWidth;
     size = size > window.innerHeight ? size : window.innerHeight;
     return new Rectangle({

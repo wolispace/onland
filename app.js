@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 const settings = {
   test: {
     suburbSize: 500, // need a fixed suburb size as it will match data loaded from disk
-    landSize: new Rectangle({ w: 500, h: 500 }), // how big each land (logically grouped items saved to disk) is 
+    landSize: 500, // how big each land (logically grouped items saved to disk) is 
     worldSize: { w: 1000, h: 1000 },
     start: { x: 100, y: 100 },
     itemQty: 10,
@@ -13,12 +13,12 @@ const settings = {
   },
   land: {
     suburbSize: 1000, // need a fixed suburb size as it will match data loaded from disk
-    landSize: new Rectangle({ w: 1000, h: 1000 }), // how big each land (logically grouped items saved to disk) is 
-    worldSize: { w: 2000, h: 2000 },
+    landSize: 1000, // how big each land (logically grouped items saved to disk) is 
+    worldSize: { w: 2000, h: 2000 }, // needs to match files on disk
     start: { x: 100, y: 100 },
     lands: 'land',
   },
-  MOVED_ITEMS: "moved",
+  MOVED_ITEMS: 'moved',
 }
 
 const mode = 'land';
@@ -44,8 +44,6 @@ let app = {
     app.events = new Events();
     app.store = new Store();
     app.items = new Items();
-    app.allItems = new Items();
-    app.tempItems = new Items();
 
 
     app.scrollable = { div: document.querySelector(".scrollable") };
