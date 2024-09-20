@@ -68,8 +68,18 @@ let app = {
     controls.setup();
     //app.overlay.div.style.top = "200px";
 
+    const dialogParams = {
+      title: 'Welcome to the world',
+      content: 'This is a test of the emergency broadcast system',
+      buttons: [
+        { text: 'OK', action: () => { console.log('OK pressed'); } },
+        { text: 'Cancel', action: () => { console.log('Cancel pressed'); } }
+      ]
+    };
 
-    setTimeout(app.world.extract, 2000);
+    setTimeout(() => {
+      dlg = new Dialog(dialogParams);
+    }, 2000);
 
 
     app.gameLoop = new GameLoop(app.update, app.show);
@@ -316,4 +326,9 @@ function loadScript(src) {
     script.onerror = reject;
     document.head.appendChild(script);
   });
+}
+
+function addToBody(html) {
+  let bodyElement = document.querySelector("body");
+  bodyElement.insertAdjacentHTML('beforeend', html);
 }

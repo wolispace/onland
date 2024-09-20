@@ -61,6 +61,7 @@ class Input {
 
     /** handle both mouse and touch events as one */
     document.addEventListener('pointerdown', (event) => {
+      if (app.dialogShown) return;
       if (this.pointerdown) return;
       if (event.button === 2) return;
       this.active = true;
