@@ -45,8 +45,7 @@ class Input {
       //event.preventDefault();
       let keyCode = this.normaliseKey(event.code);
       this.keys.take(keyCode);
-
-      this.endInput();
+      app.testDialog();
     });
 
     window.addEventListener('resize', (event) => {

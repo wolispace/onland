@@ -68,18 +68,11 @@ let app = {
     controls.setup();
     //app.overlay.div.style.top = "200px";
 
-    const dialogParams = {
-      title: 'Welcome to the world',
-      content: 'This is a test of the emergency broadcast system',
-      buttons: [
-        { text: 'OK', action: () => { console.log('OK pressed'); } },
-        { text: 'Cancel', action: () => { console.log('Cancel pressed'); } }
-      ]
-    };
+
 
     setTimeout(() => {
-      dlg = new Dialog(dialogParams);
-    }, 2000);
+      this.testDialog();
+    }, 1000);
 
 
     app.gameLoop = new GameLoop(app.update, app.show);
@@ -88,6 +81,36 @@ let app = {
     //app.world.layers.surface.show();
   },
 
+  testDialog() {
+    const dialogParams = {
+      title: 'Welcome to Onland',
+      content: `
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      `,
+      buttons: [
+        { text: 'OK', action: () => { console.log('OK pressed'); } },
+        { text: 'Cancel', action: () => { console.log('Cancel pressed'); } }
+      ]
+    };
+    app.dlg = new Dialog(dialogParams);
+  },
 
   /**
    * Update the position and state of everything in the world

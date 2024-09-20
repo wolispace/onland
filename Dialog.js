@@ -12,13 +12,13 @@ const dlg = new Dialog('Home', buttons);
 class Dialog {
   // passing in buttons object updates this
   buttons = {
-    ok: {
-      caption: 'OK', hint: 'OK',
-      closeAfter: true, onClick: () => { console.log('OK clicked') }
-    },
     cancel: {
       caption: 'Cancel', hint: 'Cancel',
       closeAfter: true, onClick: () => { console.log('Cancel clicked') }
+    },
+    ok: {
+      caption: 'OK', hint: 'OK',
+      closeAfter: true, onClick: () => { console.log('OK clicked') }
     },
   };
 
@@ -35,7 +35,13 @@ class Dialog {
       this.addButton(buttonInfo);
     });
     this.addDefaults();
+    this.setTitle(params.title);
+    this.setContent(params.content);
     app.dialogShown = true;
+  }
+
+  setTitle(html) {
+    this.dialog.querySelector('.dialogTitle').innerHTML = html;
   }
 
   setContent(html) {
@@ -107,7 +113,7 @@ class Dialog {
         <div class="dialogContainer">
           <div class="dialogHeader">
             <div class="dialogTitle"></div>
-            <div class="dialogClose">X</div>
+            <div class="dialogClose buttonize">X</div>
           </div>
           <div class="dialogContent"></div>
           <div class="dialogFooter"></div>
