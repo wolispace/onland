@@ -40,6 +40,7 @@ class Mover extends Item {
     this.applyFriction();
     this.backupPos();
     this.applyVelocity();
+    this.checkWorldBoundary();
     this.checkCollisions('surface');
     this.checkGhosts();
     this.removeGhosts();
@@ -125,6 +126,18 @@ class Mover extends Item {
   updateCollisionBox() {
     if (!this.collideInfo) return;
     this.collisionBox = this.collideInfo.copy().add(this);
+  }
+
+  /**
+   * Make sure this object does not move off the world boundary
+   */
+  checkWorldBoundary() {
+    const padding = 20;
+    if (this.x < padding || this.x > app.world.w - padding 
+      || this.y < padding || this.y > app.world.h - padding) {
+      this.restorePos();
+      this.velocity.clear();
+    }
   }
 
   // check the grid to see what we are colliding with

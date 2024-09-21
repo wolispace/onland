@@ -71,7 +71,7 @@ let app = {
 
 
     setTimeout(() => {
-      this.testDialog();
+      //this.testDialog();
     }, 1000);
 
 
