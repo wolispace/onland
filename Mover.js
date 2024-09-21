@@ -2,8 +2,9 @@ class Mover extends Item {
 
   velocity = new Vector();
   acceleration = new Vector();
-  maxSpeed = 5;
-  friction = 0.85;
+  accelerationRate = 0.5; 
+  maxSpeed = 10;
+  friction = 0.75;
   precision = 1;
   postcode = '0_0';
   moveStep = 1;
@@ -56,7 +57,7 @@ class Mover extends Item {
     if (app.input.anyKeysPressed()) {
       app.input.keys.list.forEach(key => {
         let direction = app.input.directions[key];
-        this.acceleration.add(direction);
+        this.acceleration.add(direction.copy().multiply(this.accelerationRate));
         this.acceleration.multiply(this.moveStep);
         this.acceleration.round(this.precision);
         //app.msg(2, this.acceleration, 'accel A ');
