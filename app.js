@@ -34,6 +34,7 @@ let app = {
   doGhosting: true,
   itemQty: settings[mode].itemQty,
   showTouchPoint: true,
+  pickupItems: true,
 
   encodeKeys: ['id', 'type', 'variant', 'layer', 'x', 'y'],
 
@@ -44,6 +45,7 @@ let app = {
     app.events = new Events();
     app.store = new Store();
     app.items = new Items();
+    app.inventory = new Inventory();
 
 
     app.scrollable = { div: document.querySelector(".scrollable") };
@@ -68,8 +70,7 @@ let app = {
     controls.setup();
     //app.overlay.div.style.top = "200px";
 
-
-
+    
     setTimeout(() => {
       //this.testDialog();
     }, 1000);

@@ -55,6 +55,11 @@ class Item extends Drawable {
     this.children.clear();
   }
 
+  remove() {
+    console.log(this.parent);
+    this.parent.removeChild(this);
+  }
+
   addClass(className) {
     if (!this.div) return;
     this.div.classList.add(className);

@@ -178,6 +178,11 @@ class Mover extends Item {
             }
             this.velocity.limit(this.maxSpeed);
             this.applyVelocity();
+            if (app.pickupItems) {
+              this.velocity.clear();
+              app.inventory.add(item.id);
+              item.hide();
+            }
           }
         });
       });

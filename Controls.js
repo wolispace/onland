@@ -10,7 +10,11 @@ const controls = {
     ld: { x: 0, y: 60, keys: ['left', 'down'] },
     ru: { x: 60, y: 0, keys: ['right', 'up'] },
     rd: { x: 60, y: 60, keys: ['right', 'down'] },
+    inv: {x: 160, y:60, keys: ['inv'], onClick: () => {
+      app.inventory.show();
+    } }
   },
+  
 
   setup: function () {
     // add the holder of the buttons
@@ -41,10 +45,12 @@ const controls = {
       const oldButtonInfo = controls.buttonList[controls.lastButton];
       app.input.keys.takeAll(oldButtonInfo.keys);
 
-      if (buttonName == 'controls') return;
+      if (['controls', 'inv'].includes(buttonName)) return;
 
       // select new button
       const buttonInfo = controls.buttonList[buttonName];
+      if (buttonInfo.onClick) return;
+      
       controls.lastButton = buttonName;
       app.input.keys.addAll(buttonInfo.keys);
       app.input.active = true;
@@ -72,6 +78,7 @@ const controls = {
     // });
 
     // all child buttons..
+    // hold buttons for movement
     Object.keys(controls.buttonList).forEach(buttonName => {
       let buttonInfo = controls.buttonList[buttonName];
       let params = assets.make({
@@ -82,21 +89,28 @@ const controls = {
         autoShow: true,
         variant: buttonName,
       });
-      params.onpointerdown = (e) => {
-        if (e.button === 2) return;
-        controls.lastButton = buttonName;
-        app.input.keys.addAll(buttonInfo.keys);
-        app.input.active = true;
-
-
-        app.msg(2, `move ${buttonName}`);
-      };
-      params.onpointerup = (e) => {
-        if (e.button === 2) return;
-        app.input.keys.takeAll(buttonInfo.keys);
-        app.input.endInput();
-        app.msg(2, `stop ${buttonName}`);
-      };
+      if (buttonInfo.onClick) {
+        params.onclick = (e) => {
+          if (e.button === 2) return;
+          buttonInfo.onClick();
+        };
+      } else {
+        params.onpointerdown = (e) => {
+          if (e.button === 2) return;
+          controls.lastButton = buttonName;
+          app.input.keys.addAll(buttonInfo.keys);
+          app.input.active = true;
+  
+  
+          app.msg(2, `move ${buttonName}`);
+        };
+        params.onpointerup = (e) => {
+          if (e.button === 2) return;
+          app.input.keys.takeAll(buttonInfo.keys);
+          app.input.endInput();
+          app.msg(2, `stop ${buttonName}`);
+        };
+      }
       app.controls.addChild(new Drawable(params));
     });
 

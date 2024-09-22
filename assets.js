@@ -311,6 +311,12 @@ const assets = {
         h: 50,
         content: `RD`,
       },
+      inv: {
+        name: 'inv',
+        w: 50,
+        h: 50,
+        content: `Inv`,
+      }
     }
   }
 
