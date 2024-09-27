@@ -54,7 +54,7 @@ const controls = {
       controls.lastButton = buttonName;
       app.input.keys.addAll(buttonInfo.keys);
       app.input.active = true;
-      app.msg(2, `move ${buttonName}`);
+      // app.msg(2, `move ${buttonName}`);
     }
 
     // app.controls.div.addEventListener('pointermove', (e) => {
@@ -100,15 +100,13 @@ const controls = {
           controls.lastButton = buttonName;
           app.input.keys.addAll(buttonInfo.keys);
           app.input.active = true;
-  
-  
-          app.msg(2, `move ${buttonName}`);
+          //app.msg(2, `move ${buttonName}`);
         };
         params.onpointerup = (e) => {
           if (e.button === 2) return;
           app.input.keys.takeAll(buttonInfo.keys);
           app.input.endInput();
-          app.msg(2, `stop ${buttonName}`);
+          //app.msg(2, `stop ${buttonName}`);
         };
       }
       app.controls.addChild(new Drawable(params));

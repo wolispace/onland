@@ -99,6 +99,38 @@ let app = {
     app.testGrid.removeById("a");
     app.compare('removeById', expected, app.testGrid.grid);
   },
+
+  testDialog() {
+    const dialogParams = {
+      title: 'Welcome to Onland',
+      content: `
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      This is a test of the emergency broadcast system<br/>
+      `,
+      buttons: [
+        { text: 'OK', action: () => { console.log('OK pressed'); } },
+        { text: 'Cancel', action: () => { console.log('Cancel pressed'); } }
+      ]
+    };
+    app.dlg = new Dialog(dialogParams);
+  },
+
   
   // 51 = 'Z', 3275 = 'ZZ', 100,000,000 = 'fUJIn' 1B = 'aeP2Pp'
 

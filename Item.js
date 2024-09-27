@@ -56,8 +56,9 @@ class Item extends Drawable {
   }
 
   remove() {
-    console.log(this.parent);
-    this.parent.removeChild(this);
+    //this.parent.removeChild(this);
+    this.parent.removeFromLayers(this);
+    this.hide();
   }
 
   addClass(className) {

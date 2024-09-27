@@ -63,6 +63,8 @@ let app = {
     this.doTest();
     //app.world.populate();
 
+    updateBlurOverlay();
+
 
     app.loadData('0_0');
     shiftSuburbsAsync(app.me);
@@ -82,36 +84,6 @@ let app = {
     //app.world.layers.surface.show();
   },
 
-  testDialog() {
-    const dialogParams = {
-      title: 'Welcome to Onland',
-      content: `
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      This is a test of the emergency broadcast system<br/>
-      `,
-      buttons: [
-        { text: 'OK', action: () => { console.log('OK pressed'); } },
-        { text: 'Cancel', action: () => { console.log('Cancel pressed'); } }
-      ]
-    };
-    app.dlg = new Dialog(dialogParams);
-  },
 
   /**
    * Update the position and state of everything in the world
@@ -140,6 +112,8 @@ let app = {
     // app.world.addToLayers(app.test);
   },
 
+
+  
   // randoms a random number like a dice roll, with side being the number of sides: rnd(2) is a flip of a coin, rnd(6) is a six sided dice.
   // this a zero based number so rnd(2) gives us 0 or 1, rnd(6) gives us 0...5
   rnd: function (sides) {
@@ -355,4 +329,26 @@ function loadScript(src) {
 function addToBody(html) {
   let bodyElement = document.querySelector("body");
   bodyElement.insertAdjacentHTML('beforeend', html);
+}
+
+function updateBlurOverlay() {
+  const overlay = document.getElementById('blurOverlay');
+  const maxBlur = 5; // Maximum blur in pixels
+
+  overlay.style.backdropFilter = `
+    blur(${maxBlur}px)
+  `;
+
+  const gradientStops = [
+    { offset: 0, blur: maxBlur },
+    { offset: 0.3, blur: 0 },
+    { offset: 0.7, blur: 0 },
+    { offset: 1, blur: maxBlur }
+  ];
+
+  const gradient = gradientStops
+    .map(stop => `rgba(0,0,0,${stop.blur / maxBlur}) ${stop.offset * 100}%`)
+    .join(', ');
+
+  overlay.style.maskImage = `linear-gradient(to bottom, ${gradient})`;
 }

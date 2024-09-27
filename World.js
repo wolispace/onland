@@ -16,7 +16,7 @@ class World extends Drawable {
     this.setupLayers();
 
     app.events.on("MOVER_STOPPED", this, info => {
-      app.msg(3, '', 'stopped');
+      //app.msg(3, '', 'stopped');
       //console.log('mover stopped', info);
     });
   }
@@ -65,6 +65,19 @@ class World extends Drawable {
     //console.log('location', location );
 
   }
+
+  removeFromLayers(item) {
+    for (const [key, cellSize] of Object.entries(this.layerDefinitions())) {
+      this.layers[key].remove(item);
+    }
+  }
+
+  removeFromLayersById(id) {
+    for (const [key, cellSize] of Object.entries(this.layerDefinitions())) {
+      this.layers[key].removeById(id);
+    }
+  }
+
 
   /**
    * Returns a rectangle: square x/y
@@ -188,7 +201,7 @@ class World extends Drawable {
       const tempItem = new Item(itemInfo);
 
       app.items.set(tempItem);
-    
+
     });
   }
 
@@ -202,11 +215,11 @@ class World extends Drawable {
         if (item) {
           suburbContents.push(app.encode(item));
         }
-      }); 
+      });
       exportData[key] = suburbContents.join('^');
 
     }
-    console.log({exportData});
+    console.log({ exportData });
   }
 
 

@@ -206,7 +206,8 @@ class SpacialHashGrid extends Rectangle {
    */
   removeById(id) {
     for (const key in this.grid) {
-      this.grid[key] = this.grid[key].filter(item => item !== id);
+      console.log(key, this.grid[key]);
+      this.grid[key].take(id);
     }
   }
 
