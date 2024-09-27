@@ -25,7 +25,7 @@ const controls = {
       autoShow: true,
       variant: 'basic',
     });
-    params.parent = app.overlay;
+    params.parent = app.overlays.overlay;
     app.controls = new Drawable(params);
     app.controls.show();
     app.controls.div.style.zIndex = 999999999;

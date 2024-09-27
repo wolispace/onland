@@ -46,6 +46,7 @@ let app = {
     app.store = new Store();
     app.items = new Items();
     app.inventory = new Inventory();
+    app.overlays = new Overlays();
 
 
     app.scrollable = { div: document.querySelector(".scrollable") };
@@ -58,12 +59,12 @@ let app = {
     app.me = new Mover(params);
 
     // set up the overlay that holds the controls and other overlay things like dialogs
-    app.overlay = { div: document.querySelector(`#overlay`) };
+    //app.overlay = { div: document.querySelector(`#overlay`) };
 
     this.doTest();
     //app.world.populate();
 
-    updateBlurOverlay();
+    app.overlays.updateBlurOverlay();
 
 
     app.loadData('0_0');
@@ -331,24 +332,4 @@ function addToBody(html) {
   bodyElement.insertAdjacentHTML('beforeend', html);
 }
 
-function updateBlurOverlay() {
-  const overlay = document.getElementById('blurOverlay');
-  const maxBlur = 5; // Maximum blur in pixels
 
-  overlay.style.backdropFilter = `
-    blur(${maxBlur}px)
-  `;
-
-  const gradientStops = [
-    { offset: 0, blur: maxBlur },
-    { offset: 0.3, blur: 0 },
-    { offset: 0.7, blur: 0 },
-    { offset: 1, blur: maxBlur }
-  ];
-
-  const gradient = gradientStops
-    .map(stop => `rgba(0,0,0,${stop.blur / maxBlur}) ${stop.offset * 100}%`)
-    .join(', ');
-
-  overlay.style.maskImage = `linear-gradient(to bottom, ${gradient})`;
-}

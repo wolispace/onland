@@ -2,6 +2,7 @@
 
 ## A big world for a little adventure.
 
+This is a work-in-progress as I build a game engine to then build a game
 
 ### storage concept
 Each item has a unique ID within the world
