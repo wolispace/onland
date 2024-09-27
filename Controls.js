@@ -10,7 +10,7 @@ const controls = {
     ld: { x: 0, y: 60, keys: ['left', 'down'] },
     ru: { x: 60, y: 0, keys: ['right', 'up'] },
     rd: { x: 60, y: 60, keys: ['right', 'down'] },
-    inv: {x: 160, y:60, keys: ['inv'], onClick: () => {
+    inv: {x: 100, y:60, keys: ['inv'], onClick: () => {
       app.inventory.show();
     } }
   },
