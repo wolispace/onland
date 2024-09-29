@@ -76,13 +76,13 @@ let app = {
     
     setTimeout(() => {
       //this.testDialog();
+      //app.world.layers.surface.show();
     }, 1000);
 
 
     app.gameLoop = new GameLoop(app.update, app.show);
     app.gameLoop.start();
     //app.world.layers.suburbs.show();
-    //app.world.layers.surface.show();
   },
 
 

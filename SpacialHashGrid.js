@@ -141,7 +141,9 @@ class SpacialHashGrid extends Rectangle {
 
     for (let x = left; x <= right; x++) {
       for (let y = top; y <= bottom; y++) {
-        this.clearCell(this.buildKey(x, y));
+
+        const key = this.buildKey(x, y);
+        this.removeIdFromCell(params.id, key);
       }
     }
   }
@@ -158,7 +160,8 @@ class SpacialHashGrid extends Rectangle {
     });
   }
 
-  clearAll(item, colliders) {
+  //TODO: this wipes every id from the cell not just the item.id
+  removeAll(item, colliders) {
     colliders.forEach((collide) => {
       let collidable = collide.copy().add(item);
       this.clearShape(collidable);
@@ -209,6 +212,11 @@ class SpacialHashGrid extends Rectangle {
       console.log(key, this.grid[key]);
       this.grid[key].take(id);
     }
+  }
+
+  removeIdFromCell(id, key) {
+    if (!this.grid[key]) return;
+    this.grid[key].take(id);
   }
 
   // update 

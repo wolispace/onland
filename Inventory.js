@@ -6,7 +6,6 @@ class Inventory extends UniqueSet {
   }
 
   show() {
-    console.log(this);
     const params = {
       title: 'Inventory',
       content: this.html(),
@@ -20,7 +19,6 @@ class Inventory extends UniqueSet {
     this.list.forEach(itemId => {
       const item = app.items.get(itemId);
       html += `<li>${item.type}</li>`;
-      console.log(item); 
     });
     return `<ul>${html}</ul>`;
   }

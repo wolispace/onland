@@ -67,8 +67,12 @@ class World extends Drawable {
   }
 
   removeFromLayers(item) {
+    const layerInfo = assets.get(item.type, item.variant);
     for (const [key, cellSize] of Object.entries(this.layerDefinitions())) {
-      this.layers[key].remove(item);
+      if (layerInfo[key]) {
+        //console.log('layerInfo',key, layerInfo);
+        this.layers[key].clearShape(item);
+      }
     }
   }
 
