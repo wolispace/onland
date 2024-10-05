@@ -23,7 +23,9 @@ class Inventory extends UniqueSet {
       let item = app.items.get(itemId);
       item.left = 0;
       item.top = 0;
-      item.html = assets.buildHtml(item);
+      item.w = 80;
+      item.h = 80;
+      item = assets.make(item);
       console.log(item);
       html += `${this.buttonHtml(item)}`;
     });

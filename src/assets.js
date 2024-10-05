@@ -12,8 +12,9 @@ const assets = {
    * @returns object defining a unique item to include in the game
    */
   make(params) {
-    params = {...params, ...assets.get(params.type, params.variant)};
-    params.style = `style="left:%left%px; top:%top%px;" width="100%" height="100%"`;
+    const defaultParams = assets.get(params.type, params.variant);
+    params = {...defaultParams, ...params};
+    params.style = `style="left:${params.left}px; top:${params.top}px;" width="100%"`;
     params.html = assets.buildHtml(params);
     return params;
   },
@@ -79,7 +80,7 @@ const assets = {
   items: {
     tree: {
       basic: {
-        top: -70,
+        top: -60,
         left: -10,
         width: 60,
         w: 70,
@@ -96,7 +97,7 @@ const assets = {
 
     rock: {
       basic: {
-        top: -30,
+        top: -20,
         left: -5,
         width: 50,
         w: 50,
@@ -143,8 +144,8 @@ const assets = {
     arch: {
       basic: {
         name: 'basic',
-        top: -150,
-        left: -15,
+        top: -130,
+        left: -10,
         width: 150,
         w: 150,
         h: 200,
