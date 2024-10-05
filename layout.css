@@ -239,7 +239,10 @@ button:hover {
   background-color: rgba(109, 160, 143, .75) !important;
 }
 
-
+.inventoryItem {
+  width: 80px;
+  height: 80px;
+}
 
 .msg {
   color: white;
