@@ -316,8 +316,6 @@ async function hideSuburbsAsync(mover) {
  * @returns 
  */
 function loadScript(src) {
-  console.log(`attempting to load`, src);
-
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.src = src;
