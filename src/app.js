@@ -21,7 +21,7 @@ const settings = {
   MOVED_ITEMS: 'moved',
 }
 
-const mode = 'land';
+const mode = 'test';
 
 let app = {
   isDev: true,
@@ -210,7 +210,6 @@ let app = {
       const filePromise = loadScript(`lands/${settings[mode].lands}_${land}.js`)
         .then(() => {
           // File loaded successfully, you can now use its functions/variables
-          console.log('Script loaded successfully');
           if (app.defaultData) {            
             app.store.addToTempList(app.defaultData[layer].join('^'));
           }
@@ -241,10 +240,13 @@ function processAllData(surrounds) {
   // all that are in tempList now get turned into real items and allocated into layers
 
   let movedItems = app.store.load(settings.MOVED_ITEMS);
+  app.store.updateMovedList(movedItems);
+
+  console.log(movedItems, app.store);
   app.store.updateTempList(movedItems);
   app.store.pruneTempList(surrounds);
   
-  // now we have a list of basic objects we can turn into Item() and fill the grids and draw on screen
+  // now we have a list of basic objects we can turn into Item()s and fill the grids and draw on screen
   app.items.setItems(app.store.tempList);
 }
 
@@ -280,7 +282,7 @@ async function showSuburbsAsync(postcode, collisionBox) {
   if (inSuburbs && inSuburbs.list && inSuburbs.list.length > 0) {
     for (const itemId of inSuburbs.list) {
       let item = app.items.get(itemId);
-      if (item) {
+      if (item && item.layer) {
         item.show();
       }
     }

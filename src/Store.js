@@ -1,11 +1,13 @@
 class Store {
   compression = false;
   tempList = {};
- 
+  // everything in the world that has moved or is new to default land data
+  movedList = {};
+
   constructor(type = 'localStorage') {
     this.type = type;
   }
-  
+
   /**
    * Add all items into a temp list {'a': {id:a, x: 100, y: 200, etc..}}
    * @param {string} encodedData 'a|||100|200^etc..
@@ -31,6 +33,22 @@ class Store {
     });
   }
 
+  updateMovedList(encodedData) {
+    const decodedData = this.decodeData(encodedData);
+    decodedData.forEach((itemData) => {
+      //add to a temp list of item info to turn into  real item
+      this.movedList[itemData.id] = itemData;
+    });
+  }
+
+  addToMovedList(item) {
+    this.movedList[item.id] = item;
+  }
+
+  getEncodedMovedList() {
+    return this.encodeData(Object.values(this.movedList));
+  }
+
   /**
    * 
    * @param {array} surrounds array of land key ['0_0', '0_1', etc..] 
@@ -47,17 +65,18 @@ class Store {
 
   save(key, data) {
     localStorage.setItem(key, data);
+    console.log('saved', key, data);
     return this;
   }
 
   load(key) {
     return localStorage.getItem(key);
   }
-  
+
   has(key) {
     return localStorage.getItem(key) !== null;
   }
-  
+
   clear(key) {
     localStorage.removeItem(key);
     return this;
@@ -83,8 +102,7 @@ class Store {
     return decodedData;
 
   }
-  
 
- 
-} 
- 
+
+
+}

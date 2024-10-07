@@ -52,7 +52,7 @@ class Input {
       clearTimeout(app.debounceTimeout);
       app.debounceTimeout = setTimeout(() => {
         console.log('resize');
-        app.blurOverlay.updateBlurOverlay();
+        app.overlays.updateBlurOverlay();
         // if (!dialog.hasInput) {
         //   location.reload();
         // }

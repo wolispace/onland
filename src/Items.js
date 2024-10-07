@@ -14,7 +14,7 @@ class Items {
     app.world.layers.suburbs.add(item);
     this.list[item.id] = item;
   }
-
+  
   setItem(parent, item, autoShow) {
     item.id = item.id ?? app.uniqueId.next();
     if (this.list[item.id]) return;
@@ -32,7 +32,9 @@ class Items {
     const autoShow = true;
     for (const itemId in itemList) {
       const params = itemList[itemId];
-      this.setItem(parent, params, autoShow);
+      if (params.layer !== 'inv') {
+        this.setItem(parent, params, autoShow);
+      }
     }
   }
 

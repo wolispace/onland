@@ -181,6 +181,9 @@ class Mover extends Item {
             if (app.pickupItems) {
               this.velocity.clear();
               app.inventory.add(item.id);
+              item.layer = 'inv';
+              app.store.addToMovedList(item);
+              app.store.save(settings.MOVED_ITEMS, app.store.getEncodedMovedList());
               item.remove();
             }
           }

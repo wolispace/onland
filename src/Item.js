@@ -58,6 +58,9 @@ class Item extends Drawable {
   remove() {
     //this.parent.removeChild(this);
     this.parent.removeFromLayers(this);
+
+    // update moved item as this is now in the inventory
+
     //this.parent.removeFromLayersById(this.id);
     this.hide();
   }

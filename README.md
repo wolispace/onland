@@ -42,3 +42,18 @@ When a rock is moved is is updated in
 
 When we move to a different land, repeat.
 
+
+Lists
+one list of all items not in their default place
+- this includes placed and pushed items, hidden items underground, items in inventories (shop, museum , player) etc
+- for storing we only need encoded id|parent|qty|layer|type|variant|x|y
+- this is an everything list.. maybe it should be split by layer
+- surface:a||||100|200^b||||150|200,inventory:c||||^d||||,
+- underground:...,museum:
+
+When adding into this moved list, we remove x and y if not located spatially like in an inventory
+
+Current working list of items spatially located in the world at this point in time
+- this list has all the detail eg the div on screen, its children, its svg content
+
+
