@@ -24,16 +24,24 @@ class Bones {
 
   /**
    * Returns an encodes string of this bones object
-   * @returns {string} encoded eg 'a,rock,,,100,200'
+   * @params {boolean} includePosition should we include the x, y position? Save space when in an inventory
+   * @returns {string} encoded eg 'a,,rock,,,100,200' or `b,,coin,,,55`
    */
-  encode() {
+  encode(includePosition = true) {
     let encoded = [];
-    for (key in this.encodeKeys) {
-      let value = item[key];
-      if (value === null || value === undefined || value === 'basic' || value === 'surface') {
+
+    for (const key of this.encodeKeys) {
+      let value = this[key];
+      if (value === null || value === undefined || value === 'basic' || (key === 'qty' && value === 1)) {
         value = '';
       }
-      encoded.push(value);
+      if (includePosition) {
+        encoded.push(value);
+      } else {
+        if ('xy'.indexOf(key) < 0) {
+          encoded.push(value);
+        }
+      }
     }
 
     return encoded.join(this.delim);

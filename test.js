@@ -24,9 +24,21 @@ let app = {
   runBonesTests() {
     const oneBone = new Bones('a,,car,,,100,200');
     console.log(oneBone);
+    console.log(oneBone.encode());
+    console.log(oneBone.encode(false));
 
-    const twoBones = new Bones({ id: 'z', type: 'boat', 'x': 250, 'y': 350 });
-    console.log(twoBones);
+    const twoBone = new Bones({ id: 'z', type: 'boat', 'x': 250, 'y': 350 });
+    console.log(twoBone);
+
+    const boneLists = new BonesList('x');
+    boneLists.add(oneBone);
+    boneLists.add(twoBone);
+    console.log(boneLists);
+    console.log(boneLists.encode());
+
+    const surfaceList = new BonesList('s');
+    surfaceList.decode('sb,,rock,,,120,220;c,,fig,,,253,351');
+    console.log(surfaceList);
   },
 
   runLocationTests() {
