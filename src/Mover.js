@@ -25,7 +25,7 @@ class Mover extends Item {
   setupCollideInfo() {
     if (this.collideInfo) return;
     const assetInfo = assets.get(this.type, this.variant);
-    this.collideInfo = assetInfo['surface'][0];
+    this.collideInfo = assetInfo[settings.SURFACE][0];
   }
 
   /**
@@ -42,7 +42,7 @@ class Mover extends Item {
     this.backupPos();
     this.applyVelocity();
     this.checkWorldBoundary();
-    this.checkCollisions('surface');
+    this.checkCollisions(settings.SURFACE);
     this.checkGhosts();
     this.removeGhosts();
     shiftSuburbsAsync(this);
@@ -196,7 +196,7 @@ class Mover extends Item {
   checkGhosts() {
     if (!app.doGhosting) return;
     this.updateCollisionBox();
-    const inCell = app.world.layers.ghosts.queryShape(this.collisionBox);
+    const inCell = app.world.layers[settings.GHOSTS].queryShape(this.collisionBox);
     app.ghosted.clear();
     //app.msg(3, app.ghosted.count());
     if (inCell && inCell.list && inCell.list.length > 0) {
@@ -204,7 +204,7 @@ class Mover extends Item {
         const item = app.items.get(itemId);
         if (!item) return;
         const assetInfo = assets.get(item.type, item.variant);
-        const collideInfo = assetInfo['ghosts'];
+        const collideInfo = assetInfo[settings.GHOSTS];
 
         collideInfo.forEach((ghost) => {
           const ghostCollidable = ghost.copy().add(item);

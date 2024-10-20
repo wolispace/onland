@@ -1,6 +1,6 @@
 class Item extends Drawable {
   qty = 0;
-  layer = 'surface'; // what layer are we currently on
+  layer = settings.SURFACE; // what layer are we currently on
   autoShow = false;
   children = [];
 
@@ -9,7 +9,7 @@ class Item extends Drawable {
     this.id = params.id;
     this.type = params.type;
     this.variant = params.variant;
-    this.layer = params.layer ?? 'surface';
+    this.layer = params.layer ?? settings.SURFACE;
     this.autoShow = params.autoShow;
     this.setup();
   }

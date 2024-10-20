@@ -10,7 +10,7 @@ class Items {
 
   set(item) {
     // work out which land this item is in
-    app.world.layers.lands.add(item);
+    app.world.layers[settings.LANDS].add(item);
     app.world.layers.suburbs.add(item);
     this.list[item.id] = item;
   }
@@ -78,9 +78,9 @@ class Items {
    */
   addAllToGrids() {
     for (const [itemId, item] of Object.entries(this.list)) {
-      const layer = item.layer ?? 'surface';
+      const layer = item.layer ?? settings.SURFACE;
       app.world.layers[layer].add(item);
-      app.world.layers['suburbs'].add(item);
+      app.world.layers[settings.SUBURBS].add(item);
     };
   }
 }

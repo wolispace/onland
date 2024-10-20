@@ -28,15 +28,16 @@ class World extends Drawable {
    * suburbs and lands are special so don't worry about their first letters clashing
    */
   layerDefinitions() {
-    return {
-      overhead: this.cellSize, // amove we cant bump into like clouds
-      raised: this.cellSize, // obstacles we can bump into when on a bridge or top of a rock
-      surface: this.cellSize, // obstacles we can bump into
-      underground: this.cellSize, // things we can dig up
-      ghosts: this.cellSize, // items to ghost when we move behind
-      suburbs: this.gridSize(app.suburbSize), // screen spaces/zones that are loaded dynamically
-      lands: this.gridSize(app.landSize), // 
-    };
+    const layerDefs = {};
+    layerDefs[settings.OVERHEAD] = this.cellSize;
+    layerDefs[settings.RAISED] = this.cellSize;
+    layerDefs[settings.SURFACE] = this.cellSize;
+    layerDefs[settings.UNDERGROUND] = this.cellSize;
+    layerDefs[settings.GHOSTS] = this.cellSize;
+    layerDefs[settings.SUBURBS] = this.gridSize(app.suburbSize);
+    layerDefs[settings.LANDS] = this.gridSize(app.landSize);
+
+    return layerDefs;
   }
 
   setupLayers() {
@@ -56,11 +57,11 @@ class World extends Drawable {
       }
     }
     // we just use the x,y of the first surface collidable to locate this within a suburb
-    let location = layerInfo['surface'][0];
+    let location = layerInfo[settings.SURFACE][0];
     if (location) {
       let collidable = location.copy().add(item);
       collidable.id = item.id;
-      this.layers['suburbs'].add(collidable);
+      this.layers[settings.SUBURBS].add(collidable);
     }
     //console.log('location', location );
 
@@ -185,7 +186,7 @@ class World extends Drawable {
       }
     }
     if (app.showCollision) {
-      this.layers['surface'].show();
+      this.layers[settings.SURFACE].show();
     }
   }
 

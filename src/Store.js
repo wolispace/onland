@@ -56,7 +56,7 @@ class Store {
   pruneTempList(surrounds) {
     for (const key in this.tempList) {
       const params = this.tempList[key];
-      const land = app.world.layers.lands.makeKey(params);
+      const land = app.world.layers[settings.LANDS].makeKey(params);
       if (!surrounds.has(land)) {
         delete this.tempList[key];
       }

@@ -2,24 +2,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   app.start();
 });
-const settings = {
-  test: {
-    suburbSize: 500, // need a fixed suburb size as it will match data loaded from disk
-    landSize: 500, // how big each land (logically grouped items saved to disk) is 
-    worldSize: { w: 1000, h: 1000 },
-    start: { x: 100, y: 100 },
-    itemQty: 10,
-    lands: 'test',
-  },
-  land: {
-    suburbSize: 1000, // need a fixed suburb size as it will match data loaded from disk
-    landSize: 1000, // how big each land (logically grouped items saved to disk) is 
-    worldSize: { w: 2000, h: 2000 }, // needs to match files on disk
-    start: { x: 100, y: 100 },
-    lands: 'land',
-  },
-  MOVED_ITEMS: 'moved',
-}
 
 const mode = 'test';
 
@@ -255,7 +237,7 @@ async function shiftSuburbsAsync(mover) {
   let postcode = app.world.layers.suburbs.makeKey(mover.collisionBox);
   if (mover.postcode !== postcode) {
     // we have changed suburbs to check if we have also changed lands
-    let currentLand = app.world.layers.lands.makeKey(mover.collisionBox);
+    let currentLand = app.world.layers[settings.LANDS].makeKey(mover.collisionBox);
     if (mover.land !== currentLand) {
       // switched lands so load and hide
       app.loadData(currentLand);
