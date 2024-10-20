@@ -1,9 +1,9 @@
 class BonesList {
-  name = '';
+  id = '';
   delim = ';';
   list = {};
-  constructor(name) {
-    this.name = name;
+  constructor(id) {
+    this.id = id;
   }
 
   add(bone) {
@@ -11,7 +11,7 @@ class BonesList {
   }
 
   encode() {
-    let encodedString = this.name;
+    let encodedString = this.id;
     let delim = '';
     for (const boneId in this.list) {
       const bone = this.list[boneId];

@@ -21,7 +21,7 @@ We have pre-defined grid lands 0_0, 0_1 etc..
 An item is first defined in one of these land files
 
 Read all item from the default files current surrounds (kings square around current pos)
-read all modified items from storage (every item no in its default place)
+read all modified items from storage (every item not in its default place)
 Loop through all modified items:
 - Update any items that are in the current surrounds
 - Remove any items that are not in the current surrounds
@@ -46,14 +46,11 @@ When we move to a different land, repeat.
 Lists
 one list of all items not in their default place
 - this includes placed and pushed items, hidden items underground, items in inventories (shop, museum , player) etc
-- for storing we only need encoded id|parent|qty|layer|type|variant|x|y
-- this is an everything list.. maybe it should be split by layer
-- surface:a||||100|200^b||||150|200,inventory:c||||^d||||,
-- underground:...,museum:
-
-When adding into this moved list, we remove x and y if not located spatially like in an inventory
+- for storing we only need encoded id,parent,type,variant,qty,x,y all items per layer
+- this is the LayerList - decode from local storage and encode to store
+- some layers dont care about x,y (inventory, museum shelf) so skip when encoding
 
 Current working list of items spatially located in the world at this point in time
-- this list has all the detail eg the div on screen, its children, its svg content
-
+- this is another LayerList object.
+- we flesh out these bones ov objects when we need collision boxes and svg etc.. from assets.js
 

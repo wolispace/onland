@@ -39,6 +39,18 @@ let app = {
     const surfaceList = new BonesList('s');
     surfaceList.decode('sb,,rock,,,120,220;c,,fig,,,253,351');
     console.log(surfaceList);
+
+    const layerList = new LayerList();
+    layerList.add(surfaceList);
+    layerList.add(boneLists);
+
+    console.log(layerList);
+    console.log(layerList.encode());
+
+    const dummyList = new LayerList();
+    dummyList.decode('sa,,ant,,,220,220;b,,bee,,,257,151 xc,,cat,,,110,210;d,,dog,,,253,353');
+    console.log(dummyList);
+    console.log(dummyList.encode());
   },
 
   runLocationTests() {
