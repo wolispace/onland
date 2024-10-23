@@ -1,7 +1,7 @@
 // the bare bones of items id, type, position
 class Bones {
   delim = ','; // how encoded elements of these bones are delimited
-  encodeKeys = ['id', 'parent', 'type', 'variant', 'qty', 'x', 'y'];
+  static ENCODED_KEYS = ['id', 'parent', 'type', 'variant', 'qty', 'x', 'y'];
   id = '';
   parent = '';
   type = '';
@@ -30,7 +30,7 @@ class Bones {
   encode(includePosition = true) {
     let encoded = [];
 
-    for (const key of this.encodeKeys) {
+    for (const key of Bones.ENCODED_KEYS) {
       let value = this[key];
       if (value === null || value === undefined || value === 'basic' || (key === 'qty' && value === 1)) {
         value = '';
@@ -55,8 +55,8 @@ class Bones {
   decode(encodedString) {
     const decodedValues = encodedString.split(this.delim);
 
-    for (let i = 0; i < this.encodeKeys.length; i++) {
-      const key = this.encodeKeys[i];
+    for (let i = 0; i < Bones.ENCODED_KEYS.length; i++) {
+      const key = Bones.ENCODED_KEYS[i];
       let value = decodedValues[i];
       if (value !== '') {
         if ('xqty'.indexOf(key) > -1) {

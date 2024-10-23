@@ -18,7 +18,6 @@ let app = {
   showTouchPoint: true,
   pickupItems: true,
 
-  encodeKeys: ['id', 'type', 'variant', 'layer', 'x', 'y'],
 
   start() {
     app.input = new Input();
