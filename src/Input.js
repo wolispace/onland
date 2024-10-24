@@ -14,7 +14,7 @@ class Input {
     // prevent context menus - does this prevent mobile selecting text
     // so we need the user-select: none; css?
     document.addEventListener('contextmenu', event => {
-      if (!app.contextMenu) {
+      if (!settings.contextMenu) {
         event.preventDefault();
       }
     });
@@ -126,7 +126,7 @@ class Input {
   }
 
   showTouchPoint() {
-    if (!app.showTouchPoint) return;
+    if (!settings.showTouchPoint) return;
     if (!this.touchPointDiv) {
       app.world.add(`<div id="touchId">`);
       this.touchPointDiv = document.querySelector('#touchId');

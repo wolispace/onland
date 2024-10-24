@@ -46,7 +46,7 @@ class Mover extends Item {
     this.checkGhosts();
     this.removeGhosts();
     shiftSuburbsAsync(this);
-    if (app.scrollBrowser) {
+    if (settings.scrollBrowser) {
       app.world.centerPlayer();
     }
     //app.msg(1, { x: Math.round(this.x, 0), y: Math.round(this.y, 0), p: this.postcode, l: this.land }, 'pos');
@@ -194,7 +194,7 @@ class Mover extends Item {
 
   // check the ghosts grid to see what we are colliding with any ghosts
   checkGhosts() {
-    if (!app.doGhosting) return;
+    if (!settings.doGhosting) return;
     this.updateCollisionBox();
     const inCell = app.world.layers[settings.GHOSTS].queryShape(this.collisionBox);
     app.ghosted.clear();

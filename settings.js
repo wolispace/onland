@@ -23,6 +23,16 @@ const settings = {
   LANDS: 'lands',
   GHOSTS: 'ghosts',
   INVENTORY: 'i',
+  
+  isDev: true,
+  showCollision: false,
+  contextMenu: true,
+  scrollBrowser: true,
+  randomItems: true,
+  doGhosting: true,
+  showTouchPoint: true,
+  pickupItems: true,
+  
 }
 
 

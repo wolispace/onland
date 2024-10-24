@@ -6,18 +6,12 @@ document.addEventListener("DOMContentLoaded", function () {
 const mode = 'test';
 
 let app = {
-  isDev: true,
+
   suburbSize: settings[mode].suburbSize, // need a fixed suburb size as it will match data loaded from disk
   landSize: settings[mode].landSize, // how big each land (logically grouped items saved to disk) is 
-  showCollision: false,
-  contextMenu: true,
-  scrollBrowser: true,
-  randomItems: true,
-  doGhosting: true,
   itemQty: settings[mode].itemQty,
-  showTouchPoint: true,
-  pickupItems: true,
 
+  encodeKeys: ['id', 'type', 'variant', 'layer', 'x', 'y'],
 
   start() {
     app.input = new Input();

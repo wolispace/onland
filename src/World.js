@@ -161,8 +161,8 @@ class World extends Drawable {
 
     for (var i = 1; i < itemQty; i++) {
 
-      let x = app.randomItems ? app.rnd(app.world.w) : lastPos.x;
-      let y = app.randomItems ? app.rnd(app.world.h) : lastPos.y;
+      let x = settings.randomItems ? app.rnd(app.world.w) : lastPos.x;
+      let y = settings.randomItems ? app.rnd(app.world.h) : lastPos.y;
       let key = app.uniqueId.next();
 
       let itemType = 'rock';
@@ -185,7 +185,7 @@ class World extends Drawable {
         lastPos.y += stepPos.y;
       }
     }
-    if (app.showCollision) {
+    if (settings.showCollision) {
       this.layers[settings.SURFACE].show();
     }
   }
