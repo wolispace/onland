@@ -1,5 +1,5 @@
 class UniqueId {
-  reel = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  static reel = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
   constructor(lastId) {
     this.lastId = lastId || '9'; // '9' is the first key in our unique keys so we start at 'a'
@@ -26,11 +26,11 @@ class UniqueId {
    * @returns {string} next char
    */
   nextInReel(char) {
-    const index = this.reel.indexOf(char);
-    if (index === this.reel.length - 1) {
-      return this.reel[0];
+    const index = UniqueId.reel.indexOf(char);
+    if (index === UniqueId.reel.length - 1) {
+      return UniqueId.reel[0];
     }
-    return this.reel[index + 1];
+    return UniqueId.reel[index + 1];
   }
 
   /**
@@ -47,7 +47,7 @@ class UniqueId {
     while (index >= 0) {
       const currentChar = id[index];
       if (currentChar === 'Z') {
-        id = id.slice(0, index) + this.reel[0] + id.slice(index + 1);
+        id = id.slice(0, index) + UniqueId.reel[0] + id.slice(index + 1);
         index--;
       } else {
         const nextChar = this.nextInReel(currentChar);

@@ -9,7 +9,7 @@ let app = {
     app.setup();
     app.runBonesTests();
     //app.runLocationTests();
-    //app.runStorageTests();
+    app.runStorageTests();
   },
 
   setup() {
