@@ -1,6 +1,6 @@
 // the bare bones of items id, type, position
 class Bones {
-  delim = ','; // how encoded elements of these bones are delimited
+  static DELIM = ','; // how encoded elements of these bones are delimited
   static ENCODED_KEYS = ['id', 'parent', 'type', 'variant', 'qty', 'x', 'y'];
   id = '';
   parent = '';
@@ -44,7 +44,7 @@ class Bones {
       }
     }
 
-    return encoded.join(this.delim);
+    return encoded.join(Bones.DELIM);
   }
 
   /**
@@ -53,7 +53,7 @@ class Bones {
    * @returns {object} this {id, type, variant, qty, x, y}
    */
   decode(encodedString) {
-    const decodedValues = encodedString.split(this.delim);
+    const decodedValues = encodedString.split(Bones.DELIM);
 
     for (let i = 0; i < Bones.ENCODED_KEYS.length; i++) {
       const key = Bones.ENCODED_KEYS[i];

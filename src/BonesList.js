@@ -1,6 +1,6 @@
 class BonesList {
   id = '';
-  delim = ';';
+  static DELIM = ';';
   list = {};
   constructor(id) {
     this.id = id;
@@ -17,7 +17,7 @@ class BonesList {
       const bone = this.list[boneId];
       encodedString += delim;
       encodedString += bone.encode();
-      delim = this.delim;
+      delim = BonesList.DELIM;
 
     }
 
@@ -33,7 +33,7 @@ class BonesList {
     encodedString = encodedString.substring(1);
 
     // divide remainder by delim
-    const parts = encodedString.split(this.delim);
+    const parts = encodedString.split(BonesList.DELIM);
 
 
     for (const part of parts) {

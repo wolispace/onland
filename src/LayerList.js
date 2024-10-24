@@ -1,6 +1,6 @@
 class LayerList {
   list = {};
-  delim = ' ';
+  static DELIM = ' ';
 
   /**
    * Adds a new BonesList object for a given layer
@@ -29,7 +29,7 @@ class LayerList {
       const bonesList = this.list[bonesListId];
       encodedString += delim;
       encodedString += bonesList.encode();
-      delim = this.delim;
+      delim = LayerList.DELIM;
     }
 
     return encodedString;
@@ -41,7 +41,7 @@ class LayerList {
    * @param {string} encodedString 
    */
   decode(encodedString) {
-    const parts = encodedString.split(this.delim);
+    const parts = encodedString.split(LayerList.DELIM);
 
     for (let part of parts) {
       const name = part[0];
