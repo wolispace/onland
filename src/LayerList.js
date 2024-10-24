@@ -45,8 +45,6 @@ class LayerList {
 
     for (let part of parts) {
       const name = part[0];
-      // remove first character from encodedString
-      part = part.substring(1);
       const bonesList = new BonesList(name);
       bonesList.decode(part);
       this.add(bonesList);
