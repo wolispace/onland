@@ -43,5 +43,11 @@ class BonesList {
 
   }
 
+  allocate(layerId) {
+    for (const boneId in this.list) {
+      const bone = this.list[boneId];
+      bone.allocate(layerId);
+    }
+  }
 
 }

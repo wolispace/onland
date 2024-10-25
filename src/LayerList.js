@@ -1,6 +1,7 @@
 class LayerList {
   list = {};
   static DELIM = ' ';
+  static VISIBLE = [settings.SFACE]; // layers that are visible and items need placing spatially
 
   /**
    * Adds a new BonesList object for a given layer
@@ -49,5 +50,13 @@ class LayerList {
       bonesList.decode(part);
       this.add(bonesList);
     };
+  }
+
+  allocate() {
+    // loops through all visual layers and adds them into spacial grids
+    for (const layerId of LayerList.VISIBLE) {
+      const bonesList = this.list[layerId];
+      bonesList.allocate(layerId);
+    }
   }
 };

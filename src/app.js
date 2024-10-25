@@ -31,7 +31,7 @@ let app = {
     let params = assets.make({ type: 'diamond', id: '_me', x: settings[mode].start.x, y: settings[mode].start.y, autoShow: true });
     params.parent = app.world;
 
-    app.me = new Mover(params);
+    app.me = new Mover(params); 
 
     // set up the overlay that holds the controls and other overlay things like dialogs
     //app.overlay = { div: document.querySelector(`#overlay`) };
@@ -83,9 +83,11 @@ let app = {
     const movedItems = `${id}|rock|||50|50^a|tree|||200|50`;
     app.store.save(settings.MOVED_ITEMS, movedItems);
 
-    // let itemInfo = assets.make('bridge', 'test', 500, 500, true, 'basic');
-    // app.test = new Item(itemInfo);
-    // app.world.addToLayers(app.test);
+    app.layerList = new LayerList();
+    app.layerList.decode(`${settings.SFACE}A,,rock,,,50,50;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
+    
+    app.layerList.allocate();
+    console.log('hi');
   },
 
 

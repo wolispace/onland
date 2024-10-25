@@ -23,15 +23,14 @@ class World extends Drawable {
 
   /**
    * 
-   * @returns The first letter of each layer must be unique as its used when storing data in local storage
-   * eg: surface is store in 's_0_0'
-   * suburbs and lands are special so don't worry about their first letters clashing
+   * @returns array of info about layers
    */
   layerDefinitions() {
     const layerDefs = {};
     layerDefs[settings.OVERHEAD] = this.cellSize;
     layerDefs[settings.RAISED] = this.cellSize;
     layerDefs[settings.SURFACE] = this.cellSize;
+    layerDefs[settings.SFACE] = this.cellSize;
     layerDefs[settings.UNDERGROUND] = this.cellSize;
     layerDefs[settings.GHOSTS] = this.cellSize;
     layerDefs[settings.SUBURBS] = this.gridSize(app.suburbSize);

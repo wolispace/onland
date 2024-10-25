@@ -71,4 +71,12 @@ class Bones {
     return this;
   }
 
+  allocate(layerId) {
+    // place this in spacial grid cell/s
+    app.world.layers[layerId].add(this);
+    app.world.layers[settings.LANDS].add(this);
+    app.world.layers[settings.SUBURBS].add(this);
+
+  }
+
 }
