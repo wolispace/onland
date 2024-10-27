@@ -188,8 +188,4 @@ let app = {
     }
   },
 
-  msg(key, msg) {
-    //console.log(`${key}, ${msg}`);
-  }
-
 }

@@ -160,15 +160,15 @@ class World extends Drawable {
 
     for (var i = 1; i < itemQty; i++) {
 
-      let x = settings.randomItems ? app.rnd(app.world.w) : lastPos.x;
-      let y = settings.randomItems ? app.rnd(app.world.h) : lastPos.y;
+      let x = settings.randomItems ? utils.utils(app.world.w) : lastPos.x;
+      let y = settings.randomItems ? utils.utils(app.world.h) : lastPos.y;
       let key = app.uniqueId.next();
 
       let itemType = 'rock';
-      if (app.rnd(20) == 1) {
+      if (utils.utils(20) == 1) {
         itemType = 'arch';
       } else {
-        if (app.rnd(2) == 1) {
+        if (utils.utils(2) == 1) {
           itemType = 'tree';
         }
       }
@@ -303,8 +303,8 @@ class World extends Drawable {
       let step = params.step.copy();
 
       const wobble = new Point(
-        app.halfRnd(params.wobble.x),
-        app.halfRnd(params.wobble.y)
+        utils.halfRnd(params.wobble.x),
+        utils.halfRnd(params.wobble.y)
       );
 
       step.multiply(counter);
