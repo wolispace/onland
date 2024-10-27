@@ -59,4 +59,15 @@ class LayerList {
       bonesList.allocate(layerId);
     }
   }
+
+  render(layerId) {
+    const bonesList = this.list[layerId];
+    console.log({bonesList});
+    for (const boneId in bonesList.list) {
+      const bones = bonesList.list[boneId]; 
+      bones.parent = app.world;
+      const thing = new Drawable(bones);
+      thing.show();
+    }  
+  }
 };

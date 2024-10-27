@@ -65,7 +65,6 @@ class Bones {
           this[key] = value;
         }
       }
-
     }
 
     return this;
@@ -74,6 +73,7 @@ class Bones {
   allocate(layerId) {
     // place this in spacial grid cell/s
     app.world.layers[layerId].add(this);
+    // every visible item 
     app.world.layers[settings.LANDS].add(this);
     app.world.layers[settings.SUBURBS].add(this);
 

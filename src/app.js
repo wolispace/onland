@@ -84,10 +84,10 @@ let app = {
     app.store.save(settings.MOVED_ITEMS, movedItems);
 
     app.layerList = new LayerList();
-    app.layerList.decode(`${settings.SFACE}A,,rock,,,50,50;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
+    app.layerList.decode(`${settings.SFACE}A,,rock,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
     
     app.layerList.allocate();
-    console.log('hi');
+    app.layerList.render(settings.SFACE);
   },
 
 

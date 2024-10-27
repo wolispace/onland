@@ -4,8 +4,8 @@ class Rectangle extends Vector {
 
   constructor(params) {
     super(params.x ?? 0, params.y ?? 0);
-    this.w = params.w ?? 50;
-    this.h = params.h ?? 50;
+    this.w = params.w;
+    this.h = params.h;
   }
 
   copy() {

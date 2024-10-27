@@ -28,6 +28,7 @@ class Drawable extends Rectangle {
       if (!this.html) {
         const tmp = assets.make(this);
         this.html = tmp.html; 
+        console.log(this, this.html);
       }
       this.parent.div.insertAdjacentHTML('beforeend', this.html);
       // clear this from memory as we dont need it any more
