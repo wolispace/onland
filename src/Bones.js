@@ -70,9 +70,13 @@ class Bones {
     return this;
   }
 
-  allocate(layerId) {
+  allocate() {
     // place this in spacial grid cell/s
-    app.world.layers[layerId].add(this);
+    const itemInfo = assets.make(this);
+    console.log(itemInfo);
+    //app.world.layers[layerId].addAll(itemInfo, itemInfo[layerId]);
+    app.world.layers[settings.SFACE].addAll(itemInfo, itemInfo[settings.SFACE]);
+    app.world.layers[settings.GHOSTS].addAll(itemInfo, itemInfo[settings.GHOSTS]);
     // every visible item 
     app.world.layers[settings.LANDS].add(this);
     app.world.layers[settings.SUBURBS].add(this);

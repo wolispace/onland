@@ -9,6 +9,9 @@ class BonesList {
   add(bone) {
     this.list[bone.id] = bone;
   }
+  get(id) {
+    return this.list[id];
+  }
 
   encode() {
     let encodedString = this.id;
@@ -43,10 +46,10 @@ class BonesList {
 
   }
 
-  allocate(layerId) {
+  allocate() {
     for (const boneId in this.list) {
       const bone = this.list[boneId];
-      bone.allocate(layerId);
+      bone.allocate();
     }
   }
 

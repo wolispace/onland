@@ -42,7 +42,7 @@ class Mover extends Item {
     this.backupPos();
     this.applyVelocity();
     this.checkWorldBoundary();
-    this.checkCollisions(settings.SURFACE);
+    this.checkCollisions(settings.SFACE);
     this.checkGhosts();
     this.removeGhosts();
     shiftSuburbsAsync(this);
@@ -150,6 +150,9 @@ class Mover extends Item {
     if (inCell && inCell.list && inCell.list.length > 0) {
       inCell.list.forEach((itemId) => {
         let item = app.items.get(itemId);
+        if (!item) {
+          item = app.layerList.get(layer).get(itemId);
+        } 
         if (!item) return;
 
         const assetInfo = assets.get(item.type, item.variant);

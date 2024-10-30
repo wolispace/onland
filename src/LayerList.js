@@ -56,7 +56,8 @@ class LayerList {
     // loops through all visual layers and adds them into spacial grids
     for (const layerId of LayerList.VISIBLE) {
       const bonesList = this.list[layerId];
-      bonesList.allocate(layerId);
+      console.log('x');
+      bonesList.allocate();
     }
   }
 
