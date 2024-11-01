@@ -12,7 +12,7 @@ const settings = {
     landSize: 1000, // how big each land (logically grouped items saved to disk) is 
     worldSize: { w: 2000, h: 2000 }, // needs to match files on disk
     start: { x: 100, y: 100 },
-    lands: 'land',
+    lands: 'bones',
   },
   MOVED_ITEMS: 'moved',
   OVERHEAD: 'overhead',

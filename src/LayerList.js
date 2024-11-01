@@ -7,7 +7,12 @@ class LayerList {
    * Adds a new BonesList object for a given layer
    * @param {BonesList} bonesList to add, which already includes an id we use for identifying the layer   */
   add(bonesList) {
-    this.list[bonesList.id] = bonesList;
+    // TODO: if there is already a bones list then merge this into it
+    if (this.list[bonesList.id]) {
+      this.list[bonesList.id].merge(bonesList);
+    } else {
+      this.list[bonesList.id] = bonesList;
+    }
   }
 
   /**
@@ -42,6 +47,8 @@ class LayerList {
    * @param {string} encodedString 
    */
   decode(encodedString) {
+    // remove all CRLF used to make the stored data easier to read
+    encodedString = encodedString.replaceAll("\n", '');
     const parts = encodedString.split(LayerList.DELIM);
 
     for (let part of parts) {
@@ -56,19 +63,24 @@ class LayerList {
     // loops through all visual layers and adds them into spacial grids
     for (const layerId of LayerList.VISIBLE) {
       const bonesList = this.list[layerId];
-      console.log('x');
       bonesList.allocate();
     }
   }
 
   render(layerId) {
     const bonesList = this.list[layerId];
-    console.log({bonesList});
     for (const boneId in bonesList.list) {
       const bones = bonesList.list[boneId]; 
       bones.parent = app.world;
       const thing = new Drawable(bones);
       thing.show();
     }  
+  }
+
+  prune(surrounds) {
+    for (const layerId of LayerList.VISIBLE) {
+      const bonesList = this.list[layerId];
+      bonesList.prune(surrounds);
+    }
   }
 };

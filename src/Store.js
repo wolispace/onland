@@ -1,6 +1,5 @@
 class Store {
   compression = false;
-  tempList = {};
   // everything in the world that has moved or is new to default land data
   movedList = {};
 
@@ -8,30 +7,6 @@ class Store {
     this.type = type;
   }
 
-  /**
-   * Add all items into a temp list {'a': {id:a, x: 100, y: 200, etc..}}
-   * @param {string} encodedData 'a|||100|200^etc..
-   */
-  addToTempList(encodedData) {
-    const decodedData = this.decodeData(encodedData);
-    decodedData.forEach((itemData) => {
-      //add to a temp list of item info to turn into  real item
-      this.tempList[itemData.id] = itemData;
-    });
-  }
-
-  /**
-   * Updates or adds items in our temp list {'a': {id:a, x: 150, y: 250, etc..}}
-   * @param {string} encodedData 'a|||150|250^etc..
-
-   */
-  updateTempList(encodedData) {
-    const decodedData = this.decodeData(encodedData);
-    decodedData.forEach((itemData) => {
-      //add to a temp list of item info to turn into  real item
-      this.tempList[itemData.id] = itemData;
-    });
-  }
 
   updateMovedList(encodedData) {
     const decodedData = this.decodeData(encodedData);
@@ -49,23 +24,8 @@ class Store {
     return this.encodeData(Object.values(this.movedList));
   }
 
-  /**
-   * 
-   * @param {array} surrounds array of land key ['0_0', '0_1', etc..] 
-   */
-  pruneTempList(surrounds) {
-    for (const key in this.tempList) {
-      const params = this.tempList[key];
-      const land = app.world.layers[settings.LANDS].makeKey(params);
-      if (!surrounds.has(land)) {
-        delete this.tempList[key];
-      }
-    }
-  }
-
   save(key, data) {
     localStorage.setItem(key, data);
-    console.log('saved', key, data);
     return this;
   }
 

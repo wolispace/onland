@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   app.start();
 });
 
-const mode = 'test';
+const mode = 'land';
 
 let app = {
 
@@ -22,6 +22,7 @@ let app = {
     app.items = new Items();
     app.inventory = new Inventory();
     app.overlays = new Overlays();
+    app.layerList = new LayerList();
 
 
     app.scrollable = { div: document.querySelector(".scrollable") };
@@ -80,10 +81,9 @@ let app = {
 
   doTest() {
     const id = 'z';
-    const movedItems = `${id}|rock|||50|50^a|tree|||200|50`;
+    const movedItems = `sZ,,rock,,,50,50;Y,,tree,,,200,50`;
     app.store.save(settings.MOVED_ITEMS, movedItems);
 
-    app.layerList = new LayerList();
     app.layerList.decode(`${settings.SFACE}A,,rock,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
     
     app.layerList.allocate();
@@ -172,8 +172,12 @@ let app = {
       const filePromise = loadScript(`lands/${settings[mode].lands}_${land}.js`)
         .then(() => {
           // File loaded successfully, you can now use its functions/variables
-          if (app.defaultData) {            
-            app.store.addToTempList(app.defaultData[layer].join('^'));
+          if (app.defaultData) {        
+            if (typeof(app.defaultData) == "string") {
+              app.layerList.decode(app.defaultData);
+            } else {
+              app.store.addToTempList(app.defaultData[layer].join('^'));
+            }
           }
         })
         .catch((error) => {
@@ -197,19 +201,16 @@ let app = {
 };
 
 function processAllData(surrounds) {
-      // now app.store.tempList has all default items in basic form
+  // now app.layerList has all default items in basic form (read from js files)
   // update with all known/moved items from local storage
-  // all that are in tempList now get turned into real items and allocated into layers
-
   let movedItems = app.store.load(settings.MOVED_ITEMS);
-  app.store.updateMovedList(movedItems);
-
-  console.log(movedItems, app.store);
-  app.store.updateTempList(movedItems);
-  app.store.pruneTempList(surrounds);
-  
-  // now we have a list of basic objects we can turn into Item()s and fill the grids and draw on screen
-  app.items.setItems(app.store.tempList);
+  app.layerList.decode(movedItems);
+  // remove all that are not in the current surround lands
+  app.layerList.prune(surrounds);
+  // allocate them all to layers
+  app.layerList.allocate();
+  // draw everything on the surface
+  app.layerList.render(settings.SFACE);
 }
 
 async function shiftSuburbsAsync(mover) {

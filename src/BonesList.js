@@ -9,10 +9,18 @@ class BonesList {
   add(bone) {
     this.list[bone.id] = bone;
   }
+
   get(id) {
     return this.list[id];
   }
 
+  merge(bonesList) {
+    for (const boneId in bonesList.list) {
+      const bone = bonesList.list[boneId];
+      this.add(bone);
+    }
+  }
+  
   encode() {
     let encodedString = this.id;
     let delim = '';
@@ -50,6 +58,20 @@ class BonesList {
     for (const boneId in this.list) {
       const bone = this.list[boneId];
       bone.allocate();
+    }
+  }
+
+  /**
+   * Remove all bones from this list that are not in the same LAND as one of the passed-in surrounds
+   * @param {UniqueSet} surrounds 
+   */
+  prune(surrounds) {
+    for (const key in this.list) {
+      const boneId = this.list[key];
+      const land = app.world.layers[settings.LANDS].makeKey(boneId);
+      if (!surrounds.has(land)) {
+        delete this.list[key];
+      }
     }
   }
 
