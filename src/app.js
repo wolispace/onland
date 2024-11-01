@@ -80,14 +80,14 @@ let app = {
   },
 
   doTest() {
-    const id = 'z';
-    const movedItems = `sZ,,rock,,,50,50;Y,,tree,,,200,50`;
+    // write some test data into the store..
+    const movedItems = `sZ,,river,,,380,50;Y,,river,,,480,50`;
     app.store.save(settings.MOVED_ITEMS, movedItems);
 
-    app.layerList.decode(`${settings.SFACE}A,,rock,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
+    app.layerList.decode(`${settings.SFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
     
-    app.layerList.allocate();
-    app.layerList.render(settings.SFACE);
+    //app.layerList.allocate();
+    //app.layerList.render(settings.SFACE);
   },
 
 
