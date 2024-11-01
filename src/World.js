@@ -189,25 +189,6 @@ class World extends Drawable {
     }
   }
 
-  /**
-   * decodes a string of data (a set of 9 suburbs) and adds them to the world
-   * also populating app.items
-   * 
-   */
-  load(encodedData) {
-    if (!encodedData) return;
-    let decodedData = app.store.decodeData(encodedData);
-    decodedData.forEach(item => {
-      item.autoShow = true;
-      item.id = app.uniqueId.next();
-      const itemInfo = assets.make(item);
-      itemInfo.parent = this;
-      const tempItem = new Item(itemInfo);
-
-      app.items.set(tempItem);
-
-    });
-  }
 
   extract() {
     //loop through all suburbs and build an array of exportable data

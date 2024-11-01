@@ -125,41 +125,6 @@ let app = {
     }
   },
 
-
-  encode(item) {
-    let encoded = [];
-    app.encodeKeys.forEach((key) => {
-      let value = item[key];
-      if (value === null || value === undefined || value === 'basic' || value === 'surface') {
-        value = '';
-      }
-      encoded.push(value);
-    });
-    return encoded.join('|');
-  },
-
-  /**
-   * 
-   * @param {string} encodedString 
-   * @returns {object} decoded object {id, type, variant, layer, x, y}
-   */
-  decode(encodedString) {
-    let decoded = {};
-    const decodedValues = encodedString.split('|');
-    app.encodeKeys.forEach((key, index) => {
-      let value = decodedValues[index];
-      if (value) {
-        if (key === 'x' || key === 'y') {
-          decoded[key] = parseInt(value);
-        } else {
-          decoded[key] = value;
-        }
-      }
-    });
-    return decoded;
-
-  },
-
   /** when we are in a new land, clear previous item info and load the kings square of land data
    * @params {string} land key eg '0_0' or 4_6' lands are bigger than suburbs
    */
@@ -196,8 +161,6 @@ let app = {
         console.error('Error loading scripts:', error);
     });
   },
-
-  
 };
 
 function processAllData(surrounds) {
