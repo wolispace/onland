@@ -51,6 +51,10 @@ class UniqueSet {
     return this.list.length;
   }
 
+  empty() {
+    return this.list.length === 0;
+  }
+
   // adds the new list into the list making sure there are not duplicates
   join(newList) {
     if (newList && newList.length > 0) {

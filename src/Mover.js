@@ -2,7 +2,7 @@ class Mover extends Item {
 
   velocity = new Vector();
   acceleration = new Vector();
-  accelerationRate = 0.5; 
+  accelerationRate = 0.5;
   maxSpeed = 10;
   friction = 0.75;
   precision = 1;
@@ -134,7 +134,7 @@ class Mover extends Item {
    */
   checkWorldBoundary() {
     const padding = 20;
-    if (this.x < padding || this.x > app.world.w - padding 
+    if (this.x < padding || this.x > app.world.w - padding
       || this.y < padding || this.y > app.world.h - padding) {
       this.restorePos();
       this.velocity.clear();
@@ -145,54 +145,60 @@ class Mover extends Item {
   checkCollisions(layer) {
     // first collidable for the surface is the item we are checking against all other items
     this.updateCollisionBox();
-    let inCell = app.world.layers[layer].queryShape(this.collisionBox);
+    const inCell = app.world.layers[layer].queryShape(this.collisionBox);
 
-    if (inCell && inCell.list && inCell.list.length > 0) {
-      inCell.list.forEach((itemId) => {
-        let item = app.items.get(itemId);
-        if (!item) {
-          item = app.layerList.get(layer).get(itemId);
-        } 
-        if (!item) return;
+    const layerBonesList = app.layerList.get(layer);
+    if (!layerBonesList) return;
 
-        const assetInfo = assets.get(item.type, item.variant);
+    for (const itemId of inCell.list || []) {
+      let item = layerBonesList.get(itemId);
+      if (!item) return;
+      const assetInfo = assets.get(item.type, item.variant);
 
-        assetInfo[layer].forEach((otherItem) => {
-          let collidable = otherItem.copy().add(item);
-          let poss = this.collisionBox.collides(collidable);
-          // if x = -1 we are on the left|top of centre, +1 is right|bottom
+      for (const otherItem of assetInfo[layer] || []) {
 
-          if (poss.x != 0 || poss.y != 0) {
-            // we hit something so return to previous pos and modify velocity before applying it again
-            this.restorePos();
-            if (item.onCollide === 'stop') {
-              this.velocity.clear();
-              app.input.clearKeys();
-            } else if (item.onCollide === 'bounce') {
-              this.velocity.multiply(poss);
-            } else {
-              if (Math.abs(this.velocity.y) > this.friction) {
-                this.velocity.x = Math.abs(this.velocity.y * this.collisionSlide) * poss.x;
-                this.velocity.y = 0;
-              } else if (Math.abs(this.velocity.x) > this.friction) {
-                this.velocity.y = Math.abs(this.velocity.x * this.collisionSlide) * poss.y;
-                this.velocity.x = 0;
-              }
-            }
-            this.velocity.limit(this.maxSpeed);
-            this.applyVelocity();
-            if (app.pickupItems) {
-              this.velocity.clear();
-              app.inventory.add(item.id);
-              item.layer = 'inv';
-              app.store.addToMovedList(item);
-              app.store.save(settings.MOVED_ITEMS, app.store.getEncodedMovedList());
-              item.remove();
-            }
-          }
-        });
-      });
-    };
+        let collidable = otherItem.copy().add(item);
+        this.surfaceCollision(collidable, item);
+      }
+    }
+  }
+
+  /**
+   * 
+   * @param {collidable} the thing we have collided with ?? 
+   * @param {bones} the thing we have collided with 
+   */
+  surfaceCollision(collidable, item) {
+    let poss = this.collisionBox.collides(collidable);
+    // if x = -1 we are on the left|top of centre, +1 is right|bottom
+    if (poss.x != 0 || poss.y != 0) {
+      // we hit something so return to previous pos and modify velocity before applying it again
+      this.restorePos();
+      if (item.onCollide === 'stop') {
+        this.velocity.clear();
+        app.input.clearKeys();
+      } else if (item.onCollide === 'bounce') {
+        this.velocity.multiply(poss);
+      } else {
+        if (Math.abs(this.velocity.y) > this.friction) {
+          this.velocity.x = Math.abs(this.velocity.y * this.collisionSlide) * poss.x;
+          this.velocity.y = 0;
+        } else if (Math.abs(this.velocity.x) > this.friction) {
+          this.velocity.y = Math.abs(this.velocity.x * this.collisionSlide) * poss.y;
+          this.velocity.x = 0;
+        }
+      }
+      this.velocity.limit(this.maxSpeed);
+      this.applyVelocity();
+      if (app.pickupItems) {
+        this.velocity.clear();
+        app.inventory.add(item.id);
+        item.layer = 'inv';
+        app.store.addToMovedList(item);
+        app.store.save(settings.MOVED_ITEMS, app.store.getEncodedMovedList());
+        item.remove();
+      }
+    }
   }
 
   // check the ghosts grid to see what we are colliding with any ghosts

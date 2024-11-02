@@ -81,10 +81,10 @@ let app = {
 
   doTest() {
     // write some test data into the store..
-    const movedItems = `sZ,,river,,,380,50;Y,,river,,,480,50`;
+    const movedItems = `sa,,tree,,,250,50;Y,,tree,,,250,250`;
     app.store.save(settings.MOVED_ITEMS, movedItems);
 
-    app.layerList.decode(`${settings.SFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
+    //app.layerList.decode(`${settings.SFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
     
     //app.layerList.allocate();
     //app.layerList.render(settings.SFACE);

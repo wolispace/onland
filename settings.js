@@ -22,7 +22,7 @@ const settings = {
   UNDERGROUND: 'underground',
   SUBURBS: 'suburbs',
   LANDS: 'lands',
-  GHOSTS: 'ghosts',
+  GHOSTS: 'g',
   INVENTORY: 'i',
   
   isDev: true,
