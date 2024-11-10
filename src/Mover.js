@@ -190,13 +190,11 @@ class Mover extends Item {
       }
       this.velocity.limit(this.maxSpeed);
       this.applyVelocity();
-      if (app.pickupItems) {
+      if (settings.pickupItems) {
         this.velocity.clear();
-        app.inventory.add(item.id);
-        item.layer = 'inv';
-        app.store.addToMovedList(item);
+        app.layerList.addBones(settings.INVENTORY, item);
+        app.layerList.removeBones(settings.SFACE, item.id);
         app.store.save(settings.MOVED_ITEMS, app.store.getEncodedMovedList());
-        item.remove();
       }
     }
   }

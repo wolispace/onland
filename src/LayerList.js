@@ -25,6 +25,36 @@ class LayerList {
   }
 
   /**
+   * Adds some bones to the given layer
+   * @param {string} layerId the id for the layer eg 's' = settings.SURFACE
+   * @param {Bones} bones to of an item to add
+   */
+  addBones(layerId, bones) {
+    if (!this.list[layerId]) {
+      this.list[layerId] = new BonesList(layerId);
+    }
+    this.list[layerId].add(bones);
+  }
+
+  /**
+   * Returns the Bones for the given layer and bone id
+   * @param {string} layerId the id for the layer eg 's' = settings.SURFACE
+   * @param {string} bonesId the id for the bones eg: 'a'
+   * @returns Bones
+   */
+  getBones(layerId, bonesId) {
+    const bonesList = this.list[layerId];
+    return this.list[layerId].get(bonesId);
+  }
+
+  removeBones(layerId, bonesId) {
+    const bonesList = this.list[layerId];
+    if (bonesList) {
+      bonesList.remove(bonesId);
+    }
+  }
+
+  /**
    * Encodes the current list of layers and their BonesLists
    * @returns {string} the coded version of these layers and their boneLists
    */

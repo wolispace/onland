@@ -14,6 +14,16 @@ class BonesList {
     return this.list[id];
   }
 
+  remove(id) {
+    delete this.list[id];
+    // find the div by this id and remove from dom
+    const div = document.querySelector(`#${id}`);
+    if (div) {
+      div.remove();
+    }
+      
+  }
+
   merge(bonesList) {
     for (const boneId in bonesList.list) {
       const bone = bonesList.list[boneId];

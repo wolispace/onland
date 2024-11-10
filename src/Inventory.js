@@ -19,16 +19,13 @@ class Inventory extends UniqueSet {
 
   html() {
     let html = '';
-    this.list.forEach(itemId => {
-      let item = app.items.get(itemId);
-      item.left = 0;
-      item.top = 0;
-      item.w = 80;
-      item.h = 80;
-      item = assets.make(item);
-      console.log(item);
+    const bonesList = app.layerList.get(settings.INVENTORY);
+    if (!bonesList) return;
+    for (const bones of Object.values(bonesList.list)) {
+      const item = assets.make(bones);
       html += `${this.buttonHtml(item)}`;
-    });
+    }
+
     return `<div class="itemList">${html}</div>`;
   }
 
