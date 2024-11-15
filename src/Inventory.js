@@ -14,14 +14,16 @@ class Inventory extends UniqueSet {
     this.dialog = new Dialog(params);
   }
 
-  // perry mason
-  // charlie chaplin
+  // names heard called for in a drs clinic:
+  // - perry mason
+  // - charlie chaplin
 
   html() {
     let html = '';
     const bonesList = app.layerList.get(settings.INVENTORY);
     if (!bonesList) return;
     for (const bones of Object.values(bonesList.list)) {
+      bones.style = ' '; // override default svg style
       const item = assets.make(bones);
       html += `${this.buttonHtml(item)}`;
     }

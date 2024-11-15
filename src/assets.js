@@ -14,7 +14,10 @@ const assets = {
   make(params) {
     const defaultParams = assets.get(params.type, params.variant);
     params = {...params, ...defaultParams};
-    params.style = `style="left:${params.left}px; top:${params.top}px;" width="100%"`;
+    // no style defined so build one based on the params
+    if (!params.style) {
+      params.style = `style="left:${params.left}px; top:${params.top}px;" width="100%"`;
+    }
     params.html = assets.buildHtml(params);
     return params;
   },

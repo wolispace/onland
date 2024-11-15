@@ -120,6 +120,20 @@ body {
   color: black;
 }
 
+.inventoryItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.inventoryItem > svg {
+  width: 100%;
+  position: static; /* Remove the absolute positioning */
+}
+
 #touchId {
   position: absolute;
   background-color: yellow;
@@ -237,11 +251,6 @@ button {
 
 button:hover {
   background-color: rgba(109, 160, 143, .75) !important;
-}
-
-.inventoryItem {
-  width: 80px;
-  height: 80px;
 }
 
 .msg {
