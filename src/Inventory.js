@@ -5,6 +5,10 @@ class Inventory extends UniqueSet {
     super(params);
   }
 
+  add(bone) {
+    // add the bone to the inventory bonelist and remove from all other lists?
+  }
+
   show() {
     const params = {
       title: 'Inventory',

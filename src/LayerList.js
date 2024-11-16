@@ -44,7 +44,9 @@ class LayerList {
    */
   getBones(layerId, bonesId) {
     const bonesList = this.list[layerId];
-    return this.list[layerId].get(bonesId);
+    if (!bonesList || !bonesId) return;
+    
+    return bonesList.get(bonesId);
   }
 
   removeBones(layerId, bonesId) {

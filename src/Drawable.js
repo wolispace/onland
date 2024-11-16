@@ -27,9 +27,9 @@ class Drawable extends Rectangle {
     if (!this.div) {
       if (!this.html) {
         const tmp = assets.make(this);
-        this.html = tmp.html; 
+        this.html = tmp.html;
       }
-      this.parent.div.insertAdjacentHTML('beforeend', this.html);
+      this.addToParent();
       // clear this from memory as we dont need it any more
       this.html = null;
       this.div = document.querySelector(`#${this.id}`);
@@ -49,13 +49,37 @@ class Drawable extends Rectangle {
     this.position();
   }
 
+  addToParent() {
+    this.buildParent();
+    this.parent.div.insertAdjacentHTML('beforeend', this.html);
+  }
+
+  buildParent() {
+    if (this.parent) {
+      if (typeof this.parent == 'string') {
+        this.parent = {
+          id: this.parent,
+          div: document.querySelector(`#${this.parent}`),
+        };
+        const rectangle = this.parent.div.getBoundingClientRect();
+        this.parent.x = rectangle.left;
+        this.parent.y = rectangle.top;
+      }
+    }
+  }
+
   position() {
+    console.trace('ss');
     if (!this.div) return;
     let itemPos = this.copy();
     // every item is relative to its parent. since the world is 0,0 we are not changing am.me x,y
-    if (this.parent) {
-      itemPos.add(this.parent);
-    }
+    this.buildParent();
+    // clear this from memory as we don't need it any more
+    this.html = null;
+    this.div = document.querySelector(`#${this.id}`);
+
+    itemPos.add(this.parent);
+
     this.div.style.transform = `translate3d(${itemPos.x}px, ${itemPos.y}px, 0)`;
     //console.log('position', this.parent, this);
 

@@ -1,6 +1,6 @@
 class Store {
   compression = false;
-  // everything in the world that has moved or is new to default land data
+  // OLD CODE: everything in the world that has moved or is new to default land data
   movedList = {};
 
   constructor(type = 'localStorage') {

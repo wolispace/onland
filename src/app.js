@@ -30,7 +30,7 @@ let app = {
     app.world.div = document.querySelector(`#world`);
 
     let params = assets.make({ type: 'diamond', id: '_me', x: settings[mode].start.x, y: settings[mode].start.y, autoShow: true });
-    params.parent = app.world;
+    params.parent = 'world';
 
     app.me = new Mover(params); 
 
