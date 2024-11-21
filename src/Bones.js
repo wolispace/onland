@@ -59,6 +59,7 @@ class Bones {
       const key = Bones.ENCODED_KEYS[i];
       let value = decodedValues[i];
       if (value !== '') {
+        // x, y and qty are ints
         if ('xqty'.indexOf(key) > -1) {
           this[key] = parseInt(value);
         } else {
@@ -73,7 +74,6 @@ class Bones {
   allocate() {
     // place this in spacial grid cell/s
     const itemInfo = assets.make(this);
-
     //app.world.layers[layerId].addAll(itemInfo, itemInfo[layerId]);
     app.world.layers[settings.SFACE].addAll(itemInfo, itemInfo[settings.SFACE]);
     app.world.layers[settings.GHOSTS].addAll(itemInfo, itemInfo[settings.GHOSTS]);

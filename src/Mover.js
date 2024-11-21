@@ -192,9 +192,7 @@ class Mover extends Item {
       this.applyVelocity();
       if (settings.pickupItems) {
         this.velocity.clear();
-        app.layerList.addBones(settings.INVENTORY, item);
-        app.layerList.removeBones(settings.SFACE, item.id);
-        app.store.save(settings.MOVED_ITEMS, app.layerList.encode());
+        app.inventory.add(item);
       }
     }
   }

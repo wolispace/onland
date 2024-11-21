@@ -102,9 +102,12 @@ class LayerList {
   render(layerId) {
     const bonesList = this.list[layerId];
     for (const boneId in bonesList.list) {
-      const bones = bonesList.list[boneId]; 
-      bones.parent = app.world;
-      const thing = new Drawable(bones);
+        // Create a deep copy of the bones object
+        const bonesCopy = JSON.parse(JSON.stringify(bonesList.list[boneId]));
+        // Update the parent property on the copy
+        bonesCopy.parent = app.world;
+        // Use the copy to create the Drawable
+        const thing = new Drawable(bonesCopy);
       thing.show();
     }  
   }

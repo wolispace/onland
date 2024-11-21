@@ -68,8 +68,8 @@ class Drawable extends Rectangle {
     }
   }
 
+  //TODO: we call position even when items have not change position.. how to compare last with current pos?
   position() {
-    console.trace('ss');
     if (!this.div) return;
     let itemPos = this.copy();
     // every item is relative to its parent. since the world is 0,0 we are not changing am.me x,y
