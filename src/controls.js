@@ -43,6 +43,7 @@ const controls = {
 
       // if we move off the button, end its input
       const oldButtonInfo = controls.buttonList[controls.lastButton];
+      if (!oldButtonInfo) return;
       app.input.keys.takeAll(oldButtonInfo.keys);
 
       if (['controls', 'inv'].includes(buttonName)) return;

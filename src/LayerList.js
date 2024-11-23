@@ -44,7 +44,7 @@ class LayerList {
   getBones(layerId, bonesId) {
     const bonesList = this.list[layerId];
     if (!bonesList || !bonesId) return;
-    
+
     return bonesList.get(bonesId);
   }
 
@@ -101,14 +101,14 @@ class LayerList {
   render(layerId) {
     const bonesList = this.list[layerId];
     for (const boneId in bonesList.list) {
-        // Create a deep copy of the bones object
-        const bonesCopy = JSON.parse(JSON.stringify(bonesList.list[boneId]));
-        // Update the parent property on the copy
-        bonesCopy.parent = app.world;
-        // Use the copy to create the Drawable
-        const thing = new Drawable(bonesCopy);
+      // Create a deep copy of the bones object
+      const bonesCopy = JSON.parse(JSON.stringify(bonesList.list[boneId]));
+      // Update the parent property on the copy
+      bonesCopy.parent = app.world;
+      // Use the copy to create the Drawable
+      const thing = new Drawable(bonesCopy);
       thing.show();
-    }  
+    }
   }
 
   prune(surrounds) {
@@ -116,5 +116,16 @@ class LayerList {
       const bonesList = this.list[layerId];
       bonesList.prune(surrounds);
     }
+  }
+
+  merge(layerList) {
+    if (!layerList) return this;
+    console.log('merging layerList', layerList);
+    if (!layerList instanceof LayerList) return this;
+    for (const layerId in layerList.list) {
+      const bonesList = layerList.list[layerId];
+      this.add(bonesList);
+    }
+    return this; 
   }
 };

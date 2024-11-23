@@ -1,14 +1,26 @@
 class GameLists {
-  defaultList = new LayerList();
-  movedList = new LayerList();
-
+  default = new LayerList(); // loaded from disk 
+  moved = new LayerList(); // loaded from local storage: augments and overrides default
   
   /**
    * Adding a new object bones to our list of moved objects
    * @param {bones} item 
    */
   add(layer, item) {
-    this.movedList.addBones(layer, item);
+    this.moved.addBones(layer, item);
+  }
+
+  get(layer) {
+    let combinedList = this.default.get(layer);
+    if (combinedList === undefined) {
+      combinedList = new LayerList();
+    }
+    const temp = this.moved.get(layer);
+    if (layer !== 's') {
+      console.log(layer, temp, combinedList);
+    }
+    combinedList = combinedList.merge(temp);
+    return combinedList;
   }
 
   /**
@@ -16,8 +28,8 @@ class GameLists {
    * @param {bones} item 
    */
   remove(layer, item) {
-    this.defaultList.removeBones(layer, item);
-    this.movedList.removeBones(layer, item);
+    this.default.removeBones(layer, item);
+    this.moved.removeBones(layer, item);
   
   }
 
@@ -26,9 +38,22 @@ class GameLists {
     this.addBones(layer, item);
   }
 
-  render() {
+  render(layerId) {
     // merge both list into one and render the result
-    const mergedList = this.defaultList.merge(this.movedList);  
-    mergedList.render();
+    const mergedList = this.default.merge(this.moved);  
+    mergedList.render(layerId);
+  }
+
+  decode(encoded, set = 'moved') {
+    console.log(set, this[set])
+    return this[set].decode(encoded);
+  }
+
+  prune(surrounds, set = 'moved') {
+    return this[set].prune(surrounds);
+  } 
+
+  allocate(thing, set = 'moved') {
+    return this[set].allocate(thing);  
   }
 }

@@ -147,7 +147,7 @@ class Mover extends Item {
     this.updateCollisionBox();
     const inCell = app.world.layers[layer].queryShape(this.collisionBox);
 
-    const layerBonesList = app.layerList.get(layer);
+    const layerBonesList = app.gameLists.get(layer);
     if (!layerBonesList) return;
 
     for (const itemId of inCell.list || []) {

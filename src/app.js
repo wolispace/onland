@@ -22,7 +22,7 @@ let app = {
     app.items = new Items();
     app.inventory = new Inventory();
     app.overlays = new Overlays();
-    app.layerList = new LayerList();
+    app.gameLists = new GameLists();
 
 
     app.scrollable = { div: document.querySelector(".scrollable") };
@@ -84,10 +84,10 @@ let app = {
     const movedItems = `sa,,tree,,,250,50;Y,,tree,,,250,250 iaa,,tree,,,250,50`;
     app.store.save(settings.MOVED_ITEMS, movedItems);
 
-    //app.layerList.decode(`${settings.SFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
+    //app.gameLists.decode(`${settings.SFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
     
-    //app.layerList.allocate();
-    //app.layerList.render(settings.SFACE);
+    //app.gameLists.allocate();
+    //app.gameLists.render(settings.SFACE);
   },
 
 
@@ -139,7 +139,7 @@ let app = {
           // File loaded successfully, you can now use its functions/variables
           if (app.defaultData) {        
             if (typeof(app.defaultData) == "string") {
-              app.layerList.decode(app.defaultData);
+              app.gameLists.decode(app.defaultData);
             } else {
               app.store.addToTempList(app.defaultData[layer].join('^'));
             }
@@ -164,16 +164,16 @@ let app = {
 };
 
 function processAllData(surrounds) {
-  // now app.layerList has all default items in basic form (read from js files)
+  // now app.gameLists has all default items in basic form (read from js files)
   // update with all known/moved items from local storage
   let movedItems = app.store.load(settings.MOVED_ITEMS);
-  app.layerList.decode(movedItems);
+  app.gameLists.decode(movedItems);
   // remove all that are not in the current surround lands
-  app.layerList.prune(surrounds);
+  app.gameLists.prune(surrounds);
   // allocate them all to layers
-  app.layerList.allocate();
+  app.gameLists.allocate();
   // draw everything on the surface
-  app.layerList.render(settings.SFACE);
+  app.gameLists.render(settings.SFACE);
 }
 
 async function shiftSuburbsAsync(mover) {

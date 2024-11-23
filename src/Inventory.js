@@ -8,9 +8,9 @@ class Inventory extends UniqueSet {
   add(item) {
     console.log(item);
     // add the bone to the inventory bonelist and remove from all other lists?
-    app.layerList.addBones(settings.INVENTORY, item);
-    app.layerList.removeBones(settings.SFACE, item.id);
-    app.store.save(settings.MOVED_ITEMS, app.layerList.encode());
+    app.gameLists.addBones(settings.INVENTORY, item);
+    app.gameLists.removeBones(settings.SFACE, item.id);
+    app.store.save(settings.MOVED_ITEMS, app.gameLists.encode(settings.MOVED_ITEMS));
   }
 
   show() {
@@ -28,8 +28,8 @@ class Inventory extends UniqueSet {
 
   html() {
     let html = '';
-    const bonesList = app.layerList.get(settings.INVENTORY);
-    if (!bonesList) return;
+    const bonesList = app.gameLists[settings.MOVED_ITEMS].get(settings.INVENTORY);
+    if (!bonesList) return 'Nothing in your inventory';
     for (const bones of Object.values(bonesList.list)) {
       bones.style = ' '; // override default svg style
       const item = assets.make(bones);
