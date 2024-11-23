@@ -1,12 +1,7 @@
 class Store {
-  compression = false;
-  // OLD CODE: everything in the world that has moved or is new to default land data
-  movedList = {};
-
   constructor(type = 'localStorage') {
     this.type = type;
   }
-
 
   updateMovedList(encodedData) {
     const decodedData = this.decodeData(encodedData);

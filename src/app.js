@@ -81,7 +81,7 @@ let app = {
 
   doTest() {
     // write some test data into the store..
-    const movedItems = `sa,,tree,,,250,50;Y,,tree,,,250,250`;
+    const movedItems = `sa,,tree,,,250,50;Y,,tree,,,250,250 iaa,,tree,,,250,50`;
     app.store.save(settings.MOVED_ITEMS, movedItems);
 
     //app.layerList.decode(`${settings.SFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
@@ -129,7 +129,7 @@ let app = {
    * @params {string} land key eg '0_0' or 4_6' lands are bigger than suburbs
    */
   loadData(landKey) {
-    const layer = 'surface';
+    const layer = settings.SFACE;
     const surrounds = app.world.layers.lands.kingsSquare(landKey);
     const filePromises = [];
     

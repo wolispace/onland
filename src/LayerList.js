@@ -7,7 +7,6 @@ class LayerList {
    * Adds a new BonesList object for a given layer
    * @param {BonesList} bonesList to add, which already includes an id we use for identifying the layer   */
   add(bonesList) {
-    // TODO: if there is already a bones list then merge this into it
     if (this.list[bonesList.id]) {
       this.list[bonesList.id].merge(bonesList);
     } else {
