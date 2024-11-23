@@ -16,9 +16,6 @@ class GameLists {
       combinedList = new LayerList();
     }
     const temp = this.moved.get(layer);
-    if (layer !== 's') {
-      console.log(layer, temp, combinedList);
-    }
     combinedList = combinedList.merge(temp);
     return combinedList;
   }
