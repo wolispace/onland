@@ -35,12 +35,16 @@ class Mover extends Item {
 
   }
 
-  move = () => {
+  move() {
     this.calcAcceleration();
     this.applyMomentum();
     this.applyFriction();
     this.backupPos();
     this.applyVelocity();
+    if (this.hasNotMoved()) {
+      return;
+    }
+    console.log('moving');
     this.checkWorldBoundary();
     this.checkCollisions(settings.SFACE);
     this.checkGhosts();
@@ -117,6 +121,14 @@ class Mover extends Item {
   // backup the current position before applying the velocity and potentially colliding with something
   backupPos() {
     this.oldPos = new Point(this.x, this.y);
+  }
+
+  /**
+   * 
+   * @returns return boolean true if our old poss matches our new/current pos
+   */
+  hasNotMoved() {
+    return this.oldPos.x === this.x && this.oldPos.y == this.y; 
   }
 
   restorePos() {
