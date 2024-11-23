@@ -119,9 +119,7 @@ class LayerList {
   }
 
   merge(layerList) {
-    if (!layerList) return this;
-    console.log('merging layerList', layerList);
-    if (!layerList instanceof LayerList) return this;
+    if (!(layerList instanceof LayerList)) return this;  // Fixed parentheses
     for (const layerId in layerList.list) {
       const bonesList = layerList.list[layerId];
       this.add(bonesList);

@@ -6,10 +6,9 @@ class Inventory extends UniqueSet {
   }
 
   add(item) {
-    console.log(item);
     // add the bone to the inventory bonelist and remove from all other lists?
-    app.gameLists.addBones(settings.INVENTORY, item);
-    app.gameLists.removeBones(settings.SFACE, item.id);
+    app.gameLists.add(settings.INVENTORY, item);
+    app.gameLists.remove(settings.SFACE, item.id);
     app.store.save(settings.MOVED_ITEMS, app.gameLists.encode(settings.MOVED_ITEMS));
   }
 

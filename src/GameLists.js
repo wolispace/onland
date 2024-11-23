@@ -11,13 +11,14 @@ class GameLists {
   }
 
   get(layer) {
-    let combinedList = this.default.get(layer);
-    if (combinedList === undefined) {
-      combinedList = new LayerList();
-    }
-    const temp = this.moved.get(layer);
-    combinedList = combinedList.merge(temp);
-    return combinedList;
+    const defaultList = this.default || new LayerList();
+    const movedList = this.moved || new LayerList();
+
+    // Create a new copy before merging
+    const newList = new LayerList();
+    newList.merge(defaultList);
+    newList.merge(movedList);
+    return newList.get(layer);
   }
 
   /**
@@ -42,8 +43,11 @@ class GameLists {
   }
 
   decode(encoded, set = 'moved') {
-    console.log(set, this[set])
     return this[set].decode(encoded);
+  }
+
+  encode(set = 'moved') {
+    return this[set].encode();
   }
 
   prune(surrounds, set = 'moved') {

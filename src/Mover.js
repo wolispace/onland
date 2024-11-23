@@ -44,7 +44,6 @@ class Mover extends Item {
     if (this.hasNotMoved()) {
       return;
     }
-    console.log('moving');
     this.checkWorldBoundary();
     this.checkCollisions(settings.SFACE);
     this.checkGhosts();
@@ -161,14 +160,12 @@ class Mover extends Item {
 
     const layerBonesList = app.gameLists.get(layer);
     if (!layerBonesList) return;
-
     for (const itemId of inCell.list || []) {
       let item = layerBonesList.get(itemId);
       if (!item) return;
       const assetInfo = assets.get(item.type, item.variant);
-
+ 
       for (const otherItem of assetInfo[layer] || []) {
-
         let collidable = otherItem.copy().add(item);
         this.surfaceCollision(collidable, item);
       }
