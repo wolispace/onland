@@ -17,11 +17,10 @@ const settings = {
   MOVED_ITEMS: 'moved',
   OVERHEAD: 'overhead',
   RAISED: 'raised',
-  SURFACE: 'surface',
-  SFACE: 's', // debug transition from 'surface' to 's'
   UNDERGROUND: 'underground',
   SUBURBS: 'suburbs',
   LANDS: 'lands',
+  SURFACE: 's',
   GHOSTS: 'g',
   INVENTORY: 'i',
   

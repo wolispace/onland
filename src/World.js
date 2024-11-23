@@ -30,7 +30,7 @@ class World extends Drawable {
     layerDefs[settings.OVERHEAD] = this.cellSize;
     layerDefs[settings.RAISED] = this.cellSize;
     layerDefs[settings.SURFACE] = this.cellSize;
-    layerDefs[settings.SFACE] = this.cellSize;
+    layerDefs[settings.SURFACE] = this.cellSize;
     layerDefs[settings.UNDERGROUND] = this.cellSize;
     layerDefs[settings.GHOSTS] = this.cellSize;
     layerDefs[settings.SUBURBS] = this.gridSize(app.suburbSize);

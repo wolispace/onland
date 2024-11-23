@@ -45,7 +45,7 @@ class Mover extends Item {
       return;
     }
     this.checkWorldBoundary();
-    this.checkCollisions(settings.SFACE);
+    this.checkCollisions(settings.SURFACE);
     this.checkGhosts();
     this.removeGhosts();
     shiftSuburbsAsync(this);

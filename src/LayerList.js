@@ -1,7 +1,7 @@
 class LayerList {
   list = {};
   static DELIM = ' ';
-  static VISIBLE = [settings.SFACE]; // layers that are visible and items need placing spatially
+  static VISIBLE = [settings.SURFACE]; // layers that are visible and items need placing spatially
 
   /**
    * Adds a new BonesList object for a given layer

@@ -42,19 +42,19 @@ class GameLists {
     mergedList.render(layerId);
   }
 
-  decode(encoded, set = 'moved') {
+  decode(encoded, set = settings.MOVED_ITEMS) {
     return this[set].decode(encoded);
   }
 
-  encode(set = 'moved') {
+  encode(set = settings.MOVED_ITEMS) {
     return this[set].encode();
   }
 
-  prune(surrounds, set = 'moved') {
+  prune(surrounds, set = settings.MOVED_ITEMS) {
     return this[set].prune(surrounds);
   } 
 
-  allocate(thing, set = 'moved') {
+  allocate(thing, set = settings.MOVED_ITEMS) {
     return this[set].allocate(thing);  
   }
 }

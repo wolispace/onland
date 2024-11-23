@@ -75,7 +75,7 @@ class Bones {
     // place this in spacial grid cell/s
     const itemInfo = assets.make(this);
     //app.world.layers[layerId].addAll(itemInfo, itemInfo[layerId]);
-    app.world.layers[settings.SFACE].addAll(itemInfo, itemInfo[settings.SFACE]);
+    app.world.layers[settings.SURFACE].addAll(itemInfo, itemInfo[settings.SURFACE]);
     app.world.layers[settings.GHOSTS].addAll(itemInfo, itemInfo[settings.GHOSTS]);
     // every visible item 
     app.world.layers[settings.LANDS].add(this);

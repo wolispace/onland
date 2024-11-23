@@ -84,10 +84,10 @@ let app = {
     const movedItems = `sa,,tree,,,250,50;Y,,tree,,,250,250 iaa,,tree,,,250,50`;
     app.store.save(settings.MOVED_ITEMS, movedItems);
 
-    //app.gameLists.decode(`${settings.SFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
+    //app.gameLists.decode(`${settings.SURFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
     
     //app.gameLists.allocate();
-    //app.gameLists.render(settings.SFACE);
+    //app.gameLists.render(settings.SURFACE);
   },
 
 
@@ -129,7 +129,7 @@ let app = {
    * @params {string} land key eg '0_0' or 4_6' lands are bigger than suburbs
    */
   loadData(landKey) {
-    const layer = settings.SFACE;
+    const layer = settings.SURFACE;
     const surrounds = app.world.layers.lands.kingsSquare(landKey);
     const filePromises = [];
     
@@ -173,7 +173,7 @@ function processAllData(surrounds) {
   // allocate them all to layers
   app.gameLists.allocate();
   // draw everything on the surface
-  app.gameLists.render(settings.SFACE);
+  app.gameLists.render(settings.SURFACE);
 }
 
 async function shiftSuburbsAsync(mover) {
