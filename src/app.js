@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   app.start();
 });
 
-const mode = 'land';
+const mode = 'bones';
 
 let app = {
 
@@ -81,8 +81,8 @@ let app = {
 
   doTest() {
     // write some test data into the store..
-    const movedItems = `sa,,tree,,,250,50;Y,,tree,,,250,250 iaa,,tree,,,250,50`;
-    app.store.save(settings.MOVED_ITEMS, movedItems);
+    const movedItems = `sX,,tree,,,250,50;Y,,tree,,,350,50 iJ,,river,,,0,0`;
+    //app.store.save(settings.MOVED_ITEMS, movedItems);
 
     //app.gameLists.decode(`${settings.SURFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
     
@@ -139,7 +139,7 @@ let app = {
           // File loaded successfully, you can now use its functions/variables
           if (app.defaultData) {        
             if (typeof(app.defaultData) == "string") {
-              app.gameLists.decode(app.defaultData);
+              app.gameLists.decode(app.defaultData, settings.DEFAULT);
             } else {
               app.store.addToTempList(app.defaultData[layer].join('^'));
             }

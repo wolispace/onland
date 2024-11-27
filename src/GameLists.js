@@ -8,6 +8,7 @@ class GameLists {
    */
   add(layer, item) {
     this.moved.addBones(layer, item);
+    console.log(this.moved);
   }
 
   get(layer) {
