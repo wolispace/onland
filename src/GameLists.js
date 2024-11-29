@@ -18,7 +18,7 @@ class GameLists {
     const newList = new LayerList();
     newList.merge(defaultList);
     newList.merge(movedList);
-    return newList;
+    return newList.get(layer);
   }
 
   /**
@@ -54,7 +54,8 @@ class GameLists {
     return this[set].prune(surrounds);
   } 
 
-  allocate(thing, set = settings.MOVED_ITEMS) {
-    return this[set].allocate(thing);  
+  allocate() {
+    this.default.allocate(); 
+    this.moved.allocate();
   }
 }

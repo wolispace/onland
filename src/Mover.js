@@ -158,14 +158,12 @@ class Mover extends Item {
     // first collidable for the surface is the item we are checking against all other items
     this.updateCollisionBox();
     const inCell = app.world.layers[layer].queryShape(this.collisionBox);
-
     const layerBonesList = app.gameLists.get(layer);
     if (!layerBonesList) return;
     for (const itemId of inCell.list || []) {
       let item = layerBonesList.get(itemId);
       if (!item) return;
       const assetInfo = assets.get(item.type, item.variant);
- 
       for (const otherItem of assetInfo[layer] || []) {
         let collidable = otherItem.copy().add(item);
         this.surfaceCollision(collidable, item);

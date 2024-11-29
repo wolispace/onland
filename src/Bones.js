@@ -78,6 +78,7 @@ class Bones {
   }
 
   allocate() {
+
     // place this in spacial grid cell/s
     const itemInfo = assets.make(this);
     //app.world.layers[layerId].addAll(itemInfo, itemInfo[layerId]);
