@@ -32,7 +32,7 @@ const settings = {
   randomItems: true,
   doGhosting: true,
   showTouchPoint: true,
-  pickupItems: true,
+  pickupItems: false,
   
 }
 

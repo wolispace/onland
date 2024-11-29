@@ -25,6 +25,8 @@ class Inventory extends UniqueSet {
       parent: 'world',
     };
     const newItem = new Bones(params);
+    newItem.allocate();
+
     app.gameLists.add(settings.SURFACE, newItem);
     const thing = new Drawable(newItem);
     thing.show();
