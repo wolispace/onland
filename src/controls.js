@@ -12,6 +12,9 @@ const controls = {
     rd: { x: 60, y: 60, keys: ['right', 'down'] },
     inv: {x: 100, y:60, keys: ['inv'], onClick: () => {
       app.inventory.show();
+    } },
+    use: {x: 130, y:60, keys: ['use'], onClick: () => {
+      app.inventory.use();
     } }
   },
   
@@ -46,7 +49,7 @@ const controls = {
       if (!oldButtonInfo) return;
       app.input.keys.takeAll(oldButtonInfo.keys);
 
-      if (['controls', 'inv'].includes(buttonName)) return;
+      if (['controls', 'inv', 'use'].includes(buttonName)) return;
 
       // select new button
       const buttonInfo = controls.buttonList[buttonName];

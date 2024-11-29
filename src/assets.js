@@ -341,7 +341,13 @@ const assets = {
         w: 50,
         h: 50,
         content: `Inv`,
-      }
+      },
+      use: {
+        name: 'use',
+        w: 50,
+        h: 50,
+        content: `Use`,
+      }      
     }
   }
 

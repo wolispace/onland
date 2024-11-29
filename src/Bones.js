@@ -20,6 +20,10 @@ class Bones {
         this[key] = params[key];
       };
     }
+    if (this.id === '') {
+      this.id = app.uniqueId.next();
+    }
+    app.uniqueId.set(this.id);
   }
 
   /**

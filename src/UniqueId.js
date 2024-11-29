@@ -10,7 +10,9 @@ class UniqueId {
    * @param {string} id sets the last ID to this one so the next call to .next() increments and returns the next  
    */
   set(id) {
-    this.lastId = id;
+    if (id > this.lastId) {
+      this.lastId = id;
+    }
   }
 
   /**

@@ -19,7 +19,7 @@ class GameLists {
     const newList = new LayerList();
     newList.merge(defaultList);
     newList.merge(movedList);
-    return newList.get(layer);
+    return newList;
   }
 
   /**

@@ -12,6 +12,21 @@ class Inventory extends UniqueSet {
     app.store.save(settings.MOVED_ITEMS, app.gameLists.encode(settings.MOVED_ITEMS));
   }
 
+  // place an item ad the users current x/y
+  use() {
+    const params = {
+      x: app.me.x,
+      y: app.me.y,
+      type: 'rock',
+      parent: 'world',
+    };
+    const newItem = new Bones(params);
+    app.gameLists.add(settings.SURFACE, newItem);
+    const thing = new Drawable(newItem);
+    thing.show();
+    app.store.save(settings.MOVED_ITEMS, app.gameLists.encode(settings.MOVED_ITEMS));
+  }
+
   show() {
     const params = {
       title: 'Inventory',
