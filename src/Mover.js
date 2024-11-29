@@ -208,16 +208,19 @@ class Mover extends Item {
   // check the ghosts grid to see what we are colliding with any ghosts
   checkGhosts() {
     if (!settings.doGhosting) return;
+    const layerBonesList = app.gameLists.get(settings.SURFACE);
+    if (!layerBonesList) return;
     this.updateCollisionBox();
     const inCell = app.world.layers[settings.GHOSTS].queryShape(this.collisionBox);
     app.ghosted.clear();
     //app.msg(3, app.ghosted.count());
     if (inCell && inCell.list && inCell.list.length > 0) {
       inCell.list.forEach((itemId) => {
-        const item = app.items.get(itemId);
+        const item = layerBonesList.get(itemId);
         if (!item) return;
         const assetInfo = assets.get(item.type, item.variant);
         const collideInfo = assetInfo[settings.GHOSTS];
+        console.log(item.id, collideInfo);
 
         collideInfo.forEach((ghost) => {
           const ghostCollidable = ghost.copy().add(item);

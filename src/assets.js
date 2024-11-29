@@ -89,8 +89,7 @@ const assets = {
         w: 70,
         h: 100,
         onCollide: 'skim',
-        surface: [new Collidable({ x: 0, y: 0, w: 30, h: 15 })], // a list of collision boxes
-        ghosts: [new Collidable({ x: 0, y: -45, w: 30, h: 45 })], // a list of ghost collision boxes
+        gXhosts: [new Collidable({ x: 0, y: -45, w: 30, h: 45 })], // a list of ghost collision boxes
         s: [new Collidable({ x: 0, y: 0, w: 30, h: 15 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: -45, w: 30, h: 45 })], // a list of ghost collision boxes
         content: `<svg viewBox="0 0 104 121" %style%>
@@ -108,8 +107,7 @@ const assets = {
         w: 50,
         h: 50,
         onCollide: 'stop',
-        surface: [new Collidable({ x: 0, y: 0, w: 40, h: 10 })], // a list of collision boxes
-        ghosts: [new Collidable({ x: 0, y: -10, w: 40, h: 10 })], // a list of ghost collision boxes
+        gXhosts: [new Collidable({ x: 0, y: -10, w: 40, h: 10 })], // a list of ghost collision boxes
         s: [new Collidable({ x: 0, y: 0, w: 40, h: 10 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: -10, w: 40, h: 10 })], // a list of ghost collision boxes
         content: `<svg viewBox="0 0 97 64" %style%>
