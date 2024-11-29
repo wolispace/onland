@@ -14,9 +14,13 @@ class Inventory extends UniqueSet {
 
   // place an item ad the users current x/y
   use() {
+    const offset = {
+      x: -15,
+      y: -10,
+    };
     const params = {
-      x: app.me.x,
-      y: app.me.y,
+      x: parseInt(app.me.x + offset.x),
+      y: parseInt(app.me.y + offset.y),
       type: 'rock',
       parent: 'world',
     };
@@ -24,6 +28,7 @@ class Inventory extends UniqueSet {
     app.gameLists.add(settings.SURFACE, newItem);
     const thing = new Drawable(newItem);
     thing.show();
+    thing.position();
     app.store.save(settings.MOVED_ITEMS, app.gameLists.encode(settings.MOVED_ITEMS));
   }
 

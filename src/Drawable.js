@@ -1,5 +1,7 @@
 class Drawable extends Rectangle {
   children = [];
+  lastPos = {};
+
   constructor(params) {
     super(params);
     this.id = params.id;
@@ -66,18 +68,28 @@ class Drawable extends Rectangle {
         this.parent.y = rectangle.top;
       }
     }
+    // the world is always absolute position 0,0 regardless of scroll
+    if (this.parent.id === 'world') {
+      this.parent.x = 0;
+      this.parent.y = 0;
+    }
   }
 
-  //TODO: we call position even when items have not change position.. how to compare last with current pos?
   position() {
     if (!this.div) return;
+    if (this.lastPos.x === this.x && this.lastPos.y === this.y) return;
+    this.x = parseInt(this.x);
+    this.y = parseInt(this.y);
+
+    // remember this position
+    this.lastPos.x = this.x;
+    this.lastPos.y = this.y;
     let itemPos = this.copy();
     // every item is relative to its parent. since the world is 0,0 we are not changing am.me x,y
     this.buildParent();
     // clear this from memory as we don't need it any more
     this.html = null;
     this.div = document.querySelector(`#${this.id}`);
-
     itemPos.add(this.parent);
 
     this.div.style.transform = `translate3d(${itemPos.x}px, ${itemPos.y}px, 0)`;

@@ -41,6 +41,7 @@ class Mover extends Item {
     this.applyFriction();
     this.backupPos();
     this.applyVelocity();
+    // TODO: similar logic in Drawable to prevent moving something to the same x,y 
     if (this.hasNotMoved()) {
       return;
     }

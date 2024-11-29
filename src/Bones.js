@@ -36,7 +36,9 @@ class Bones {
 
     for (const key of Bones.ENCODED_KEYS) {
       let value = this[key];
-      if (value === null || value === undefined || value === 'basic' || (key === 'qty' && value === 1)) {
+      if (value === null || value === undefined || value === 'basic'
+        || value === 'world' 
+        || (key === 'qty' && value === 1)) {
         value = '';
       }
       if (includePosition) {
