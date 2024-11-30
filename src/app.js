@@ -16,7 +16,6 @@ let app = {
   start() {
     app.input = new Input();
     app.uniqueId = new UniqueId();
-    app.ghosted = new UniqueSet();
     app.events = new Events();
     app.store = new Store();
     app.items = new Items();

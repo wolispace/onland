@@ -47,8 +47,8 @@ class Mover extends Item {
     }
     this.checkWorldBoundary();
     this.checkCollisions(settings.SURFACE);
-    this.checkGhosts();
     this.removeGhosts();
+    this.checkGhosts();
     shiftSuburbsAsync(this);
     if (settings.scrollBrowser) {
       app.world.centerPlayer();
@@ -128,7 +128,7 @@ class Mover extends Item {
    * @returns return boolean true if our old poss matches our new/current pos
    */
   hasNotMoved() {
-    return this.oldPos.x === this.x && this.oldPos.y == this.y; 
+    return this.oldPos.x === this.x && this.oldPos.y == this.y;
   }
 
   restorePos() {
@@ -212,25 +212,19 @@ class Mover extends Item {
     if (!layerBonesList) return;
     this.updateCollisionBox();
     const inCell = app.world.layers[settings.GHOSTS].queryShape(this.collisionBox);
-    app.ghosted.clear();
-    //app.msg(3, app.ghosted.count());
     if (inCell && inCell.list && inCell.list.length > 0) {
       inCell.list.forEach((itemId) => {
         const item = layerBonesList.get(itemId);
         if (!item) return;
         const assetInfo = assets.get(item.type, item.variant);
         const collideInfo = assetInfo[settings.GHOSTS];
-        console.log(item.id, collideInfo);
-
         collideInfo.forEach((ghost) => {
           const ghostCollidable = ghost.copy().add(item);
           const poss = this.collisionBox.collides(ghostCollidable);
           if (poss.x != 0 || poss.y != 0) {
-            app.ghosted.add(itemId);
-            // add ghost class to this item
-            if (item.div) {
-              item.addClass('ghost');
-            }
+            // find the div
+            const div = document.querySelector(`#${item.id}`);
+            div.classList.add('ghost');
           }
         });
       });
@@ -238,13 +232,10 @@ class Mover extends Item {
   }
 
   removeGhosts() {
-
-    if (app.ghosted.count() < 1) {
-      // remove all ghost class
-      var elements = document.querySelectorAll('.ghost');
-      for (var i = 0; i < elements.length; i++) {
-        elements[i].classList.remove('ghost');
-      }
+    // remove all ghost class
+    var elements = document.querySelectorAll('.ghost');
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].classList.remove('ghost');
     }
   }
 }
