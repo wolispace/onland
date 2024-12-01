@@ -10,6 +10,7 @@ class Mover extends Item {
   moveStep = 1;
   endTouchZone = 20;
   collisionSlide = 0.5;
+  oldFacing =  {x:1, y:2};
 
   constructor(params) {
     super(params);
@@ -45,6 +46,7 @@ class Mover extends Item {
     if (this.hasNotMoved()) {
       return;
     }
+    this.updateFacing();
     this.checkWorldBoundary();
     this.checkCollisions(settings.SURFACE);
     this.removeGhosts();
@@ -121,6 +123,30 @@ class Mover extends Item {
   // backup the current position before applying the velocity and potentially colliding with something
   backupPos() {
     this.oldPos = new Point(this.x, this.y);
+  }
+
+  updateFacing() {
+    // default facing at screen (no direction). icon = me_1_1.svg
+    // 0 = -1, 1 = 0, 2 = +1 so we are +1 and don't need to worry about sign eg -1_1.svg
+    this.facing = {x:1, y:2};
+
+    if (this.oldPos.x < this.x) {
+      this.facing.x = 2;
+    } else if (this.oldPos.x > this.x) {
+      this.facing.x = 0;
+    }
+    if (this.oldPos.y < this.y) {
+      this.facing.y = 2;
+    } else if (this.oldPos.y > this.y) {
+      this.facing.y = 0;
+    }
+    if (this.facing.x === this.oldFacing.x && this.facing.y === this.oldFacing.y) return;
+    
+    this.oldFacing = this.facing;
+    
+    const div = document.querySelector(`#${this.id}`);
+    const imgSrc = `work/cube_${this.facing.x}_${this.facing.y}.png`;
+    div.innerHTML = `<img src="${imgSrc}">`;
   }
 
   /**

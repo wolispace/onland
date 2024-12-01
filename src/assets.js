@@ -81,6 +81,19 @@ const assets = {
 
   // all the items
   items: {
+    cube: {
+      basic: {
+        top: 0,
+        left: 0,
+        width: 50,
+        w: 50,
+        h: 50,
+        onCollide: 'skim',
+        s: [new Collidable({ x: 0, y: 100, w: 50, h: 50 })], // a list of collision boxes
+        g: [new Collidable({ x: 0, y: 100, w: 50, h: 50 })], // a list of ghost collision boxes
+        content: `<img src="work/cube_1_2.png">`,
+      }
+    },
     tree: {
       basic: {
         top: -60,

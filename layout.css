@@ -253,6 +253,11 @@ button:hover {
   background-color: rgba(109, 160, 143, .75) !important;
 }
 
+#_me > img {
+  width: 100%;
+}
+
+
 .msg {
   color: white;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;

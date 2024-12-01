@@ -28,7 +28,7 @@ let app = {
     app.world = new World(settings[mode].worldSize);
     app.world.div = document.querySelector(`#world`);
 
-    let params = assets.make({ type: 'diamond', id: '_me', x: settings[mode].start.x, y: settings[mode].start.y, autoShow: true });
+    let params = assets.make({ type: 'cube', id: '_me', x: settings[mode].start.x, y: settings[mode].start.y, autoShow: true });
     params.parent = 'world';
 
     app.me = new Mover(params); 
@@ -81,7 +81,7 @@ let app = {
   doTest() {
     // write some test data into the store..
     const movedItems = `sX,,tree,,,250,50;Y,,tree,,,350,50 iJ,,river,,,0,0`;
-//    app.store.save(settings.MOVED_ITEMS, movedItems);
+    app.store.save(settings.MOVED_ITEMS, movedItems);
 
     //app.gameLists.decode(`${settings.SURFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
     
