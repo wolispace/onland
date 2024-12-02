@@ -128,7 +128,7 @@ class Mover extends Item {
   updateFacing() {
     // default facing at screen (no direction). icon = me_1_1.svg
     // 0 = -1, 1 = 0, 2 = +1 so we are +1 and don't need to worry about sign eg -1_1.svg
-    this.facing = {x:1, y:2};
+    this.facing = {x:1, y:1};
 
     if (this.oldPos.x < this.x) {
       this.facing.x = 2;

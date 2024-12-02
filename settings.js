@@ -11,7 +11,7 @@ const settings = {
     suburbSize: 1000, // need a fixed suburb size as it will match data loaded from disk
     landSize: 1000, // how big each land (logically grouped items saved to disk) is 
     worldSize: { w: 2000, h: 2000 }, // needs to match files on disk
-    start: { x: 330, y: 60 },
+    start: { x: 100, y: 60 },
     lands: 'bones',
   },
   MOVED_ITEMS: 'moved',
