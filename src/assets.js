@@ -83,15 +83,15 @@ const assets = {
   items: {
     cube: {
       basic: {
-        top: 0,
-        left: 0,
-        width: 50,
+        top: -10,
+        left: -10,
+        width: 30,
         w: 50,
         h: 50,
         onCollide: 'skim',
-        s: [new Collidable({ x: 0, y: 100, w: 50, h: 50 })], // a list of collision boxes
-        g: [new Collidable({ x: 0, y: 100, w: 50, h: 50 })], // a list of ghost collision boxes
-        content: `<img src="work/cube_1_2.png">`,
+        s: [new Collidable({ x: 0, y: 10, w: 30, h: 30 })], // a list of collision boxes
+        g: [new Collidable({ x: 0, y: 10, w: 30, h: 30 })], // a list of ghost collision boxes
+        content: `<img src="work/cube_1_2.png" %style%>`,
       }
     },
     tree: {

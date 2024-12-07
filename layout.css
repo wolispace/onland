@@ -25,6 +25,11 @@ body {
   opacity: 100%;
 }
 
+.collisionBox {
+  border: 1px solid white;
+  position: absolute;
+}
+
 .buttonize {
   border-top: 2px solid white;
   border-left: 2px solid white;
@@ -52,6 +57,10 @@ body {
 
 
 .item > svg {
+  position: absolute;
+}
+
+.item > img {
   position: absolute;
 }
 

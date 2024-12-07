@@ -26,7 +26,7 @@ const settings = {
   INVENTORY: 'i',
   
   isDev: true,
-  showCollision: true,
+  showCollision: false,
   contextMenu: true,
   scrollBrowser: true,
   randomItems: true,

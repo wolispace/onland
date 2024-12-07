@@ -142,11 +142,12 @@ class Mover extends Item {
     }
     if (this.facing.x === this.oldFacing.x && this.facing.y === this.oldFacing.y) return;
     
+    const item = assets.make(this);
     this.oldFacing = this.facing;
     
     const div = document.querySelector(`#${this.id}`);
     const imgSrc = `work/cube_${this.facing.x}_${this.facing.y}.png`;
-    div.innerHTML = `<img src="${imgSrc}">`;
+    div.innerHTML = `<img src="${imgSrc}" ${item.style}>`;
   }
 
   /**
@@ -165,6 +166,17 @@ class Mover extends Item {
   updateCollisionBox() {
     if (!this.collideInfo) return;
     this.collisionBox = this.collideInfo.copy().add(this);
+    if (!settings.showCollision) return;
+    const showBox = `<div id="collisionBox" class="collisionBox" style="
+      top: ${this.collisionBox.y}px; 
+      left: ${this.collisionBox.x}px; 
+      width: ${this.collisionBox.w}px; 
+      height: ${this.collisionBox.h}px; 
+    "></div>`;
+    const oldBox = document.querySelector('#collisionBox');
+    if (oldBox) oldBox.remove();
+    const worldDiv = document.querySelector('#world');
+    worldDiv.insertAdjacentHTML('beforeend', showBox);
   }
 
   /**
