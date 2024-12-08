@@ -145,9 +145,11 @@ class Mover extends Item {
     const item = assets.make(this);
     this.oldFacing = this.facing;
     
-    const div = document.querySelector(`#${this.id}`);
+    const divImg = document.querySelector(`#${this.id} img`);
     const imgSrc = `work/cube_${this.facing.x}_${this.facing.y}.png`;
-    div.innerHTML = `<img src="${imgSrc}" ${item.style}>`;
+    const imgCache = app.imageCache.get(imgSrc);
+    divImg.src = imgCache.src;
+    //div.innerHTML = `<img src="${imgSrc}" ${item.style}>`;
   }
 
   /**

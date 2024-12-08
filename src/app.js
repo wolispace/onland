@@ -22,6 +22,7 @@ let app = {
     app.inventory = new Inventory();
     app.overlays = new Overlays();
     app.gameLists = new GameLists();
+    app.imageCache = new ImageCache();
 
 
     app.scrollable = { div: document.querySelector(".scrollable") };
@@ -48,7 +49,12 @@ let app = {
     controls.setup();
     //app.overlay.div.style.top = "200px";
 
-    
+    for (x = 0; x < 3; x++) {
+      for (y = 0; y < 3; y++) {
+        app.imageCache.add(`work/cube_${x}_${y}.png`);    
+      }
+    }
+     
     setTimeout(() => {
       //this.testDialog();
       //app.world.layers.surface.show();
@@ -80,7 +86,7 @@ let app = {
 
   doTest() {
     // write some test data into the store..
-    const movedItems = `sX,,tree,,,250,50;Y,,tree,,,350,50 iJ,,river,,,0,0`;
+    const movedItems = `sX,,tree,,,250,80;Y,,tree,,,350,80 iJ,,river,,,0,0`;
     app.store.save(settings.MOVED_ITEMS, movedItems);
 
     //app.gameLists.decode(`${settings.SURFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
