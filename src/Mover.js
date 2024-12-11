@@ -2,14 +2,14 @@ class Mover extends Item {
 
   velocity = new Vector();
   acceleration = new Vector();
-  accelerationRate = 0.5;
+  accelerationRate = 0.25;
   maxSpeed = 10;
-  friction = 0.75;
+  friction = 0.5;
   precision = 1;
   postcode = '0_0';
   moveStep = 1;
   endTouchZone = 20;
-  collisionSlide = 0.5;
+  collisionSlide = 1;
   oldFacing =  {x:1, y:2};
 
   constructor(params) {
@@ -46,9 +46,9 @@ class Mover extends Item {
     if (this.hasNotMoved()) {
       return;
     }
-    this.updateFacing();
     this.checkWorldBoundary();
     this.checkCollisions(settings.SURFACE);
+    this.updateFacing();
     this.removeGhosts();
     this.checkGhosts();
     shiftSuburbsAsync(this);
@@ -220,6 +220,7 @@ class Mover extends Item {
     let poss = this.collisionBox.collides(collidable);
     // if x = -1 we are on the left|top of centre, +1 is right|bottom
     if (poss.x != 0 || poss.y != 0) {
+      console.log('collision', item.id, poss);
       // we hit something so return to previous pos and modify velocity before applying it again
       this.restorePos();
       if (item.onCollide === 'stop') {
@@ -228,11 +229,13 @@ class Mover extends Item {
       } else if (item.onCollide === 'bounce') {
         this.velocity.multiply(poss);
       } else {
+        // skim - switch axis of movement if colliding with -y then determine middle point and apply iether + or - x instead.
+        
         if (Math.abs(this.velocity.y) > this.friction) {
-          this.velocity.x = Math.abs(this.velocity.y * this.collisionSlide) * poss.x;
+          this.velocity.x = 0; //Math.abs(this.velocity.y * this.collisionSlide) * poss.x;
           this.velocity.y = 0;
         } else if (Math.abs(this.velocity.x) > this.friction) {
-          this.velocity.y = Math.abs(this.velocity.x * this.collisionSlide) * poss.y;
+          this.velocity.y = 0; //Math.abs(this.velocity.x * this.collisionSlide) * poss.y;
           this.velocity.x = 0;
         }
       }
