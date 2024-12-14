@@ -148,7 +148,7 @@ class Mover extends Item {
     this.oldFacing = this.facing;
     
     const divImg = document.querySelector(`#${this.id} img`);
-    const imgSrc = `work/cube_${this.facing.x}_${this.facing.y}.png`;
+    const imgSrc = `img/${this.type}_${this.variant}_${this.facing.x}_${this.facing.y}.png`;
     const imgCache = app.imageCache.get(imgSrc);
     divImg.src = imgCache.src;
     //div.innerHTML = `<img src="${imgSrc}" ${item.style}>`;

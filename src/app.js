@@ -49,11 +49,7 @@ let app = {
     controls.setup();
     //app.overlay.div.style.top = "200px";
 
-    for (x = 0; x < 3; x++) {
-      for (y = 0; y < 3; y++) {
-        app.imageCache.add(`work/cube_${x}_${y}.png`);    
-      }
-    }
+    app.imageCache.load();
      
     setTimeout(() => {
       //this.testDialog();

@@ -91,7 +91,7 @@ const assets = {
         onCollide: 'skim',
         s: [new Collidable({ x: 0, y: 10, w: 30, h: 30 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: 10, w: 30, h: 30 })], // a list of ghost collision boxes
-        content: `<img src="work/cube_1_2.png" %style%>`,
+        content: `<img src="img/cube_basic_1_2.png" %style%>`,
       }
     },
     tree: {
