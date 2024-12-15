@@ -32,9 +32,6 @@ class Drawable extends Rectangle {
         const tmp = assets.make(this);
         this.html = tmp.html;
         this.variant = tmp.variant;
-        if (this.id === 'dd') {
-          console.trace(this, tmp);
-        }
       }
       this.addToParent();
       // clear this from memory as we dont need it any more

@@ -12,8 +12,7 @@ class Overlays {
     const maxBlur = this.maxBlur;
     
     this.blurOverlay.div.style.backdropFilter = `blur(${maxBlur}px)`;
-    console.log({playerY});
-
+    
     // Create a clear zone around the player
     const clearZoneSize = 0.5; // Size of the non-blurred area
     const playerPosition = playerY; // Normalized position (0-1)
@@ -27,11 +26,12 @@ class Overlays {
       { offset: Math.min(1, playerPosition + clearZoneSize), blur: maxBlur },
       { offset: 1, blur: maxBlur }
     ];
-
+    
     const gradient = gradientStops
-      .map(stop => `rgba(0,0,0,${stop.blur / maxBlur}) ${stop.offset * 100}%`)
-      .join(', ');
-
+    .map(stop => `rgba(0,0,0,${stop.blur / maxBlur}) ${stop.offset * 100}%`)
+    .join(', ');
+    
+    console.log({playerY}, {gradient});
     this.blurOverlay.div.style.maskImage = `linear-gradient(to bottom, ${gradient})`;
   }
 
@@ -70,13 +70,10 @@ class Overlays {
   // Call this when player position changes and is near edges
   updateForPlayerPosition(playerY, screenHeight) {
     // Only update if player is near top or bottom edges
+
+    if (playerY > screenHeight/2 && playerY < settings[mode].worldSize.h - (screenHeight / 2)) return;
     const normalizedY = playerY / screenHeight;
-    this.updateDebugOverlay(normalizedY);
-    return;
-    const edgeThreshold = 0.1; // Adjust this value to determine when to start updating
-    console.log(normalizedY, screenHeight);
-    if (normalizedY < edgeThreshold || normalizedY > (1 - edgeThreshold)) {
-      this.updateBlurOverlay(normalizedY);
-    }
+    this.updateBlurOverlay(normalizedY);
+
   }
 }

@@ -40,7 +40,8 @@ let app = {
     this.doTest();
     //app.world.populate();
 
-    app.overlays.updateBlurOverlay();
+    const normalizedY = app.me.y / window.innerHeight;
+    app.overlays.updateBlurOverlay(normalizedY);
 
 
     app.loadData('0_0');
