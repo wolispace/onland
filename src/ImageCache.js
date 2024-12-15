@@ -33,7 +33,7 @@ class ImageCache {
       for (const variantName in variants) {
         const variantData = variants[variantName];
         if (variantData) {
-          if (variantData.content.includes('.png')) {
+          if (variantData.mover) {
             this.directional(typeName, variantName);
           }
         }
