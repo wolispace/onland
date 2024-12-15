@@ -6,6 +6,7 @@ class Drawable extends Rectangle {
     super(params);
     this.id = params.id;
     this.type = params.type;
+    this.variant = params.variant;
     this.parent = params.parent ?? document.querySelector(`#world`);
     this.html = params.html;
     this.setupEvents(params);
@@ -30,6 +31,10 @@ class Drawable extends Rectangle {
       if (!this.html) {
         const tmp = assets.make(this);
         this.html = tmp.html;
+        this.variant = tmp.variant;
+        if (this.id === 'dd') {
+          console.trace(this, tmp);
+        }
       }
       this.addToParent();
       // clear this from memory as we dont need it any more

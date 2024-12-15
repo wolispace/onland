@@ -30,12 +30,20 @@ const assets = {
    */
   get: function (type, variant) {
     if (!variant) {
-      // get a random key from the assets[type] object
-      variant = Object.keys(assets.items[type])[Math.floor(Math.random() * Object.keys(assets.items[type]).length)];
+      // default to the basic variant 
+      variant = 'basic'; 
     }
     params = { type, variant, ...assets.items[type][variant] };
 
     return params;
+  },
+/**
+ * Select a random variant from the type (basic, tall, short etc..)
+ * @param {string} type 
+ * @returns 
+ */
+  randomVariant(type) {
+    return Object.keys(assets.items[type])[Math.floor(Math.random() * Object.keys(assets.items[type]).length)];
   },
 
   /**
