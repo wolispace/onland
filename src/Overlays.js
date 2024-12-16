@@ -1,54 +1,57 @@
 class Overlays {
+  normalizedY = 0.5;
+
   constructor() {
     this.overlay = { div: document.querySelector(`#overlay`) };
     this.blurOverlay = { div: document.querySelector(`#blurOverlay`) };
     this.maxBlur = 5;
-    this.updateBlurOverlay();
-    this.updateForPlayerPosition(100);
   }
 
-  updateBlurOverlay(playerY = 0.5) {
+  /**
+   * Update the blur overlay relative to the player and the top and bottom of the world
+   */
+  updateBlurOverlay() {
     // playerY should be normalized (0 to 1, where 0 is top of screen, 1 is bottom)
     const maxBlur = this.maxBlur;
-    
+
     this.blurOverlay.div.style.backdropFilter = `blur(${maxBlur}px)`;
-    
+
     // Create a clear zone around the player
     const clearZoneSize = 0.5; // Size of the non-blurred area
-    const playerPosition = playerY; // Normalized position (0-1)
-    
+
     // Adjust gradient stops based on player position
     const gradientStops = [
       { offset: 0, blur: maxBlur },
-      { offset: Math.max(0, playerPosition - clearZoneSize), blur: maxBlur },
-      { offset: Math.max(0, playerPosition - clearZoneSize/2), blur: 0 },
-      { offset: Math.min(1, playerPosition + clearZoneSize/2), blur: 0 },
-      { offset: Math.min(1, playerPosition + clearZoneSize), blur: maxBlur },
+      { offset: Math.max(0, this.normalizedY - clearZoneSize), blur: maxBlur },
+      { offset: Math.max(0, this.normalizedY - clearZoneSize / 2), blur: 0 },
+      { offset: Math.min(1, this.normalizedY + clearZoneSize / 2), blur: 0 },
+      { offset: Math.min(1, this.normalizedY + clearZoneSize), blur: maxBlur },
       { offset: 1, blur: maxBlur }
     ];
-    
+
     const gradient = gradientStops
-    .map(stop => `rgba(0,0,0,${stop.blur / maxBlur}) ${stop.offset * 100}%`)
-    .join(', ');
-    
-    console.log({playerY}, {gradient});
+      .map(stop => `rgba(0,0,0,${stop.blur / maxBlur}) ${stop.offset * 100}%`)
+      .join(', ');
+
     this.blurOverlay.div.style.maskImage = `linear-gradient(to bottom, ${gradient})`;
   }
 
-  updateDebugOverlay(playerY = 0.5) {
+  /**
+   * Show a faded-to-black overlay so we can easily visualise where the blur will be
+   */
+  updateDebugOverlay() {
     // Remove the blur filter for debugging
     this.blurOverlay.div.style.backdropFilter = 'none';
-    
-    const clearZoneSize = 0.3; // Size of the clear area
-    const playerPosition = playerY; 
-    
+
+    const clearZoneSize = 0.5; // Size of the clear area
+
     // Using black with opacity instead of blur
     const gradientStops = [
       { offset: 0, opacity: 0.8 },  // Top of screen
-      { offset: Math.max(0, playerPosition - clearZoneSize), opacity: 0.8 },
-      { offset: Math.max(0, playerPosition - clearZoneSize/2), opacity: 0 },
-      { offset: Math.min(1, playerPosition + clearZoneSize/2), opacity: 0 },
-      { offset: Math.min(1, playerPosition + clearZoneSize), opacity: 0.8 },
+      { offset: Math.max(0, this.normalizedY - clearZoneSize), opacity: 0.8 },
+      { offset: Math.max(0, this.normalizedY - clearZoneSize / 2), opacity: 0 },
+      { offset: Math.min(1, this.normalizedY + clearZoneSize / 2), opacity: 0 },
+      { offset: Math.min(1, this.normalizedY + clearZoneSize), opacity: 0.8 },
       { offset: 1, opacity: 0.8 }   // Bottom of screen
     ];
 
@@ -59,21 +62,37 @@ class Overlays {
 
     // Apply the gradient directly as background instead of mask
     this.blurOverlay.div.style.background = `linear-gradient(to bottom, ${gradient})`;
-    
+
     // Remove the mask image
     this.blurOverlay.div.style.maskImage = 'none';
-    
+
     // For debugging - log player position and gradient
-    console.log('Player Y:', playerY, 'Gradient:', gradient);
+    console.log('Player Y:', this.normalizedY, 'Gradient:', gradient);
   }
 
-  // Call this when player position changes and is near edges
-  updateForPlayerPosition(playerY, screenHeight) {
-    // Only update if player is near top or bottom edges
+/**
+ * Clacl where the player is relative to the screen height so we can modify the overlay
+ * @param {number} playerY 
+ * @param {number} screenHeight 
+ */
+  updateForPlayerPosition(playerY) {
+    const screenHeight = window.innerHeight;
+    const worldHeight = settings[mode].worldSize.h;
+let newNormalizedY = 0.5; // default middle of the screen most of the time
+    if (playerY < screenHeight / 2) {
+      // Near top of screen
+      newNormalizedY = playerY / screenHeight;
+    } else if (playerY > worldHeight - (screenHeight / 2)) {
+      // Near bottom of play area
+      newNormalizedY = (playerY - (worldHeight - screenHeight)) / screenHeight;
+    } 
 
-    if (playerY > screenHeight/2 && playerY < settings[mode].worldSize.h - (screenHeight / 2)) return;
-    const normalizedY = playerY / screenHeight;
-    this.updateBlurOverlay(normalizedY);
+    if (this.normalizedY === newNormalizedY) return;
 
+    // update the normal
+    this.normalizedY = newNormalizedY;
+    //this.updateDebugOverlay();
+    this.updateBlurOverlay();
   }
+
 }

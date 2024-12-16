@@ -55,7 +55,7 @@ class Mover extends Item {
     if (settings.scrollBrowser) {
       app.world.centerPlayer();
     }
-    app.overlays.updateForPlayerPosition(this.y, window.innerHeight);
+    app.overlays.updateForPlayerPosition(this.y);
     //app.msg(1, { x: Math.round(this.x, 0), y: Math.round(this.y, 0), p: this.postcode, l: this.land }, 'pos');
   }
 

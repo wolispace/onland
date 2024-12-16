@@ -40,9 +40,8 @@ let app = {
     this.doTest();
     //app.world.populate();
 
-    const normalizedY = app.me.y / window.innerHeight;
-    app.overlays.updateBlurOverlay(normalizedY);
-
+    app.overlays.updateForPlayerPosition(app.me.y);
+  
 
     app.loadData('0_0');
     shiftSuburbsAsync(app.me);
