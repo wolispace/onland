@@ -111,7 +111,6 @@ const assets = {
         w: 70,
         h: 100,
         onCollide: 'skim',
-        gXhosts: [new Collidable({ x: 0, y: -45, w: 30, h: 45 })], // a list of ghost collision boxes
         s: [new Collidable({ x: 0, y: 0, w: 30, h: 15 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: -45, w: 30, h: 45 })], // a list of ghost collision boxes
         content: `<svg viewBox="0 0 104 121" %style%>
@@ -126,7 +125,6 @@ const assets = {
         w: 70,
         h: 100,
         onCollide: 'skim',
-        gXhosts: [new Collidable({ x: 0, y: -45, w: 30, h: 45 })], // a list of ghost collision boxes
         s: [new Collidable({ x: 0, y: 0, w: 30, h: 15 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: -45, w: 30, h: 45 })], // a list of ghost collision boxes
         content: `<img src="img/tree_001a.png" %style%>`,
@@ -141,7 +139,6 @@ const assets = {
         w: 50,
         h: 50,
         onCollide: 'stop',
-        gXhosts: [new Collidable({ x: 0, y: -10, w: 40, h: 10 })], // a list of ghost collision boxes
         s: [new Collidable({ x: 0, y: 0, w: 40, h: 10 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: -10, w: 40, h: 10 })], // a list of ghost collision boxes
         content: `<svg viewBox="0 0 97 64" %style%>
@@ -165,8 +162,6 @@ const assets = {
         w: 50,
         h: 50,
         onCollide: 'stop',
-        surface: [new Collidable({ x: 0, y: 0, w: 10, h: 10 })], // a list of collision boxes
-        ghosts: [new Collidable({ x: -5, y: -20, w: 20, h: 20 })], // a list of ghost collision boxes
         s: [new Collidable({ x: 0, y: 0, w: 10, h: 10 })], // a list of collision boxes
         g: [new Collidable({ x: -5, y: -20, w: 20, h: 20 })], // a list of ghost collision boxes
         content: `<svg viewBox="0 0 79 68" %style%>
@@ -191,8 +186,6 @@ const assets = {
         w: 150,
         h: 200,
         onCollide: 'skim',
-        surface: [new Collidable({ x: 0, y: 0, w: 22, h: 16 }), new Collidable({ x: 96, y: 0, w: 22, h: 16 })], // a list of collision boxes
-        ghosts: [new Collidable({ x: 0, y: -130, w: 20, h: 130 }), new Collidable({ x: 96, y: -130, w: 20, h: 130 }), new Collidable({ x: 0, y: -130, w: 100, h: 20 })], // a list of ghost collision boxes
         s: [new Collidable({ x: 0, y: 0, w: 22, h: 16 }), new Collidable({ x: 96, y: 0, w: 22, h: 16 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: -130, w: 20, h: 130 }), new Collidable({ x: 96, y: -130, w: 20, h: 130 }), new Collidable({ x: 0, y: -130, w: 100, h: 20 })], // a list of ghost collision boxes
         content: `<svg viewBox="0 0 200 200" %style%>
@@ -215,8 +208,6 @@ const assets = {
         w: 139,
         h: 200,
         onCollide: 'skim',
-        surface: [new Collidable({ x: 0, y: 0, w: 120, h: 200 })], // a list of collision boxes
-        ghosts: [new Collidable({ x: 0, y: 0, w: 0, h: 0 })], // a list of ghost collision boxes
         s: [new Collidable({ x: 0, y: 0, w: 120, h: 200 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: 0, w: 0, h: 0 })], // a list of ghost collision boxes
         content: `<svg viewBox="0 0 139 200" %style%>
@@ -237,8 +228,6 @@ const assets = {
         w: 139,
         h: 200,
         onCollide: 'skim',
-        surface: [new Collidable({ x: 0, y: 0, w: 120, h: 200 })], // a list of collision boxes
-        ghosts: [], // a list of ghost collision boxes
         s: [new Collidable({ x: 0, y: 0, w: 120, h: 200 })], // a list of collision boxes
         g: [], // a list of ghost collision boxes
         content: `<svg viewBox="0 0 139 200" %style%>
@@ -264,8 +253,6 @@ const assets = {
         // if we collide with a transition rectangle the moving item's layer is changed
         // each move checks if we are still colliding with
         transitions: [{}],
-        surface: [new Collidable({ x: 0, y: 0, w: 150, h: 210 })], // a list of collision boxes
-        ghosts: [new Collidable({ x: 0, y: 0, w: 0, h: 0 })], // a list of ghost collision boxes
         s: [new Collidable({ x: 0, y: 0, w: 150, h: 210 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: 0, w: 0, h: 0 })], // a list of ghost collision boxes
         content: `<svg viewBox="0 0 212 108" style="left:%left%px; top:%top%px; width:%width%px;">
