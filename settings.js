@@ -24,6 +24,7 @@ const settings = {
   SURFACE: 's',
   GHOSTS: 'g',
   INVENTORY: 'i',
+  SHADOW: 'd',
   
   isDev: true,
   showCollision: false,

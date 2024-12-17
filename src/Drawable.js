@@ -1,6 +1,7 @@
 class Drawable extends Rectangle {
   children = [];
   lastPos = {};
+  colors = {s: 'white', g: 'dodgerblue', d: 'black'};
 
   constructor(params) {
     super(params);
@@ -32,6 +33,12 @@ class Drawable extends Rectangle {
         const tmp = assets.make(this);
         this.html = tmp.html;
         this.variant = tmp.variant;
+        this.boxes = {};
+        this.boxes[settings.SURFACE] = tmp[settings.SURFACE];
+        this.boxes[settings.GHOSTS] = tmp[settings.GHOSTS];
+        this.boxes[settings.SHADOW] = tmp[settings.SHADOW];
+        console.log(tmp);
+
       }
       this.addToParent();
       // clear this from memory as we dont need it any more
@@ -101,6 +108,7 @@ class Drawable extends Rectangle {
     if (this.type == 'buttons') return;
     this.div.style.zIndex = parseInt(itemPos.y);
     this.setPostcode();
+    this.showBoxes();
   }
   /**
  * Record the current suburb (postcode) for this item
@@ -146,4 +154,31 @@ class Drawable extends Rectangle {
 
   }
 
+  showBoxes() {
+    let layerOpacity = 0.8;
+    const thisDiv = document.querySelector(`#${this.id}`);
+
+    thisDiv.classList.add('collision');
+    // loop through the boxes and show them
+    for (const layerId in this.boxes) {
+      const rectangles = this.boxes[layerId];
+      layerOpacity -= 0.2;
+      if (!rectangles) continue;
+
+      for (const rectangle of rectangles) {
+        const thisBox = document.createElement('div');
+        thisBox.classList.add('collisionBox');
+        thisDiv.insertAdjacentElement('beforeend', thisBox);
+        thisBox.style.transform = `translate3d(${rectangle.x}px, ${rectangle.y}px, 0)`;
+        thisBox.style.left = `${rectangle.x}px`;
+        thisBox.style.top = `${rectangle.y}px`;
+        thisBox.style.width = `${rectangle.w}px`;
+        thisBox.style.height = `${rectangle.h}px`;
+        thisBox.style.display = 'block';
+        thisBox.style.backgroundColor = this.colors[layerId];
+        thisBox.style.opacity = layerOpacity;
+      }
+
+    }
+  }
 }

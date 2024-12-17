@@ -70,22 +70,21 @@ class Overlays {
     console.log('Player Y:', this.normalizedY, 'Gradient:', gradient);
   }
 
-/**
- * Clacl where the player is relative to the screen height so we can modify the overlay
- * @param {number} playerY 
- * @param {number} screenHeight 
- */
+  /**
+   * Clacl where the player is relative to the screen height so we can modify the overlay
+   * @param {number} playerY 
+   */
   updateForPlayerPosition(playerY) {
     const screenHeight = window.innerHeight;
     const worldHeight = settings[mode].worldSize.h;
-let newNormalizedY = 0.5; // default middle of the screen most of the time
+    let newNormalizedY = 0.5; // default middle of the screen most of the time
     if (playerY < screenHeight / 2) {
       // Near top of screen
       newNormalizedY = playerY / screenHeight;
     } else if (playerY > worldHeight - (screenHeight / 2)) {
       // Near bottom of play area
       newNormalizedY = (playerY - (worldHeight - screenHeight)) / screenHeight;
-    } 
+    }
 
     if (this.normalizedY === newNormalizedY) return;
 

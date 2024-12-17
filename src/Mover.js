@@ -221,7 +221,7 @@ class Mover extends Item {
     let poss = this.collisionBox.collides(collidable);
     // if x = -1 we are on the left|top of centre, +1 is right|bottom
     if (poss.x != 0 || poss.y != 0) {
-      console.log('collision', item.id, poss);
+      //console.log('collision', item.id, poss);
       // we hit something so return to previous pos and modify velocity before applying it again
       this.restorePos();
       if (item.onCollide === 'stop') {
