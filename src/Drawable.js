@@ -37,9 +37,8 @@ class Drawable extends Rectangle {
         this.boxes[settings.SURFACE] = tmp[settings.SURFACE];
         this.boxes[settings.GHOSTS] = tmp[settings.GHOSTS];
         this.boxes[settings.SHADOW] = tmp[settings.SHADOW];
-        console.log(tmp);
-
       }
+      
       this.addToParent();
       // clear this from memory as we dont need it any more
       this.html = null;
@@ -108,7 +107,9 @@ class Drawable extends Rectangle {
     if (this.type == 'buttons') return;
     this.div.style.zIndex = parseInt(itemPos.y);
     this.setPostcode();
-    this.showBoxes();
+    if (settings.showBoxes) {
+      this.showBoxes();
+    }
   }
   /**
  * Record the current suburb (postcode) for this item
@@ -163,7 +164,7 @@ class Drawable extends Rectangle {
     for (const layerId in this.boxes) {
       const rectangles = this.boxes[layerId];
       layerOpacity -= 0.2;
-      if (!rectangles) continue;
+      if (!rectangles || layerId === 'd') continue;
 
       for (const rectangle of rectangles) {
         const thisBox = document.createElement('div');

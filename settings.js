@@ -28,6 +28,7 @@ const settings = {
   
   isDev: true,
   showCollision: false,
+  showBoxes: false,
   contextMenu: true,
   scrollBrowser: true,
   randomItems: true,
