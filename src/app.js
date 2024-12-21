@@ -24,7 +24,6 @@ let app = {
     app.gameLists = new GameLists();
     app.imageCache = new ImageCache();
 
-
     app.scrollable = { div: document.querySelector(".scrollable") };
     app.world = new World(settings[mode].worldSize);
     app.world.div = document.querySelector(`#world`);
@@ -45,11 +44,7 @@ let app = {
 
     app.loadData('0_0');
     shiftSuburbsAsync(app.me);
-
     controls.setup();
-    //app.overlay.div.style.top = "200px";
-
-    //app.imageCache.load();
      
     setTimeout(() => {
       //this.testDialog();
