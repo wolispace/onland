@@ -24,6 +24,8 @@ class Bones {
       this.id = app.uniqueId.next();
     }
     app.uniqueId.set(this.id);
+    // prep the image cache as we know we need this image
+    app.imageCache.addInUse(this);
   }
 
   /**
@@ -78,10 +80,6 @@ class Bones {
   }
 
   allocate() {
-
-    // prep the image cache as we know we need this image
-    app.imageCache.addInUse(this);
-
     // place this in spacial grid cell/s
     const itemInfo = assets.make(this);
     //app.world.layers[layerId].addAll(itemInfo, itemInfo[layerId]);
