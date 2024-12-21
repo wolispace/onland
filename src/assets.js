@@ -137,15 +137,15 @@ const assets = {
            </svg>`,
       },
       '001a': {
-        top: -60,
-        left: -10,
+        top: -80,
+        left: -20,
         width: 60,
         w: 70,
         h: 100,
         onCollide: 'skim',
         s: [new Collidable({ x: 0, y: 0, w: 30, h: 15 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: -45, w: 30, h: 45 })], // a list of ghost collision boxes
-        d: [new Collidable({ x: 0, y: 0, w: 50, h: 45 })], // a list of shadow boxes
+        Xd: [new Collidable({ x: -20, y: -5, w: 60, h: 40 })], // a list of shadow boxes
         content: `<img src="img/tree_001a.png" %style%>`,
       }
     },

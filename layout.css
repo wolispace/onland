@@ -1,3 +1,7 @@
+:root {
+  --shadow: 30%;
+}
+
 body {
   margin: 0;
   overflow: hidden;
@@ -23,7 +27,7 @@ body {
 .item {
   position: absolute;
   opacity: 100%;
-  border: 1px solid #fd353562
+  /* border: 1px solid #fd353562 */
 }
 
 .collisionBox {
@@ -34,8 +38,8 @@ body {
 .shadow {
   background: radial-gradient(
     ellipse at center,
-    rgba(0,0,0,0.5) 0%,
-    rgba(0,0,0,0.5) 50%,
+    rgba(0,0,0,var(--shadow)) 0%,
+    rgba(0,0,0,var(--shadow)) 50%,
     rgba(0,0,0,0) 80%
   );  position: absolute;
   transform: rotate(15deg);
