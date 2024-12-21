@@ -29,15 +29,14 @@ class Drawable extends Rectangle {
    */
   show() {
     if (!this.div) {
-      if (!this.html) {
-        const tmp = assets.make(this);
-        this.html = tmp.html;
-        this.variant = tmp.variant;
-        this.boxes = {};
-        this.boxes[settings.SURFACE] = tmp[settings.SURFACE];
-        this.boxes[settings.GHOSTS] = tmp[settings.GHOSTS];
-        this.boxes[settings.SHADOW] = tmp[settings.SHADOW];
-      }
+      const tmp = assets.make(this);
+      this.html = tmp.html;
+      this.variant = tmp.variant;
+      this.boxes = {};
+      this.boxes[settings.SURFACE] = tmp[settings.SURFACE];
+      this.boxes[settings.GHOSTS] = tmp[settings.GHOSTS];
+      this.boxes[settings.SHADOW] = tmp[settings.SHADOW];
+      
       
       this.addToParent();
       // clear this from memory as we dont need it any more
@@ -156,30 +155,19 @@ class Drawable extends Rectangle {
   }
 
   showBoxes() {
-    let layerOpacity = 0.8;
     const thisDiv = document.querySelector(`#${this.id}`);
+
+    if (thisDiv.classList.contains('collision')) return;
 
     thisDiv.classList.add('collision');
     // loop through the boxes and show them
     for (const layerId in this.boxes) {
       const rectangles = this.boxes[layerId];
-      layerOpacity -= 0.2;
       if (!rectangles || layerId === 'd') continue;
 
       for (const rectangle of rectangles) {
-        const thisBox = document.createElement('div');
-        thisBox.classList.add('collisionBox');
-        thisDiv.insertAdjacentElement('beforeend', thisBox);
-        thisBox.style.transform = `translate3d(${rectangle.x}px, ${rectangle.y}px, 0)`;
-        thisBox.style.left = `${rectangle.x}px`;
-        thisBox.style.top = `${rectangle.y}px`;
-        thisBox.style.width = `${rectangle.w}px`;
-        thisBox.style.height = `${rectangle.h}px`;
-        thisBox.style.display = 'block';
-        thisBox.style.backgroundColor = this.colors[layerId];
-        thisBox.style.opacity = layerOpacity;
+        thisDiv.insertAdjacentHTML('beforeend', rectangle.html());
       }
-
     }
   }
 }

@@ -169,17 +169,6 @@ class Mover extends Item {
   updateCollisionBox() {
     if (!this.collideInfo) return;
     this.collisionBox = this.collideInfo.copy().add(this);
-    if (!settings.showCollision) return;
-    const showBox = `<div id="collisionBox" class="collisionBox" style="
-      top: ${this.collisionBox.y}px; 
-      left: ${this.collisionBox.x}px; 
-      width: ${this.collisionBox.w}px; 
-      height: ${this.collisionBox.h}px; 
-    "></div>`;
-    const oldBox = document.querySelector('#collisionBox');
-    if (oldBox) oldBox.remove();
-    const worldDiv = document.querySelector('#world');
-    worldDiv.insertAdjacentHTML('beforeend', showBox);
   }
 
   /**

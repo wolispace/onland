@@ -184,9 +184,6 @@ class World extends Drawable {
         lastPos.y += stepPos.y;
       }
     }
-    if (settings.showCollision) {
-      this.layers[settings.SURFACE].show();
-    }
   }
 
 

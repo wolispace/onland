@@ -97,7 +97,7 @@ const assets = {
   },  
 
   htmlSets: {
-    items: `<div id="%id%" class="%type% item" style="width: %w%px; height: %h%px;">%shadows%%content%</div>`,
+    items: `<div id="%id%" class="%type% item" style="width: %w%px; height: 1px;">%shadows%%content%</div>`,
     controls: `<div id="%id%" class="%type%" style="left:%x%px; bottom:%y%px; width: %w%px; height: %h%px;">%content%</div>`,
     buttons: `<div id="%id%" class="%type%" style="left:%x%px; top:%y%px; width: %w%px; height: %h%px;">%content%</div>`
   },
@@ -107,26 +107,25 @@ const assets = {
   items: {
     cube: {
       basic: {
-        top: -10,
-        left: -10,
-        width: 30,
-        w: 50,
-        h: 50,
+        top: -30, // raise this so bottom of image is at bottom of collision y: 0 + h:15
+        left: -10, // compensate for left padding around image (if any)
+        w: 50, // width of image including padding, height is auto
         onCollide: 'skim',
         mover: true,
-        s: [new Collidable({ x: 0, y: 10, w: 30, h: 30 })], // a list of collision boxes
-        g: [new Collidable({ x: 0, y: 10, w: 30, h: 30 })], // a list of ghost collision boxes
-        d: [new Collidable({ x: -18, y: 5, w: 50, h: 35 })], // a list of shadows
+        // collision boxes, first is matching the parent div x,y then whatever height and width for the collision box (can be more than one)
+        // ghost boxes are shifted y to close to the top of the image and extend down to top of collision box s
+        // shadows arre wider versions of the collision box/s but will be drawn into the png using a transparent layer
+        s: [new Collidable({ x: 0, y: 0, w: 30, h: 15 })], // a list of collision boxes
+        g: [new Collidable({ x: 0, y: -20, w: 30, h: 20 })], // a list of ghost collision boxes
+        d: [new Collidable({ x: -15, y: -10, w: 50, h: 35 })], // a list of shadows
         content: `<img src="img/cube_basic_1_2.png" %style%>`,
       }
     },
     tree: {
       basic: {
         top: -60,
-        left: -10,
-        width: 60,
+        left: -15,
         w: 70,
-        h: 100,
         onCollide: 'skim',
         s: [new Collidable({ x: 0, y: 0, w: 30, h: 15 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: -45, w: 30, h: 45 })], // a list of ghost collision boxes
@@ -138,14 +137,11 @@ const assets = {
       },
       '001a': {
         top: -80,
-        left: -20,
-        width: 60,
+        left: -15,
         w: 70,
-        h: 100,
         onCollide: 'skim',
         s: [new Collidable({ x: 0, y: 0, w: 30, h: 15 })], // a list of collision boxes
-        g: [new Collidable({ x: 0, y: -45, w: 30, h: 45 })], // a list of ghost collision boxes
-        Xd: [new Collidable({ x: -20, y: -5, w: 60, h: 40 })], // a list of shadow boxes
+        g: [new Collidable({ x: 0, y: -60, w: 30, h: 60 })], // a list of ghost collision boxes
         content: `<img src="img/tree_001a.png" %style%>`,
       }
     },
@@ -154,9 +150,7 @@ const assets = {
       basic: {
         top: -20,
         left: -5,
-        width: 50,
         w: 50,
-        h: 50,
         onCollide: 'stop',
         s: [new Collidable({ x: 0, y: 0, w: 40, h: 10 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: -10, w: 40, h: 10 })], // a list of ghost collision boxes
@@ -178,9 +172,7 @@ const assets = {
         name: 'basic',
         top: -32,
         left: -22,
-        width: 50,
         w: 50,
-        h: 50,
         onCollide: 'stop',
         s: [new Collidable({ x: 0, y: 0, w: 10, h: 10 })], // a list of collision boxes
         g: [new Collidable({ x: -5, y: -20, w: 20, h: 20 })], // a list of ghost collision boxes
@@ -203,9 +195,7 @@ const assets = {
         name: 'basic',
         top: -130,
         left: -10,
-        width: 150,
         w: 150,
-        h: 200,
         onCollide: 'skim',
         s: [new Collidable({ x: 0, y: 0, w: 22, h: 16 }), new Collidable({ x: 96, y: 0, w: 22, h: 16 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: -130, w: 20, h: 130 }), new Collidable({ x: 96, y: -130, w: 20, h: 130 }), new Collidable({ x: 0, y: -130, w: 100, h: 20 })], // a list of ghost collision boxes
@@ -226,9 +216,7 @@ const assets = {
         name: 'basic',
         top: 0,
         left: 0,
-        width: 139,
         w: 139,
-        h: 200,
         onCollide: 'skim',
         s: [new Collidable({ x: 0, y: 0, w: 120, h: 200 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: 0, w: 0, h: 0 })], // a list of ghost collision boxes
@@ -247,9 +235,7 @@ const assets = {
         name: 'one',
         top: 0,
         left: 0,
-        width: 139,
         w: 139,
-        h: 200,
         onCollide: 'skim',
         s: [new Collidable({ x: 0, y: 0, w: 120, h: 200 })], // a list of collision boxes
         g: [], // a list of ghost collision boxes
@@ -270,9 +256,7 @@ const assets = {
         name: 'basic',
         top: 0,
         left: 0,
-        width: 150,
         w: 50,
-        h: 50,
         onCollide: 'skim',
         // if we collide with a transition rectangle the moving item's layer is changed
         // each move checks if we are still colliding with

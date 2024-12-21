@@ -26,15 +26,14 @@ const settings = {
   INVENTORY: 'i',
   SHADOW: 'd',
   
-  isDev: true,
-  showCollision: false,
-  showBoxes: true,
-  contextMenu: true,
-  scrollBrowser: true,
-  randomItems: true,
-  doGhosting: true,
-  showTouchPoint: true,
-  pickupItems: false,
+  isDev: true, 
+  showBoxes: false, // show collision boxes (sufrace and ghost)
+  contextMenu: true, // allow the context menu
+  scrollBrowser: true, // scroll the browser viewport to keep the payer in the centre
+  randomItems: true, // redundant now as we load from files a known set of items
+  doGhosting: true, // redundant now as ghosting is working fine
+  showTouchPoint: true, // show a circle on the screen where the mouse clicks
+  pickupItems: false, // auto pick up each item we collide with
   
 }
 
