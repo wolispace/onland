@@ -96,6 +96,7 @@ class LayerList {
       const bonesList = this.list[layerId];
       bonesList.allocate();
     }
+    app.imageCache.load();
   }
 
   render(layerId) {

@@ -1,5 +1,6 @@
 class ImageCache {
   list = {};
+  inUse = new Set();
 
   constructor() {
   }
@@ -12,6 +13,29 @@ class ImageCache {
     if (!this.list[imgName]) {
       this.list[imgName] = new Image();
       this.list[imgName].src = imgName;
+    }
+  }
+
+  /**
+   * Add each unique type and variant for pre-loading
+   * @param {Bones} bones 
+   */
+  addInUse(bones) {
+    this.inUse.add(`${bones.type}_${bones.variant}`);
+  }
+
+  /**
+   * Load all the images that are in use
+   */  
+  loadInUse() {
+    for (const bones in this.inUse) {
+      const bits = bones.split('_');
+      const variantData = assets.get(bits[0], bits[1]);
+      if (variantData) {
+        if (variantData.mover) {
+          this.directional(bits[0], bits[1]);
+        }
+      }    
     }
   }
 

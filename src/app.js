@@ -49,7 +49,7 @@ let app = {
     controls.setup();
     //app.overlay.div.style.top = "200px";
 
-    app.imageCache.load();
+    //app.imageCache.load();
      
     setTimeout(() => {
       //this.testDialog();
