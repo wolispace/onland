@@ -30,12 +30,10 @@ body {
 }
 
 .shadow {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0,0,0,var(--shadow)) 0%,
-    rgba(0,0,0,var(--shadow)) 50%,
-    rgba(0,0,0,0) 80%
-  );  
+  background: radial-gradient(ellipse at center,
+      rgba(0, 0, 0, var(--shadow)) 0%,
+      rgba(0, 0, 0, var(--shadow)) 50%,
+      rgba(0, 0, 0, 0) 80%);
   position: absolute;
   transform: rotate(15deg);
 }
@@ -54,14 +52,14 @@ body {
 .collideZone {
   position: absolute;
   background-color: rgba(255, 255, 255, 0.25);
-  outline:1px solid black;
+  outline: 1px solid black;
 }
 
-.item > svg {
+.item>svg {
   position: absolute;
 }
 
-.item > img {
+.item>img {
   position: absolute;
 }
 
@@ -71,7 +69,7 @@ body {
 }
 
 .showGrid {
-  outline:1px solid white;
+  outline: 1px solid white;
   position: absolute;
 }
 
@@ -83,7 +81,7 @@ body {
 }
 
 #overlay {
-  position:absolute;
+  position: absolute;
   z-index: 1;
   bottom: 0;
   left: 0;
@@ -93,7 +91,7 @@ body {
 
 .controls {
   position: absolute;
-  border:3px solid black;
+  border: 3px solid black;
   background-color: white;
   opacity: 0.1;
   border-radius: .5rem;
@@ -110,11 +108,11 @@ body {
 
 .buttons {
   position: absolute;
-  border:3px solid maroon;
+  border: 3px solid maroon;
   background-color: rgb(128, 97, 97);
   opacity: 1;
   color: white;
-  cursor:pointer;
+  cursor: pointer;
   font-weight: bold;
   border-radius: .5rem;
 }
@@ -125,23 +123,31 @@ body {
 }
 
 .inventoryItem {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
   width: 80px;
   height: 80px;
+  overflow: hidden;
 }
 
-.inventoryItem > svg {
+.inventoryItem svg {
   width: 100%;
-  position: static; /* Remove the absolute positioning */
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Cover the entire area, maintaining aspect ratio */
+}
+
+.inventoryItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Cover the entire area, maintaining aspect ratio */
 }
 
 #touchId {
   position: absolute;
   background-color: yellow;
-  border:2px solid maroon;
+  border: 2px solid maroon;
   border-radius: 50%;
   opacity: 50%;
   width: 20px;
@@ -154,11 +160,13 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Semi-transparent background */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999999999; /* Ensure it's above other content */
+  z-index: 9999999999;
+  /* Ensure it's above other content */
 }
 
 .dialogContainer {
@@ -235,8 +243,10 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none; /* This allows clicks to pass through */
-  z-index: 1; /* Adjust as needed to ensure it's on top */
+  pointer-events: none;
+  /* This allows clicks to pass through */
+  z-index: 1;
+  /* Adjust as needed to ensure it's on top */
 }
 
 
@@ -257,7 +267,7 @@ button:hover {
   background-color: rgba(109, 160, 143, .75) !important;
 }
 
-#_me > img {
+#_me>img {
   width: 100%;
 }
 
@@ -268,18 +278,21 @@ button:hover {
   font-weight: bold;
   z-index: 99999999;
 }
+
 #msg1 {
-  position:absolute;
+  position: absolute;
   top: 0;
   left: 0;
 }
+
 #msg2 {
-  position:absolute;
+  position: absolute;
   top: 1rem;
   left: 0;
 }
+
 #msg3 {
-  position:absolute;
+  position: absolute;
   top: 2rem;
   left: 0;
 }
@@ -299,4 +312,3 @@ button:hover {
     opacity: 0;
   }
 }
-

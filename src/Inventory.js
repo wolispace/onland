@@ -39,7 +39,7 @@ class Inventory extends UniqueSet {
       title: 'Inventory',
       content: this.html(),
     };
-    
+
     this.dialog = new Dialog(params);
   }
 
@@ -52,9 +52,11 @@ class Inventory extends UniqueSet {
     const bonesList = app.gameLists[settings.MOVED_ITEMS].get(settings.INVENTORY);
     if (!bonesList) return 'Nothing in your inventory';
     for (const bones of Object.values(bonesList.list)) {
-      bones.style = ' '; // override default svg style
-      const item = assets.make(bones);
-      html += `${this.buttonHtml(item)}`;
+      const itemInfo = assets.make(bones);
+      itemInfo.style = ' '; // override default svg style
+      itemInfo.html = assets.buildInvHtml(itemInfo);
+
+      html += this.buttonHtml(itemInfo);
     }
 
     return `<div class="itemList">${html}</div>`;

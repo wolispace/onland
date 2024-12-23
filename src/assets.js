@@ -67,20 +67,17 @@ const assets = {
   buildHtml(params) {
     let html = assets.html ?? assets.htmlSets[params.type] ?? assets.htmlSets['items'];
 
-    let match;
-    const regex = /%(\w+)%/;
-    // keep checking for a match as the last replaced param may have added more
-    while ((match = regex.exec(html)) !== null) {
-      const [fullMatch, paramName] = match;
-      if (params[paramName] === '' || params[paramName]) {
-        html = html.replace(fullMatch, params[paramName]);
-      } else {
-        // If the parameter is not found in params, move past this match
-        html = html.slice(0, match.index) + html.slice(match.index + fullMatch.length);
-      }
-    }
+    return utils.replaceParams(html, params);
+  },
 
-    return html;
+  /**
+   * Buids the img or dvg for display in an inv button
+   * 
+   * @param {object} params 
+   * @returns 
+   */
+  buildInvHtml(params) {
+    return utils.replaceParams(params.content, params);
   },
 
   buildShadows(params) {
@@ -219,8 +216,7 @@ const assets = {
         w: 139,
         onCollide: 'skim',
         s: [new Collidable({ x: 0, y: 0, w: 120, h: 200 })], // a list of collision boxes
-        g: [new Collidable({ x: 0, y: 0, w: 0, h: 0 })], // a list of ghost collision boxes
-        d: [new Collidable({ x: 0, y: 0, w: 120, h: 200 })], // a list of shadow boxes
+        g: [], // a list of ghost collision boxes
         content: `<svg viewBox="0 0 139 200" %style%>
           <path d="m18.031 10.253s-16.263 17.324-16.971 37.123c-0.70711 19.799 6.364 38.184 7.4246 57.276 1.0607 19.092 0.70711 51.619-0.70711 66.822-1.4142 15.203 24.749 21.567 24.749 21.567 39.598 12.728 64.7 1.7678 87.328-5.3033 0 0 17.678-9.5459 18.031-35.002 0.35356-25.456-13.789-46.316-18.385-67.175-4.5962-20.86 0.35355-45.608-0.35356-59.043-0.7071-13.435-19.092-24.395-19.092-24.395s-62.579-8.4853-82.024 8.1317z" style="fill:#3537d8;paint-order:fill markers stroke"/>
           <path d="m38.052 31.244c7.8166-1.1364 9.1193-6.9806 9.1193-6.9806 1.2389 3.3558 3.291 5.1276 10.236 5.8443" style="fill:none;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:.39557;stroke-width:1.6224;stroke:#fff"/>
