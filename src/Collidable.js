@@ -20,15 +20,38 @@ class Collidable extends Rectangle {
  */
   collides(otherRect) {
     // Calculate the distance between the two rectangles' centers
+    console.log('collides', this, otherRect);
     var dx = (this.x + this.w / 2) - (otherRect.x + otherRect.w / 2);
     var dy = (this.y + this.h / 2) - (otherRect.y + otherRect.h / 2);
+    //console.log('dx:', dx, 'dy:', dy);
     // Compare distance with sum of half widths and heights
-    if (Math.abs(dx) < (this.w / 2 + otherRect.w / 2) && Math.abs(dy) < (this.h / 2 + otherRect.h / 2)) {
-      return new Point(
-        this.x + this.w / 2 < otherRect.x + otherRect.w / 2 ? -1 : 1,
-        this.y + this.h / 2 < otherRect.y + otherRect.h / 2 ? -1 : 1);
+    var overlapX = Math.abs(dx) < (this.w / 2 + otherRect.w / 2);
+    var overlapY = Math.abs(dy) < (this.h / 2 + otherRect.h / 2);
+    //console.log('overlapX:', overlapX, 'overlapY:', overlapY);
+
+    const shift = new Point(0, 0);
+
+    // if we overlap in the x axis, return x:0, y: -1 or 1 if we are below or above the centre line in the y axis
+    if (overlapX) {
+      shift.y = this.y + this.h / 2 < otherRect.y + otherRect.h / 2 ? -1 : 1;
     }
-    return new Point(0, 0); // They are not colliding
+    // if we overlap in the y axis, return y: 0, x:-1 or 1 if we are left or right of the centre line in the x axis
+    if (overlapY) {
+      shift.x = this.x + this.w / 2 < otherRect.x + otherRect.w / 2 ? -1 : 1;
+    }
+
+    return shift; // They are not colliding
+  }
+
+  showBox() {
+    const collideBox = document.querySelector('#collideBox');
+    collideBox.style.top = this.y + 'px';
+    collideBox.style.left = this.x + 'px';
+    collideBox.style.width = this.w + 'px';
+    collideBox.style.height = this.h + 'px';
+
+    const collidePoint1 = document.querySelector('#collidePoint1');
+
   }
 
   /**

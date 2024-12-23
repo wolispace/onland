@@ -209,9 +209,11 @@ class Mover extends Item {
   surfaceCollision(collidable, item) {
     let poss = this.collisionBox.collides(collidable);
     // if x = -1 we are on the left|top of centre, +1 is right|bottom
-    if (poss.x != 0 || poss.y != 0) {
-      //console.log('collision', item.id, poss);
-      // we hit something so return to previous pos and modify velocity before applying it again
+    if (poss.x != 0 && poss.y != 0) {
+      console.log(`Collided with ${item.id} at ${collidable.x}, ${collidable.y}, ${collidable.w}, ${collidable.h}`);
+      console.log(`Collision detected: curPos:${this.x}, ${this.y}`, poss);
+      console.log('Initial velocity:', this.velocity);
+      //collidable.showBox();
       this.restorePos();
       if (item.onCollide === 'stop') {
         this.velocity.clear();
@@ -219,18 +221,19 @@ class Mover extends Item {
       } else if (item.onCollide === 'bounce') {
         this.velocity.multiply(poss);
       } else {
-        // skim - switch axis of movement if colliding with -y then determine middle point and apply iether + or - x instead.
-        
-        if (Math.abs(this.velocity.y) > this.friction) {
-          this.velocity.x = 0; //Math.abs(this.velocity.y * this.collisionSlide) * poss.x;
-          this.velocity.y = 0;
-        } else if (Math.abs(this.velocity.x) > this.friction) {
-          this.velocity.y = 0; //Math.abs(this.velocity.x * this.collisionSlide) * poss.y;
-          this.velocity.x = 0;
+        // Adjust velocity based on direction of travel to slide around objects
+        if (this.velocity.y !== 0) {
+          this.velocity.y = 0; // Stop vertical movement
+          this.velocity.x += poss.x; // Adjust horizontal movement - slide up or down
+        } else if (this.velocity.x !== 0) {
+          this.velocity.x = 0; // Stop horizontal movement
+          this.velocity.y += poss.y; // Adjust vertical movement - slide left or right
         }
       }
       this.velocity.limit(this.maxSpeed);
+      console.log('Adjusted velocity:', this.velocity);
       this.applyVelocity();
+      console.log('Position after applying velocity: newPos:', this.x, this.y);
       if (settings.pickupItems) {
         this.velocity.clear();
         app.inventory.add(item);
