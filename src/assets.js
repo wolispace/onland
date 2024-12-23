@@ -13,7 +13,7 @@ const assets = {
    */
   make(params) {
     const defaultParams = assets.get(params.type, params.variant);
-    params = {...params, ...defaultParams};
+    params = { ...params, ...defaultParams };
     // no style defined so build one based on the params
     if (!params.style) {
       params.style = `style="left:${params.left}px; top:${params.top}px;" width="100%"`;
@@ -34,17 +34,17 @@ const assets = {
   get: function (type, variant) {
     if (!variant) {
       // default to the basic variant 
-      variant = 'basic'; 
+      variant = 'basic';
     }
     params = { type, variant, ...assets.items[type][variant] };
 
     return params;
   },
-/**
- * Select a random variant from the type (basic, tall, short etc..)
- * @param {string} type 
- * @returns 
- */
+  /**
+   * Select a random variant from the type (basic, tall, short etc..)
+   * @param {string} type 
+   * @returns 
+   */
   randomVariant(type) {
     return Object.keys(assets.items[type])[Math.floor(Math.random() * Object.keys(assets.items[type]).length)];
   },
@@ -66,7 +66,7 @@ const assets = {
    */
   buildHtml(params) {
     let html = assets.html ?? assets.htmlSets[params.type] ?? assets.htmlSets['items'];
-    
+
     let match;
     const regex = /%(\w+)%/;
     // keep checking for a match as the last replaced param may have added more
@@ -79,7 +79,7 @@ const assets = {
         html = html.slice(0, match.index) + html.slice(match.index + fullMatch.length);
       }
     }
-    
+
     return html;
   },
 
@@ -94,7 +94,7 @@ const assets = {
 
   buildShadow(params) {
     return `<div class="shadow" style="width: ${params.w}px; height: ${params.h}px; top: ${params.y}px; left: ${params.x}px;"></div>`;
-  },  
+  },
 
   htmlSets: {
     items: `<div id="%id%" class="%type% item" style="width: %w%px; height: 1px;">%shadows%%content%</div>`,
@@ -116,8 +116,7 @@ const assets = {
         // ghost boxes are shifted y to close to the top of the image and extend down to top of collision box s
         // shadows arre wider versions of the collision box/s but will be drawn into the png using a transparent layer
         s: [new Collidable({ x: 0, y: 0, w: 30, h: 15 })], // a list of collision boxes
-        g: [],
-        Xg: [new Collidable({ x: 0, y: -20, w: 30, h: 20 })], // a list of ghost collision boxes
+        g: [new Collidable({ x: 0, y: -20, w: 30, h: 20 })], // a list of ghost collision boxes
         d: [new Collidable({ x: -15, y: -10, w: 50, h: 35 })], // a list of shadows
         content: `<img src="img/cube_basic_1_2.png" %style%>`,
       }
@@ -129,8 +128,7 @@ const assets = {
         w: 70,
         onCollide: 'skim',
         s: [new Collidable({ x: 0, y: 0, w: 30, h: 15 })], // a list of collision boxes
-        g: [],
-        Xg: [new Collidable({ x: 0, y: -45, w: 30, h: 45 })], // a list of ghost collision boxes
+        g: [new Collidable({ x: 0, y: -45, w: 30, h: 45 })], // a list of ghost collision boxes
         d: [new Collidable({ x: -10, y: -10, w: 50, h: 35 })], // a list of shadow boxes
         content: `<svg viewBox="0 0 104 121" %style%>
            <path d="m17.324 114.9c15.556-11.314 16.617-22.627 16.617-22.627l0.70711-41.366 23.688-0.35355s-4.9497 29.698 1.4142 42.073c6.364 12.374 16.263 19.092 16.263 19.092l-2.1213 3.182s-9.1924-7.4246-15.91-4.9497c-6.7175 2.4749-7.4246 7.4246-7.4246 7.4246l-8.4853 0.7071s6.8724-11.522-1.4142-9.8995c-3.6858 0.72165-8.7725 3.4516-11.667 6.7175z" style="fill:#572e11;paint-order:fill markers stroke;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.4;stroke:#000"/>
@@ -139,12 +137,11 @@ const assets = {
       },
       '001a': {
         top: -80,
-        left: -15,
+        left: -30,
         w: 70,
         onCollide: 'skim',
-        s: [new Collidable({ x: 0, y: 0, w: 30, h: 15 })], // a list of collision boxes
-        g: [],
-        Xg: [new Collidable({ x: 0, y: -60, w: 30, h: 60 })], // a list of ghost collision boxes
+        s: [new Collidable({ x: 0, y: 0, w: 20, h: 15 })], // a list of collision boxes
+        g: [new Collidable({ x: 0, y: -50, w: 20, h: 50 })], // a list of ghost collision boxes
         content: `<img src="img/tree_001a.png" %style%>`,
       }
     },
@@ -156,8 +153,7 @@ const assets = {
         w: 50,
         onCollide: 'stop',
         s: [new Collidable({ x: 0, y: 0, w: 40, h: 10 })], // a list of collision boxes
-        g: [],
-        Xg: [new Collidable({ x: 0, y: -10, w: 40, h: 10 })], // a list of ghost collision boxes
+        g: [], // no need for ghosting small slow objects
         d: [new Collidable({ x: -20, y: -5, w: 60, h: 20 })], // a list of shadow boxes
         content: `<svg viewBox="0 0 97 64" %style%>
            <path d="m19.208 62.032-14.8-14.485-2.5191-9.7614 5.9828-23.931 11.651-7.2423 38.416-4.0935 22.357 0.62977 12.595 10.391 2.5191 23.301-2.2042 15.744-32.118 8.8167z" style="fill:#d0bfbf;paint-order:stroke fill markers;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.6;stroke:#000"/>
@@ -379,7 +375,7 @@ const assets = {
         w: 50,
         h: 50,
         content: `Use`,
-      }      
+      }
     }
   }
 

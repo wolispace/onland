@@ -20,7 +20,6 @@ class Collidable extends Rectangle {
  */
   collides(otherRect) {
     // Calculate the distance between the two rectangles' centers
-    console.log('collides', this, otherRect);
     var dx = (this.x + this.w / 2) - (otherRect.x + otherRect.w / 2);
     var dy = (this.y + this.h / 2) - (otherRect.y + otherRect.h / 2);
     //console.log('dx:', dx, 'dy:', dy);
@@ -43,6 +42,9 @@ class Collidable extends Rectangle {
     return shift; // They are not colliding
   }
 
+  /**
+   * Show this collidable rectangle
+   */
   showBox() {
     const collideBox = document.querySelector('#collideBox');
     collideBox.style.top = this.y + 'px';

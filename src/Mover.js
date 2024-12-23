@@ -210,10 +210,6 @@ class Mover extends Item {
     let poss = this.collisionBox.collides(collidable);
     // if x = -1 we are on the left|top of centre, +1 is right|bottom
     if (poss.x != 0 && poss.y != 0) {
-      console.log(`Collided with ${item.id} at ${collidable.x}, ${collidable.y}, ${collidable.w}, ${collidable.h}`);
-      console.log(`Collision detected: curPos:${this.x}, ${this.y}`, poss);
-      console.log('Initial velocity:', this.velocity);
-      //collidable.showBox();
       this.restorePos();
       if (item.onCollide === 'stop') {
         this.velocity.clear();
@@ -231,9 +227,7 @@ class Mover extends Item {
         }
       }
       this.velocity.limit(this.maxSpeed);
-      console.log('Adjusted velocity:', this.velocity);
       this.applyVelocity();
-      console.log('Position after applying velocity: newPos:', this.x, this.y);
       if (settings.pickupItems) {
         this.velocity.clear();
         app.inventory.add(item);
@@ -243,7 +237,6 @@ class Mover extends Item {
 
   // check the ghosts grid to see what we are colliding with any ghosts
   checkGhosts() {
-    if (!settings.doGhosting) return;
     const layerBonesList = app.gameLists.get(settings.SURFACE);
     if (!layerBonesList) return;
     this.updateCollisionBox();
@@ -257,7 +250,7 @@ class Mover extends Item {
         collideInfo.forEach((ghost) => {
           const ghostCollidable = ghost.copy().add(item);
           const poss = this.collisionBox.collides(ghostCollidable);
-          if (poss.x != 0 || poss.y != 0) {
+          if (poss.x != 0 && poss.y != 0) {
             // find the div
             const div = document.querySelector(`#${item.id}`);
             div.classList.add('ghost');
