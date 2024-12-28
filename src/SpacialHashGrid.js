@@ -102,6 +102,18 @@ class SpacialHashGrid extends Rectangle {
     return key.split('_').map(Number);
   }
 
+  /**
+   * 
+   * @param {string} key1 eg `4_6` 
+   * @param {string} key2  eg `-1_1`
+   * @returns {string} reuslting key eg `3_7`
+   */
+  addKey(key1, key2) {
+    const [x1, y1] = this.breakKey(key1);
+    const [x2, y2] = this.breakKey(key2);
+    return this.buildKey(x1 + x2, y1 + y2);
+  }
+
   // work out the bounding box for this shape and add() points into the grid for the corners and all cells between them
   // the params must include a Rectangle and an id
   addShape(params) {

@@ -7,9 +7,9 @@ let app = {
 
   start() {
     app.setup();
-    app.runBonesTests();
-    //app.runLocationTests();
-    app.runStorageTests();
+    //app.runBonesTests();
+    app.runLocationTests();
+    //app.runStorageTests();
   },
 
   setup() {
@@ -87,6 +87,11 @@ let app = {
     params = '4_6';
     expected = [4, 6];
     app.compare('breakKey', expected, app.testGrid.breakKey(params));
+
+    params = '4_6';
+    params2 = '-1_1';
+    expected = [3, 7];
+    app.compare('addKey', expected, app.testGrid.breakKey(params, params2));
 
     let key = '4_6';
     let id = 'test_001';
