@@ -102,6 +102,11 @@ class LayerList {
   render(layerId) {
     const bonesList = this.list[layerId];
     for (const boneId in bonesList.list) {
+      
+      // dont put the item on the screen if its already there
+      const onScreen = document.querySelector(`#${boneId}`);
+      if (onScreen) continue;
+
       // Create a deep copy of the bones object
       const bonesCopy = JSON.parse(JSON.stringify(bonesList.list[boneId]));
       // Update the parent property on the copy
