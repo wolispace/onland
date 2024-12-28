@@ -100,10 +100,84 @@ class World extends Drawable {
   styleWorld() {
     this.div.style.width = `${this.w}px`;
     this.div.style.height = `${this.h}px`;
-    this.div.style.backgroundColor = 'seagreen';
+    this.div.style.backgroundColor = '#63957d'; //'seagreen';
+    this.div.style.transition = 'background-color 0.5s ease';
+
     // make sure scrollable are is op, left as mobile tends to remember previous scroll offset
     app.scrollable.div.scrollLeft = 0;
     app.scrollable.div.scrollTop = 0;
+  }
+
+  updateBackgroundColor() {
+    const colourGrid = [
+      ['seagreen', 'green', 'red'],
+      ['seagreen', 'white', 'seagreen'],
+      ['yellow', 'maroon', 'wheat']
+    ];
+  
+    const cellSize = app.suburbSize;
+    const halfCellSize = cellSize / 2;
+    const playPos = { x: app.me.x, y: app.me.y };
+  
+    // Calculate the player's current cell
+    const currentCell = {
+      x: Math.floor(playPos.x / cellSize),
+      y: Math.floor(playPos.y / cellSize)
+    };
+  
+    // Calculate the player's position within the current cell
+    const playerXInCell = (playPos.x % cellSize) - halfCellSize;
+    const playerYInCell = (playPos.y % cellSize) - halfCellSize;
+  
+    // Calculate progress (0-1) for both x and y axes
+    const xProgress = (playerXInCell + halfCellSize) / cellSize;
+    const yProgress = (playerYInCell + halfCellSize) / cellSize;
+  
+    // Get the colors of the current cell and adjacent cells
+    const startColor = colourGrid[currentCell.y] && colourGrid[currentCell.y][currentCell.x] ? colourGrid[currentCell.y][currentCell.x] : 'black';
+    const horizontalColor = colourGrid[currentCell.y] && colourGrid[currentCell.y][currentCell.x + 1] ? colourGrid[currentCell.y][currentCell.x + 1] : 'black';
+    const verticalColor = colourGrid[currentCell.y + 1] && colourGrid[currentCell.y + 1][currentCell.x] ? colourGrid[currentCell.y + 1][currentCell.x] : 'black';
+    const diagonalColor = colourGrid[currentCell.y + 1] && colourGrid[currentCell.y + 1][currentCell.x + 1] ? colourGrid[currentCell.y + 1][currentCell.x + 1] : 'black';
+  
+    // Convert color names to RGB values
+    const colorMap = {
+      red: { r: 255, g: 0, b: 0 },
+      green: { r: 0, g: 255, b: 0 },
+      seagreen: { r: 99, g: 149, b: 125 },
+      blue: { r: 0, g: 0, b: 255 },
+      yellow: { r: 255, g: 255, b: 0 },
+      maroon: { r: 128, g: 0, b: 0 },
+      wheat: { r: 245, g: 222, b: 179 },
+      white: { r: 255, g: 255, b: 255 },
+      black: { r: 0, g: 0, b: 0 }
+    };
+  
+    const startRGB = colorMap[startColor];
+    const horizontalRGB = colorMap[horizontalColor];
+    const verticalRGB = colorMap[verticalColor];
+    const diagonalRGB = colorMap[diagonalColor];
+  
+    // Interpolate between all four colors
+    // First, interpolate horizontally
+    const topRowColor = {
+      r: startRGB.r + (horizontalRGB.r - startRGB.r) * xProgress,
+      g: startRGB.g + (horizontalRGB.g - startRGB.g) * xProgress,
+      b: startRGB.b + (horizontalRGB.b - startRGB.b) * xProgress
+    };
+  
+    const bottomRowColor = {
+      r: verticalRGB.r + (diagonalRGB.r - verticalRGB.r) * xProgress,
+      g: verticalRGB.g + (diagonalRGB.g - verticalRGB.g) * xProgress,
+      b: verticalRGB.b + (diagonalRGB.b - verticalRGB.b) * xProgress
+    };
+  
+    // Then interpolate vertically between the results
+    const r = Math.round(topRowColor.r + (bottomRowColor.r - topRowColor.r) * yProgress);
+    const g = Math.round(topRowColor.g + (bottomRowColor.g - topRowColor.g) * yProgress);
+    const b = Math.round(topRowColor.b + (bottomRowColor.b - topRowColor.b) * yProgress);
+  
+    // Set the new background color
+    this.div.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
   }
 
   add(html) {

@@ -56,6 +56,7 @@ class Mover extends Item {
       app.world.centerPlayer();
     }
     app.overlays.updateForPlayerPosition(this.y);
+    app.world.updateBackgroundColor();
     //app.msg(1, { x: Math.round(this.x, 0), y: Math.round(this.y, 0), p: this.postcode, l: this.land }, 'pos');
   }
 
