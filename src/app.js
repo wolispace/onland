@@ -45,9 +45,7 @@ let app = {
      
     setTimeout(() => {
       //this.testDialog();
-      app.overlays.updateForPlayerPosition(app.me.y);
-      app.world.updateBackgroundColor();
-    }, 100);
+    }, 500);
 
 
     app.gameLoop = new GameLoop(app.update, app.show);
@@ -151,15 +149,15 @@ let app = {
           console.error('Error loading script:', error);
         });
         filePromises.push(filePromise);
-    }));
-
-    Promise.all(filePromises)
-    .then(() => {
+      }));
+      
+      Promise.all(filePromises)
+      .then(() => {
         // All files have been read from disk
         // Handle the data as a whole here
         processAllData(surrounds);
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         console.error('Error loading scripts:', error);
     });
   },
@@ -176,6 +174,8 @@ function processAllData(surrounds) {
   app.gameLists.allocate();
   // draw everything on the surface
   app.gameLists.render(settings.SURFACE);
+  app.overlays.updateForPlayerPosition(app.me.y);
+  app.world.updateBackgroundColor();
 }
 
 async function shiftSuburbsAsync(mover) {

@@ -75,6 +75,7 @@ class Overlays {
    * @param {number} playerY 
    */
   updateForPlayerPosition(playerY) {
+    this.updateBlurEffect(playerY);
     const screenHeight = window.innerHeight;
     const worldHeight = settings[mode].worldSize.h;
     let newNormalizedY = 0.5; // default middle of the screen most of the time
@@ -92,16 +93,16 @@ class Overlays {
     this.normalizedY = newNormalizedY;
     //this.updateDebugOverlay();
     this.updateBlurOverlay();
-    this.updateBlurEffect();
   }
 
   // Function to calculate the distance and apply blur
-  updateBlurEffect() {
-    const playerY = app.me.y; // Assuming app.me.y gives the player's Y position
+  updateBlurEffect(playerY) {
+    const maxBlur = 10; // The maximum blur amount allowed
+    const blurDistance = 100; // divide the ditance by this to calculate a blur between 0 and 10
 
     const onScreen = app.gameLists.get(settings.SURFACE); // get current list of items
+    console.log(onScreen);
     if (!onScreen) return;
-    //console.log(onScreen);
 
     for (const boneId in onScreen.list) {
       const bones = onScreen.list[boneId];
@@ -112,8 +113,9 @@ class Overlays {
       if (!firstChild) continue;
       //console.log(`#${bones.id}`, div);
       const distance = Math.abs(playerY - bones.y);
-      const blurAmount = Math.min(distance / 100, 10); // Adjust the divisor and max blur as needed
+      const blurAmount = Math.min(distance / blurDistance, maxBlur); // Adjust the divisor and max blur as needed
       firstChild.style.filter = `blur(${blurAmount}px)`;
+      console.log(`#${bones.id}`, distance, blurAmount);
     };
   }
 
