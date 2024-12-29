@@ -39,17 +39,15 @@ let app = {
     this.doTest();
     //app.world.populate();
 
-    app.overlays.updateForPlayerPosition(app.me.y);
-  
-
     app.loadData('0_0');
     shiftSuburbsAsync(app.me);
     controls.setup();
      
     setTimeout(() => {
       //this.testDialog();
-      //app.world.layers.surface.show();
-    }, 1000);
+      app.overlays.updateForPlayerPosition(app.me.y);
+      app.world.updateBackgroundColor();
+    }, 100);
 
 
     app.gameLoop = new GameLoop(app.update, app.show);
@@ -125,6 +123,8 @@ let app = {
    * @params {string} land key eg '0_0' or 4_6' lands are bigger than suburbs
    */
   loadData(landKey) {
+    // clear all previous background colours ready to setup a new set of 9 suburbs
+    app.backgroundColors = {};
     const layer = settings.SURFACE;
     const surrounds = app.world.layers.lands.kingsSquare(landKey);
     const filePromises = [];
@@ -137,9 +137,15 @@ let app = {
             if (typeof(app.defaultData) == "string") {
               app.gameLists.decode(app.defaultData, settings.DEFAULT);
             } else {
+              // REDUNDANT - new data file format combines all laters in an encoded string
               app.store.addToTempList(app.defaultData[layer].join('^'));
             }
           }
+          // if no background colour defined the default to sea green
+          if (!app.backgroundColor) {
+              app.backgroundColor = { r: 99, g: 149, b: 125 }; // seagreen
+          }
+          app.backgroundColors[land] = app.backgroundColor;
         })
         .catch((error) => {
           console.error('Error loading script:', error);
@@ -209,6 +215,7 @@ async function showSuburbsAsync(postcode, collisionBox) {
       }
     }
   }
+  console.log(newSuburbs, currentSuburbs);
   app.lastShown = currentSuburbs;
 }
 

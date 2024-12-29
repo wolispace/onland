@@ -109,6 +109,14 @@ class World extends Drawable {
   }
 
   updateBackgroundColor() {
+
+    // app.me.postcode = centre of grid
+    // calc kings square including -1, -1
+    // read colours from app.backgroundColours to each cell
+    
+
+    //app.backgroundColors = {'0_0': { r: 99, g: 149, b: 125 }};
+
     const colourGrid = [
       ['seagreen', 'green', 'red'],
       ['seagreen', 'white', 'seagreen'],

@@ -92,6 +92,31 @@ class Overlays {
     this.normalizedY = newNormalizedY;
     //this.updateDebugOverlay();
     this.updateBlurOverlay();
+    this.updateBlurEffect();
   }
+
+  // Function to calculate the distance and apply blur
+  updateBlurEffect() {
+    const playerY = app.me.y; // Assuming app.me.y gives the player's Y position
+
+    const onScreen = app.gameLists.get(settings.SURFACE); // get current list of items
+    if (!onScreen) return;
+    //console.log(onScreen);
+
+    for (const boneId in onScreen.list) {
+      const bones = onScreen.list[boneId];
+      //console.log(bones);
+      const div = document.querySelector(`#${bones.id}`); // Replace with your div class
+      if (!div) continue;
+      const firstChild = div.lastElementChild;
+      if (!firstChild) continue;
+      //console.log(`#${bones.id}`, div);
+      const distance = Math.abs(playerY - bones.y);
+      const blurAmount = Math.min(distance / 100, 10); // Adjust the divisor and max blur as needed
+      firstChild.style.filter = `blur(${blurAmount}px)`;
+    };
+  }
+
+
 
 }

@@ -42,16 +42,23 @@
   <script src='src/assets.js?{$v6}'></script>
   <script src='src/app.js?{$v6}'></script>
 </head>
+
 <body style='margin: 0'>
   <div class="scrollable">
+    <div id="blurOverlay"></div>
     <div id="world" class='world'></div>
   </div>
-  <div id="blurOverlay"></div>
   <div id='overlay'></div>
 
   <div id='msg1' class="msg"></div>
   <div id='msg2' class="msg"></div>
   <div id='msg3' class="msg"></div>
+  <svg width="0" height="0">
+    <filter id="noise-filter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
+    </filter>
+  </svg>
+
 </body>
 
 </html>
