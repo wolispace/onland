@@ -11,6 +11,8 @@ class Overlays {
    * Update the blur overlay relative to the player and the top and bottom of the world
    */
   updateBlurOverlay() {
+    if (!settings.depthOfField) return;
+
     // playerY should be normalized (0 to 1, where 0 is top of screen, 1 is bottom)
     const maxBlur = this.maxBlur;
 
@@ -75,6 +77,7 @@ class Overlays {
    * @param {number} playerY 
    */
   updateForPlayerPosition(playerY) {
+    if (!settings.depthOfField) return;
     this.updateBlurEffect(playerY);
     const screenHeight = window.innerHeight;
     const worldHeight = settings[mode].worldSize.h;
@@ -99,9 +102,7 @@ class Overlays {
   updateBlurEffect(playerY) {
     const maxBlur = 10; // The maximum blur amount allowed
     const blurDistance = 100; // divide the ditance by this to calculate a blur between 0 and 10
-
     const onScreen = app.gameLists.get(settings.SURFACE); // get current list of items
-    console.log(onScreen);
     if (!onScreen) return;
 
     for (const boneId in onScreen.list) {
@@ -115,7 +116,6 @@ class Overlays {
       const distance = Math.abs(playerY - bones.y);
       const blurAmount = Math.min(distance / blurDistance, maxBlur); // Adjust the divisor and max blur as needed
       firstChild.style.filter = `blur(${blurAmount}px)`;
-      console.log(`#${bones.id}`, distance, blurAmount);
     };
   }
 

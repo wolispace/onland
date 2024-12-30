@@ -1,7 +1,2 @@
-app.defaultData = {
-  "surface": [
-    "g|river|||1250|250",
-  ],
-  "underground": [""],
-
-}
+app.defaultData = '';
+app.backgroundColor = { r: 99, g: 149, b: 125 }; // seagreen

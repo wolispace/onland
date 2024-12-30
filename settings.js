@@ -1,8 +1,8 @@
 const settings = {
   test: {
-    suburbSize: 500, // need a fixed suburb size as it will match data loaded from disk
-    landSize: 500, // how big each land (logically grouped items saved to disk) is 
-    worldSize: { w: 1000, h: 1000 },
+    suburbSize: 1000, // need a fixed suburb size as it will match data loaded from disk
+    landSize: 1000, // how big each land (logically grouped items saved to disk) is 
+    worldSize: { w: 3000, h: 3000 },
     start: { x: 100, y: 100 },
     itemQty: 10,
     lands: 'test',
@@ -33,6 +33,7 @@ const settings = {
   randomItems: true, // redundant now as we load from files a known set of items
   showTouchPoint: true, // show a circle on the screen where the mouse clicks
   pickupItems: false, // auto pick up each item we collide with
+  depthOfField: true, // turn off the blur effect
   
 }
 

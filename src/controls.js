@@ -10,14 +10,35 @@ const controls = {
     ld: { x: 0, y: 60, keys: ['left', 'down'] },
     ru: { x: 60, y: 0, keys: ['right', 'up'] },
     rd: { x: 60, y: 60, keys: ['right', 'down'] },
-    inv: {x: 100, y:60, keys: ['inv'], onClick: () => {
-      app.inventory.show();
-    } },
-    use: {x: 130, y:60, keys: ['use'], onClick: () => {
-      app.inventory.use();
-    } }
+    inv: {
+      x: 100, y: 60, keys: ['inv'], onClick: () => {
+        app.inventory.show();
+      }
+    },
+    use: {
+      x: 130, y: 60, keys: ['use'], onClick: () => {
+        app.inventory.use();
+      }
+    },
+    dof: {
+      x: 100, y: 30, keys: ['dof'], onClick: () => {
+        // toggle depth of field
+        const items = document.querySelectorAll('.item');
+        items.forEach(item => {
+          const firstChild = item.lastElementChild;
+          if (firstChild) {
+
+          }
+          firstChild.style.filter = 'none';
+        });
+        settings.depthOfField = !settings.depthOfField;
+        app.overlays.updateForPlayerPosition(app.me.y);
+        app.overlays.updateBlurOverlay();
+      }
+    }
+
   },
-  
+
 
   setup: function () {
     // add the holder of the buttons
@@ -54,7 +75,7 @@ const controls = {
       // select new button
       const buttonInfo = controls.buttonList[buttonName];
       if (buttonInfo.onClick) return;
-      
+
       controls.lastButton = buttonName;
       app.input.keys.addAll(buttonInfo.keys);
       app.input.active = true;

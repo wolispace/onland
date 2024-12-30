@@ -108,7 +108,7 @@ class World extends Drawable {
     app.scrollable.div.scrollTop = 0;
   }
 
-  updateBackgroundColor() {
+  updateBackgroundColor_OLD() {
 
     // app.me.postcode = centre of grid
     // calc kings square including -1, -1
@@ -187,6 +187,64 @@ class World extends Drawable {
     // Set the new background color
     this.div.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
   }
+
+  updateBackgroundColor() {
+
+    if (!app.backgroundColours) return;
+
+    const cellSize = app.suburbSize;
+    const halfCellSize = cellSize / 2;
+    const playPos = { x: app.me.x, y: app.me.y };
+
+    // Calculate the player's current cell
+    const currentCell = {
+      x: Math.floor(playPos.x / cellSize),
+      y: Math.floor(playPos.y / cellSize)
+    };
+
+    // Calculate the player's position within the current cell
+    const playerXInCell = (playPos.x % cellSize) - halfCellSize;
+    const playerYInCell = (playPos.y % cellSize) - halfCellSize;
+
+    // Calculate progress (0-1) for both x and y axes
+    const xProgress = (playerXInCell + halfCellSize) / cellSize;
+    const yProgress = (playerYInCell + halfCellSize) / cellSize;
+
+    // Helper function to get color from app.backgroundColours
+    const getColor = (x, y) => {
+      const key = `${x}_${y}`;
+      return app.backgroundColours[key] || { r: 0, g: 0, b: 0 }; // Default to black if not found
+    };
+
+    // Get the colors of the current cell and adjacent cells
+    const startColor = getColor(currentCell.x, currentCell.y);
+    const horizontalColor = getColor(currentCell.x + 1, currentCell.y);
+    const verticalColor = getColor(currentCell.x, currentCell.y + 1);
+    const diagonalColor = getColor(currentCell.x + 1, currentCell.y + 1);
+
+    console.log({ startColor, horizontalColor, verticalColor, diagonalColor });
+    // Interpolate between all four colors
+    // First, interpolate horizontally
+    const topRowColor = {
+      r: startColor.r + (horizontalColor.r - startColor.r) * xProgress,
+      g: startColor.g + (horizontalColor.g - startColor.g) * xProgress,
+      b: startColor.b + (horizontalColor.b - startColor.b) * xProgress
+    };
+
+    const bottomRowColor = {
+      r: verticalColor.r + (diagonalColor.r - verticalColor.r) * xProgress,
+      g: verticalColor.g + (diagonalColor.g - verticalColor.g) * xProgress,
+      b: verticalColor.b + (diagonalColor.b - verticalColor.b) * xProgress
+    };
+
+    // Then interpolate vertically between the results
+    const r = Math.round(topRowColor.r + (bottomRowColor.r - topRowColor.r) * yProgress);
+    const g = Math.round(topRowColor.g + (bottomRowColor.g - topRowColor.g) * yProgress);
+    const b = Math.round(topRowColor.b + (bottomRowColor.b - topRowColor.b) * yProgress);
+
+    // Set the new background color
+    this.div.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+}
 
   add(html) {
     app.world.div.insertAdjacentHTML('beforeend', html);

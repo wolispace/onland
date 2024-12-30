@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   app.start();
 });
 
-const mode = 'bones';
+const mode = 'test';
 
 let app = {
 
@@ -31,7 +31,7 @@ let app = {
     let params = assets.make({ type: 'cube', id: '_me', x: settings[mode].start.x, y: settings[mode].start.y, autoShow: true });
     params.parent = 'world';
 
-    app.me = new Mover(params); 
+    app.me = new Mover(params);
 
     // set up the overlay that holds the controls and other overlay things like dialogs
     //app.overlay = { div: document.querySelector(`#overlay`) };
@@ -42,7 +42,7 @@ let app = {
     app.loadData('0_0');
     shiftSuburbsAsync(app.me);
     controls.setup();
-     
+
     setTimeout(() => {
       //this.testDialog();
     }, 500);
@@ -77,7 +77,7 @@ let app = {
     app.store.save(settings.MOVED_ITEMS, movedItems);
 
     //app.gameLists.decode(`${settings.SURFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
-    
+
     //app.gameLists.allocate();
     //app.gameLists.render(settings.SURFACE);
   },
@@ -126,13 +126,13 @@ let app = {
     const layer = settings.SURFACE;
     const surrounds = app.world.layers.lands.kingsSquare(landKey);
     const filePromises = [];
-    
-    surrounds.list.forEach((land => {  
+
+    surrounds.list.forEach((land => {
       const filePromise = loadScript(`lands/${settings[mode].lands}_${land}.js`)
         .then(() => {
           // File loaded successfully, you can now use its functions/variables
-          if (app.defaultData) {        
-            if (typeof(app.defaultData) == "string") {
+          if (app.defaultData) {
+            if (typeof (app.defaultData) == "string") {
               app.gameLists.decode(app.defaultData, settings.DEFAULT);
             } else {
               // REDUNDANT - new data file format combines all laters in an encoded string
@@ -141,17 +141,17 @@ let app = {
           }
           // if no background colour defined the default to sea green
           if (!app.backgroundColor) {
-              app.backgroundColor = { r: 99, g: 149, b: 125 }; // seagreen
+            app.backgroundColor = { r: 99, g: 149, b: 125 }; // seagreen
           }
           app.backgroundColors[land] = app.backgroundColor;
         })
         .catch((error) => {
           console.error('Error loading script:', error);
         });
-        filePromises.push(filePromise);
-      }));
-      
-      Promise.all(filePromises)
+      filePromises.push(filePromise);
+    }));
+
+    Promise.all(filePromises)
       .then(() => {
         // All files have been read from disk
         // Handle the data as a whole here
@@ -159,7 +159,7 @@ let app = {
       })
       .catch((error) => {
         console.error('Error loading scripts:', error);
-    });
+      });
   },
 };
 

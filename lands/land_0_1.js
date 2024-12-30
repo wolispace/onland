@@ -1,7 +1,2 @@
-app.defaultData = {
-  "surface": [
-    "s|diamond|||200|1200",
-  ],
-  "underground": [""],
-
-}
+app.defaultData = '';
+app.backgroundColor = { r: 0, g: 0, b: 255 }; // blue

@@ -371,7 +371,13 @@ const assets = {
         w: 50,
         h: 50,
         content: `Use`,
-      }
+      },
+      dof: {
+        name: 'dof',
+        w: 50,
+        h: 50,
+        content: `DOF`,
+      },
     }
   }
 
