@@ -1,5 +1,7 @@
 class Overlays {
   normalizedY = 0.5;
+  lastUpdateTime = 0; // timer used for the DOF delay
+  blurDelay = 500; // ms to wait between running the DOF blur effect
 
   constructor() {
     this.overlay = { div: document.querySelector(`#overlay`) };
@@ -100,6 +102,10 @@ class Overlays {
 
   // Function to calculate the distance and apply blur
   updateBlurEffect(playerY) {
+    const currentTime = Date.now();
+    if (currentTime - this.lastUpdateTime < this.blurDelay) return;
+    this.lastUpdateTime = currentTime;
+
     const maxBlur = 10; // The maximum blur amount allowed
     const blurDistance = 100; // divide the ditance by this to calculate a blur between 0 and 10
     const onScreen = app.gameLists.get(settings.SURFACE); // get current list of items
