@@ -31,6 +31,26 @@ class BonesList {
     }
   }
   
+  /**
+   * Return a unique list where the type and variants are unique and the quantity is the sum of all the quantities
+   */
+  compact() {
+    //const compactedList = new BonesList(this.id);
+    const uniqueList = {};
+    for (const boneId in this.list) {
+      const bone = this.list[boneId];
+      const key = `${bone.type}_${bone.variant}`;
+      if (uniqueList[key]) {
+        uniqueList[key].qty += bone.qty;
+        console.log(`adding ${bone.qty} to ${uniqueList[key].qty} for ${key}`);
+      } else {
+        uniqueList[key] = bone;
+      }
+    }
+    console.log('uniqueList', uniqueList);
+    return uniqueList
+  }
+
   encode() {
     let encodedString = this.id;
     let delim = '';

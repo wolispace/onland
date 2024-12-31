@@ -1,6 +1,7 @@
 // an inventory is a uniqueSet that holds Items and ve output as html
 
 class Inventory extends UniqueSet {
+  
   constructor(params) {
     super(params);
   }
@@ -21,7 +22,8 @@ class Inventory extends UniqueSet {
     const params = {
       x: parseInt(app.me.x + offset.x),
       y: parseInt(app.me.y + offset.y),
-      type: 'rock',
+      type: 'tree',
+      variant: '001a',
       parent: 'world',
     };
     const newItem = new Bones(params);
@@ -47,11 +49,27 @@ class Inventory extends UniqueSet {
   // - perry mason
   // - charlie chaplin
 
+  /**
+   * 
+   * @returns {string} the html for the inventory
+   */
   html() {
+    let html = '';
+
+    html += this.heldItems();
+
+    return html;
+  }
+
+  /**
+   * 
+   * @returns {string} the html for the items in the inventory
+   */
+  heldItems() {
     let html = '';
     const bonesList = app.gameLists[settings.MOVED_ITEMS].get(settings.INVENTORY);
     if (!bonesList) return 'Nothing in your inventory';
-    for (const bones of Object.values(bonesList.list)) {
+    for (const bones of Object.values(bonesList.compact())) {
       const itemInfo = assets.make(bones);
       itemInfo.style = ' '; // override default svg style
       itemInfo.html = assets.buildInvHtml(itemInfo);

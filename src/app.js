@@ -72,7 +72,7 @@ let app = {
   },
 
   doTest() {
-    // write some test data into the store..
+    // write some test data into the store (resets store for testing)..
     const movedItems = `sX,,tree,,,250,80;Y,,tree,,,350,80 iJ,,river,,,0,0`;
     app.store.save(settings.MOVED_ITEMS, movedItems);
 

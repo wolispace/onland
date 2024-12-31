@@ -23,6 +23,7 @@ body {
   width: 500px;
   height: 500px;
 }
+
 .world::before { 
   content: ''; 
   position: absolute; 
@@ -30,9 +31,7 @@ body {
   width: 100%; 
   height: 100%;
   filter: url(#noise-filter); 
-  bXackground-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEuNSA4LjUgTDE1IDE1IE0xNSA4LjUgTDEuNSAxNSBNMy41IDExIEwxMiAxNiIgIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIuNSIvPjwvc3ZnPg==');
 }
-
 
 .item {
   position: absolute;
@@ -152,6 +151,14 @@ body {
   height: 100%;
   object-fit: contain;
   /* Cover the entire area, maintaining aspect ratio */
+}
+
+.qty {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-weight: bold;
+  color: black;
 }
 
 #touchId {

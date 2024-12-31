@@ -77,7 +77,18 @@ const assets = {
    * @returns 
    */
   buildInvHtml(params) {
-    return utils.replaceParams(params.content, params);
+    let html = utils.replaceParams(params.content, params);
+    html += assets.buildQty(params);
+    return html;
+  },
+
+  /**
+   * 
+   * @param {object} params with a .qty 
+   * @returns {string} the html for showing a qty for a button
+   */
+  buildQty(params) {
+    return `<div class="qty">${params.qty}</div>`;
   },
 
   buildShadows(params) {
