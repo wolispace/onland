@@ -33,7 +33,6 @@ class Input {
         this.keys.add(keyCode);
         this.active = true;
       } else if (event.code == 'Space') {
-        console.log('placing a rock');
         app.inventory.use();
       } else if (event.code == 'Enter') {
         console.log('confirm dialog');

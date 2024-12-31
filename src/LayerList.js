@@ -55,6 +55,17 @@ class LayerList {
     }
   }
 
+  clean(movedLayerList) {
+    for (const movedListId in movedLayerList.list) {
+      const movedList = movedLayerList.list[movedListId];
+      for (const bonesId in movedList.list) {
+        for (const bonesListId in this.list) {
+          this.removeBones(bonesListId, bonesId);
+        }
+      }
+    }
+  }
+
   /**
    * Encodes the current list of layers and their BonesLists
    * @returns {string} the coded version of these layers and their boneLists
@@ -102,7 +113,7 @@ class LayerList {
   render(layerId) {
     const bonesList = this.list[layerId];
     for (const boneId in bonesList.list) {
-      
+
       // dont put the item on the screen if its already there
       const onScreen = document.querySelector(`#${boneId}`);
       if (onScreen) continue;
@@ -130,6 +141,6 @@ class LayerList {
       const bonesList = layerList.list[layerId];
       this.add(bonesList);
     }
-    return this; 
+    return this;
   }
 };

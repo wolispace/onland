@@ -42,7 +42,6 @@ class BonesList {
       const key = `${bone.type}_${bone.variant}`;
       if (uniqueList[key]) {
         uniqueList[key].qty += bone.qty;
-        console.log(`adding ${bone.qty} to ${uniqueList[key].qty} for ${key}`);
       } else {
         uniqueList[key] = bone;
       }

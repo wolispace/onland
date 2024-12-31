@@ -55,7 +55,15 @@ class GameLists {
   } 
 
   allocate() {
+    this.clean();
     this.default.allocate(); 
     this.moved.allocate();
+  }
+
+  /**
+   * remove everything from default list that is in moved list
+   */
+  clean() {
+    this.default.clean(this.moved);
   }
 }
