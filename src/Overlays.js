@@ -108,6 +108,7 @@ class Overlays {
 
     const maxBlur = 10; // The maximum blur amount allowed
     const blurDistance = 100; // divide the ditance by this to calculate a blur between 0 and 10
+    const maxScaleChange = 0.1; // Maximum scale change (10%)
     const onScreen = app.gameLists.get(settings.SURFACE); // get current list of items
     if (!onScreen) return;
 
@@ -122,6 +123,17 @@ class Overlays {
       const distance = Math.abs(playerY - bones.y);
       const blurAmount = Math.min(distance / blurDistance, maxBlur); // Adjust the divisor and max blur as needed
       firstChild.style.filter = `blur(${blurAmount}px)`;
+
+      // if the firstChild's y < players y then make it smaller, else make it bigger
+      let scaleFactor;
+      if (bones.y < playerY) {
+        scaleFactor = 1 - (maxScaleChange * (distance / blurDistance)); // Calculate scale factor for shrinking
+        scaleFactor = Math.max(1 - maxScaleChange, scaleFactor); // Ensure scale factor is within the limit
+      } else {
+        scaleFactor = 1 + (maxScaleChange * (distance / blurDistance)); // Calculate scale factor for growing
+        scaleFactor = Math.min(1 + maxScaleChange, scaleFactor); // Ensure scale factor is within the limit
+      }
+      firstChild.style.transform = `scale(${scaleFactor})`; // Apply scale factor
     };
   }
 

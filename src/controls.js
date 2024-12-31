@@ -35,7 +35,13 @@ const controls = {
         app.overlays.updateForPlayerPosition(app.me.y);
         app.overlays.updateBlurOverlay();
       }
-    }
+    },
+    pick: {
+      x: 130, y: 30, keys: ['pick'], onClick: () => {
+        // toggle pickup
+        settings.pickupItems = !settings.pickupItems;
+      }
+    },
 
   },
 

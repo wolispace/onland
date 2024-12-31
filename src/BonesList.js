@@ -47,7 +47,7 @@ class BonesList {
         uniqueList[key] = bone;
       }
     }
-    console.log('uniqueList', uniqueList);
+
     return uniqueList
   }
 

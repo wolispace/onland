@@ -389,6 +389,12 @@ const assets = {
         h: 50,
         content: `DOF`,
       },
+      pick: {
+        name: 'dof',
+        w: 50,
+        h: 50,
+        content: `Pickup`,
+      },
     }
   }
 

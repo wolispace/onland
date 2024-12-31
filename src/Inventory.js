@@ -16,8 +16,8 @@ class Inventory extends UniqueSet {
   // place an item ad the users current x/y
   use() {
     const offset = {
-      x: -15,
-      y: -10,
+      x: -10,
+      y: -20,
     };
     const params = {
       x: parseInt(app.me.x + offset.x),
