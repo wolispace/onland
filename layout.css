@@ -20,8 +20,10 @@ body {
 
 #world {
   position: absolute;
-  width: 500px;
-  height: 500px;
+  width: 2000px;
+  height: 2000px;
+  /* transform: perspective(6000px) rotateX(45deg); 
+  transform-origin: top; */
 }
 
 .world::before { 
