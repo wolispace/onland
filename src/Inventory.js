@@ -20,6 +20,7 @@ class Inventory extends UniqueSet {
       y: -20,
     };
     const params = {
+      id: app.uniqueId.next(),
       x: parseInt(app.me.x + offset.x),
       y: parseInt(app.me.y + offset.y),
       type: 'tree',

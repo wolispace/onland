@@ -105,6 +105,7 @@ class LayerList {
     // loops through all visual layers and adds them into spacial grids
     for (const layerId of LayerList.VISIBLE) {
       const bonesList = this.list[layerId];
+      if (!bonesList) continue;
       bonesList.allocate();
     }
     app.imageCache.load();
@@ -131,6 +132,7 @@ class LayerList {
   prune(surrounds) {
     for (const layerId of LayerList.VISIBLE) {
       const bonesList = this.list[layerId];
+      if (!bonesList) continue;
       bonesList.prune(surrounds);
     }
   }
@@ -139,6 +141,7 @@ class LayerList {
     if (!(layerList instanceof LayerList)) return this;  // Fixed parentheses
     for (const layerId in layerList.list) {
       const bonesList = layerList.list[layerId];
+      if (!bonesList) continue;
       this.add(bonesList);
     }
     return this;

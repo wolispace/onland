@@ -74,8 +74,12 @@ let app = {
   doTest() {
     // write some test data into the store (resets store for testing)..
     const movedItems = `sX,,tree,,,250,80;Y,,tree,,,350,80 iJ,,river,,,0,0`;
-  // app.store.save(settings.MOVED_ITEMS, movedItems);
-
+    // if we already have some moved data stored then dont reset it
+    const saved = app.store.load(settings.MOVED_ITEMS);
+    if (!saved) {
+      app.store.save(settings.MOVED_ITEMS, movedItems);
+    }
+    //
     //app.gameLists.decode(`${settings.SURFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
 
     //app.gameLists.allocate();

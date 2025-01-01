@@ -8,8 +8,8 @@ let app = {
   start() {
     app.setup();
     //app.runBonesTests();
-    app.runLocationTests();
-    //app.runStorageTests();
+    //app.runLocationTests();
+    app.runStorageTests();
   },
 
   setup() {
@@ -133,7 +133,7 @@ let app = {
     expected = { list: ["0_0", "1_0", "0_1", "1_1"] };
     app.compare('kingsSquare', expected, app.testGrid.kingsSquare(key));
 
-    app.testGrid.grid = { '0_0': ['a', 'b', 'c'], '0_1': ['d', 'a', 'c'] };
+    app.testGrid.grid = { '0_0': new UniqueSet(['a', 'b', 'c']), '0_1': new UniqueSet(['d', 'a', 'c']) };
     expected = { "0_0": ["b", "c"], "0_1": ["d", "c"] };
     app.testGrid.removeById("a");
     app.compare('removeById', expected, app.testGrid.grid);
@@ -174,12 +174,12 @@ let app = {
   // 51 = 'Z', 3275 = 'ZZ', 100,000,000 = 'fUJIn' 1B = 'aeP2Pp'
 
   runStorageTests() {
-    for (let i = 0; i < 100000; i++) {
+    for (let i = 0; i < 1000; i++) {
       app.uniqueId.next();
 
-      //console.log(app.uniqueId.lastId, i);
+      console.log(app.uniqueId.get(), i);
     }
-    console.log(app.uniqueId.lastId);
+    console.log(app.uniqueId.get());
 
   },
 

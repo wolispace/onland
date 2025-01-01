@@ -1,5 +1,5 @@
 class UniqueId {
-  static reel = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  static reel = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
   constructor(lastId) {
     this.lastId = lastId || '9'; // '9' is the first key in our unique keys so we start at 'a'
@@ -10,16 +10,17 @@ class UniqueId {
    * @param {string} id sets the last ID to this one so the next call to .next() increments and returns the next  
    */
   set(id) {
-    if (id > this.lastId) {
+    if (id.length > this.lastId.length || (id.length === this.lastId.length && id.localeCompare(this.lastId) > 0)) {
       this.lastId = id;
     }
+    console.log('set(id)', id, 'last is:', this.lastId);
   }
 
   /**
    * returns the current last id defined.
    */
   get() {
-    this.lastId;
+    return this.lastId;
   }
   
   /**
@@ -48,7 +49,7 @@ class UniqueId {
   
     while (index >= 0) {
       const currentChar = id[index];
-      if (currentChar === 'Z') {
+      if (currentChar === 'z') {
         id = id.slice(0, index) + UniqueId.reel[0] + id.slice(index + 1);
         index--;
       } else {
@@ -62,7 +63,7 @@ class UniqueId {
       id = 'a' + id;
     }
   
-    this.lastId = id;
+    this.set(id);
     return id;
   }
   
