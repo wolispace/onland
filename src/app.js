@@ -36,7 +36,12 @@ let app = {
     // set up the overlay that holds the controls and other overlay things like dialogs
     //app.overlay = { div: document.querySelector(`#overlay`) };
 
-    this.doTest();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('reset')) {
+      this.doTest();
+    }
+
     //app.world.populate();
 
     app.loadData('0_0');
@@ -73,13 +78,9 @@ let app = {
 
   doTest() {
     // write some test data into the store (resets store for testing)..
-    const movedItems = `sX,,tree,,,250,80;Y,,tree,,,350,80 iJ,,river,,,0,0`;
-    // if we already have some moved data stored then dont reset it
-    const saved = app.store.load(settings.MOVED_ITEMS);
-    if (!saved) {
+    const movedItems = `sX,,tree,001a,,250,80;Y,,tree,001a,,350,80 iJ,,rock,001a,,0,0`;
       app.store.save(settings.MOVED_ITEMS, movedItems);
-    }
-    //
+
     //app.gameLists.decode(`${settings.SURFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
 
     //app.gameLists.allocate();
