@@ -172,6 +172,15 @@ const assets = {
            <path d="m62.977 32.748 7.2423 13.54 21.727-8.9742z" style="fill:#fff;paint-order:stroke fill markers;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.3;stroke:#000"/>
            <path d="m2.6765 38.258 12.123-0.62977 3.1488 22.042-12.753-11.808z" style="fill-opacity:.70466;fill:#2e2e2e;paint-order:stroke fill markers;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.3;stroke:#000"/>
            </svg>`,
+      },
+      '001a': {
+        top: -20,
+        left: -5,
+        w: 50,
+        onCollide: 'stop',
+        s: [new Collidable({ x: 0, y: 0, w: 40, h: 10 })], // a list of collision boxes
+        g: [], // no need for ghosting small slow objects
+        content: `<img src="img/rock_001a.png" %style%>`,
       }
     },
 
