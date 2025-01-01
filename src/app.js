@@ -138,9 +138,6 @@ let app = {
           if (app.defaultData) {
             if (typeof (app.defaultData) == "string") {
               app.gameLists.decode(app.defaultData, settings.DEFAULT);
-            } else {
-              // REDUNDANT - new data file format combines all laters in an encoded string
-              app.store.addToTempList(app.defaultData[layer].join('^'));
             }
           }
           // if no background colour defined the default to sea green
