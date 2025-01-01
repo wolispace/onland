@@ -63,7 +63,8 @@ class UniqueId {
       id = 'a' + id;
     }
   
-    this.set(id);
+    this.lastId = id;
+    console.log('last is:', this.lastId);
     return id;
   }
   

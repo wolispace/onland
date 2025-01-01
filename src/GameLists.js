@@ -50,7 +50,7 @@ class GameLists {
     return this[set].encode();
   }
 
-  prune(surrounds, set = settings.MOVED_ITEMS) {
+  prune(surrounds, set = settings.DEFAULT) {
     return this[set].prune(surrounds);
   } 
 
