@@ -13,7 +13,7 @@ class Overlays {
    * Update the blur overlay relative to the player and the top and bottom of the world
    */
   updateBlurOverlay() {
-    if (!settings.depthOfField) return;
+    if (!settings.dofBlur) return;
 
     // playerY should be normalized (0 to 1, where 0 is top of screen, 1 is bottom)
     const maxBlur = this.maxBlur;
@@ -79,7 +79,7 @@ class Overlays {
    * @param {number} playerY 
    */
   updateForPlayerPosition(playerY) {
-    if (!settings.depthOfField) return;
+    if (!settings.dofBlur) return;
     this.updateBlurEffect(playerY);
     const screenHeight = window.innerHeight;
     const worldHeight = settings[mode].worldSize.h;
@@ -124,16 +124,19 @@ class Overlays {
       const blurAmount = Math.min(distance / blurDistance, maxBlur); // Adjust the divisor and max blur as needed
       firstChild.style.filter = `blur(${blurAmount}px)`;
 
-      // if the firstChild's y < players y then make it smaller, else make it bigger
-      let scaleFactor;
-      if (bones.y < playerY) {
-        scaleFactor = 1 - (maxScaleChange * (distance / blurDistance)); // Calculate scale factor for shrinking
-        scaleFactor = Math.max(1 - maxScaleChange, scaleFactor); // Ensure scale factor is within the limit
-      } else {
-        scaleFactor = 1 + (maxScaleChange * (distance / blurDistance)); // Calculate scale factor for growing
-        scaleFactor = Math.min(1 + maxScaleChange, scaleFactor); // Ensure scale factor is within the limit
+      // EXPERIMENTAL scale items based on Y position
+      if (settings.dofScale) {
+        // if the firstChild's y < players y then make it smaller, else make it bigger
+        let scaleFactor;
+        if (bones.y < playerY) {
+          scaleFactor = 1 - (maxScaleChange * (distance / blurDistance)); // Calculate scale factor for shrinking
+          scaleFactor = Math.max(1 - maxScaleChange, scaleFactor); // Ensure scale factor is within the limit
+        } else {
+          scaleFactor = 1 + (maxScaleChange * (distance / blurDistance)); // Calculate scale factor for growing
+          scaleFactor = Math.min(1 + maxScaleChange, scaleFactor); // Ensure scale factor is within the limit
+        }
+        firstChild.style.transform = `scale(${scaleFactor})`; // Apply scale factor
       }
-      firstChild.style.transform = `scale(${scaleFactor})`; // Apply scale factor
     };
   }
 

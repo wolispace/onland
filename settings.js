@@ -33,8 +33,8 @@ const settings = {
   randomItems: true, // redundant now as we load from files a known set of items
   showTouchPoint: true, // show a circle on the screen where the mouse clicks
   pickupItems: false, // auto pick up each item we collide with
-  depthOfField: true, // turn off the blur effect
-  
+  dofBlur: true, // turn off the blur effect
+  dofScale: false, // make objects larger when closer to the bottom of the screen - EXPERIMENTAL!
 }
 
 

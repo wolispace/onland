@@ -13,7 +13,6 @@ class UniqueId {
     if (id.length > this.lastId.length || (id.length === this.lastId.length && id.localeCompare(this.lastId) > 0)) {
       this.lastId = id;
     }
-    console.log('set(id)', id, 'last is:', this.lastId);
   }
 
   /**

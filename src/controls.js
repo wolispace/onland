@@ -31,7 +31,7 @@ const controls = {
           }
           firstChild.style.filter = 'none';
         });
-        settings.depthOfField = !settings.depthOfField;
+        settings.dofBlur = !settings.dofBlur;
         app.overlays.updateForPlayerPosition(app.me.y);
         app.overlays.updateBlurOverlay();
       }
