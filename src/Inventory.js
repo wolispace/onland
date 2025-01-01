@@ -34,6 +34,7 @@ class Inventory extends UniqueSet {
     thing.show();
     thing.position();
     app.store.save(settings.MOVED_ITEMS, app.gameLists.encode(settings.MOVED_ITEMS));
+    app.overlays.updateBlurEffect(app.me.y)
   }
 
   show() {
