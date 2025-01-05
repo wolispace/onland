@@ -18,7 +18,6 @@ let app = {
     app.uniqueId = new UniqueId();
     app.events = new Events();
     app.store = new Store();
-    app.items = new Items();
     app.inventory = new Inventory();
     app.overlays = new Overlays();
     app.gameLists = new GameLists();
@@ -191,57 +190,10 @@ async function shiftSuburbsAsync(mover) {
       app.loadData(currentLand);
       mover.land = currentLand;
     }
-    await hideSuburbsAsync(mover);
-    await showSuburbsAsync(postcode, mover.collisionBox);
     mover.postcode = postcode;
   }
 }
 
-async function showSuburbsAsync(postcode, collisionBox) {
-
-  const currentSuburbs = app.world.layers.suburbs.kingsSquare(postcode);
-  let newSuburbs = null;
-  // compare current suburbs with last show and only add the missing ones
-  if (app.lastShown) {
-    newSuburbs = app.lastShown.notIn(currentSuburbs.list);
-  } else {
-    newSuburbs = currentSuburbs.list;
-  }
-
-  let inSuburbs = app.world.layers.suburbs.query(newSuburbs);
-  if (inSuburbs && inSuburbs.list && inSuburbs.list.length > 0) {
-    for (const itemId of inSuburbs.list) {
-      let item = app.items.get(itemId);
-      if (item && item.layer) {
-        item.show();
-      }
-    }
-  }
-  console.log(newSuburbs, currentSuburbs);
-  app.lastShown = currentSuburbs;
-}
-
-async function hideSuburbsAsync(mover) {
-  mover.updateCollisionBox();
-  let postcode = app.world.layers.suburbs.makeKey(mover.collisionBox);
-  let suburbs = app.world.layers.suburbs.kingsSquare(postcode);
-  if (app.lastShown && app.lastShown.list && app.lastShown.list.length > 0) {
-    let toHide = app.lastShown.outside(suburbs.list);
-    if (toHide && toHide.length > 0) {
-      for (const postcode of toHide) {
-        const oneSuburb = app.world.layers.suburbs.grid[postcode];
-        if (oneSuburb && oneSuburb.list) {
-          for (const itemId of oneSuburb.list) {
-            let item = app.items.get(itemId);
-            if (item) {
-              item.hide();
-            }
-          }
-        }
-      }
-    }
-  }
-}
 
 /**
  * Loads the js file ie one that has a js data object with more world data

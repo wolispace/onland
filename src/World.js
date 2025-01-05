@@ -113,7 +113,7 @@ class World extends Drawable {
     // app.me.postcode = centre of grid
     // calc kings square including -1, -1
     // read colours from app.backgroundColours to each cell
-    
+
 
     //app.backgroundColors = {'0_0': { r: 99, g: 149, b: 125 }};
 
@@ -122,31 +122,31 @@ class World extends Drawable {
       ['seagreen', 'white', 'seagreen'],
       ['yellow', 'maroon', 'wheat']
     ];
-  
+
     const cellSize = app.suburbSize;
     const halfCellSize = cellSize / 2;
     const playPos = { x: app.me.x, y: app.me.y };
-  
+
     // Calculate the player's current cell
     const currentCell = {
       x: Math.floor(playPos.x / cellSize),
       y: Math.floor(playPos.y / cellSize)
     };
-  
+
     // Calculate the player's position within the current cell
     const playerXInCell = (playPos.x % cellSize) - halfCellSize;
     const playerYInCell = (playPos.y % cellSize) - halfCellSize;
-  
+
     // Calculate progress (0-1) for both x and y axes
     const xProgress = (playerXInCell + halfCellSize) / cellSize;
     const yProgress = (playerYInCell + halfCellSize) / cellSize;
-  
+
     // Get the colors of the current cell and adjacent cells
     const startColor = colourGrid[currentCell.y] && colourGrid[currentCell.y][currentCell.x] ? colourGrid[currentCell.y][currentCell.x] : 'black';
     const horizontalColor = colourGrid[currentCell.y] && colourGrid[currentCell.y][currentCell.x + 1] ? colourGrid[currentCell.y][currentCell.x + 1] : 'black';
     const verticalColor = colourGrid[currentCell.y + 1] && colourGrid[currentCell.y + 1][currentCell.x] ? colourGrid[currentCell.y + 1][currentCell.x] : 'black';
     const diagonalColor = colourGrid[currentCell.y + 1] && colourGrid[currentCell.y + 1][currentCell.x + 1] ? colourGrid[currentCell.y + 1][currentCell.x + 1] : 'black';
-  
+
     // Convert color names to RGB values
     const colorMap = {
       red: { r: 255, g: 0, b: 0 },
@@ -159,12 +159,12 @@ class World extends Drawable {
       white: { r: 255, g: 255, b: 255 },
       black: { r: 0, g: 0, b: 0 }
     };
-  
+
     const startRGB = colorMap[startColor];
     const horizontalRGB = colorMap[horizontalColor];
     const verticalRGB = colorMap[verticalColor];
     const diagonalRGB = colorMap[diagonalColor];
-  
+
     // Interpolate between all four colors
     // First, interpolate horizontally
     const topRowColor = {
@@ -172,18 +172,18 @@ class World extends Drawable {
       g: startRGB.g + (horizontalRGB.g - startRGB.g) * xProgress,
       b: startRGB.b + (horizontalRGB.b - startRGB.b) * xProgress
     };
-  
+
     const bottomRowColor = {
       r: verticalRGB.r + (diagonalRGB.r - verticalRGB.r) * xProgress,
       g: verticalRGB.g + (diagonalRGB.g - verticalRGB.g) * xProgress,
       b: verticalRGB.b + (diagonalRGB.b - verticalRGB.b) * xProgress
     };
-  
+
     // Then interpolate vertically between the results
     const r = Math.round(topRowColor.r + (bottomRowColor.r - topRowColor.r) * yProgress);
     const g = Math.round(topRowColor.g + (bottomRowColor.g - topRowColor.g) * yProgress);
     const b = Math.round(topRowColor.b + (bottomRowColor.b - topRowColor.b) * yProgress);
-  
+
     // Set the new background color
     this.div.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
   }
@@ -244,7 +244,7 @@ class World extends Drawable {
 
     // Set the new background color
     this.div.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-}
+  }
 
   add(html) {
     app.world.div.insertAdjacentHTML('beforeend', html);
@@ -291,175 +291,4 @@ class World extends Drawable {
     app.scrollable.div.scrollLeft = scrollLeft;
     app.scrollable.div.scrollTop = scrollTop;
   }
-
-  // fill the world with items
-  populate() {
-    const stepPos = new Point(144, 133);
-    const lastPos = new Point(200, 200);
-    let itemQty = app.itemQty;
-
-    for (var i = 1; i < itemQty; i++) {
-
-      let x = settings.randomItems ? utils.utils(app.world.w) : lastPos.x;
-      let y = settings.randomItems ? utils.utils(app.world.h) : lastPos.y;
-      let key = app.uniqueId.next();
-
-      let itemType = 'rock';
-      if (utils.utils(20) == 1) {
-        itemType = 'arch';
-      } else {
-        if (utils.utils(2) == 1) {
-          itemType = 'tree';
-        }
-      }
-      let itemParams = { id: key, type: itemType, x: x, y: y, autoShow: true };
-      const itemInfo = assets.make(itemParams);
-      itemInfo.parent = this;
-      const tempItem = new Item(itemInfo);
-      app.items.set(tempItem);
-      // increment pos grid
-      lastPos.x += stepPos.x;
-      if (lastPos.x > this.x) {
-        lastPos.x = stepPos.x;
-        lastPos.y += stepPos.y;
-      }
-    }
-  }
-
-
-  extract() {
-    //loop through all suburbs and build an array of exportable data
-    let exportData = {};
-    for (const [key, items] of Object.entries(app.world.layers.suburbs.grid)) {
-      let suburbContents = [];
-      items.list.forEach(itemId => {
-        const item = app.items.get(itemId);
-        if (item) {
-          suburbContents.push(app.encode(item));
-        }
-      });
-      exportData[key] = suburbContents.join('^');
-
-    }
-    console.log({ exportData });
-  }
-
-
-  /**
-   * build up some item to put on the world. can extract this as encoded data
-   */
-  generateSampleItems() {
-    let index = 1;
-    let data = [];
-
-    let params = {
-      qty: 1,
-      type: 'arch',
-      variant: null,
-      start: new Point(200, 200),
-      step: new Point(0, 100),
-      wobble: new Point(20, 0),
-    }
-    index = this.addItem(index, params, data);
-
-    params = {
-      qty: 2,
-      type: 'rock',
-      variant: null,
-      start: new Point(50, 150),
-      step: new Point(100, 0),
-      wobble: new Point(0, 0),
-    }
-    index = this.addItem(index, params, data);
-
-    params = {
-      qty: 3,
-      type: 'river',
-      variant: null,
-      start: new Point(500, 170),
-      step: new Point(0, 150),
-      wobble: new Point(20, 30),
-    }
-    index = this.addItem(index, params, data);
-
-    params = {
-      qty: 4,
-      type: 'tree',
-      variant: null,
-      start: new Point(750, 150),
-      step: new Point(1, 1),
-      wobble: new Point(700, 200),
-    }
-    index = this.addItem(index, params, data);
-
-    data.forEach(item => {
-      item.autoShow = true;
-      const itemInfo = assets.make(item);
-      itemInfo.parent = this;
-      const tempItem = new Item(itemInfo);
-      app.items.add(tempItem);
-    });
-
-    let encodedData = app.store.encodeData(data);
-    console.log('encodedData', encodedData);
-
-    let decodedData = app.store.decodeData(encodedData);
-    console.log(decodedData);
-  }
-
-  /**
-   * 
-   * @param {*} params 
-   * @returns array of items of a specific type for adding to the world
-   */
-  addItem(index, params, data) {
-    let counter = 1;
-    while (counter <= params.qty) {
-      counter++;
-      // make sure we start from the same point
-      let pos = params.start.copy();
-      let step = params.step.copy();
-
-      const wobble = new Point(
-        utils.halfRnd(params.wobble.x),
-        utils.halfRnd(params.wobble.y)
-      );
-
-      step.multiply(counter);
-      pos.add(step);
-      pos.add(wobble);
-
-      let key = app.uniqueId.next();
-
-      // add into the data array we passed in
-      data.push({ id: key, type: params.type, variant: params.variant, x: pos.x, y: pos.y });
-      index++;
-    }
-    return index;
-  }
-
-  /*
-    addItem(item) {
-      this.items.push(item);
-    }
-  
-    removeItem(item) {
-      const index = this.items.indexOf(item);
-      if (index !== -1) {
-        this.items.splice(index, 1);
-      }
-    }
-  
-    update() {
-      for (const item of this.items) {
-        item.update();
-      }
-    }
-  
-    draw() {
-      for (const item of this.items) {
-        item.draw();
-      }
-    }
-      */
 }

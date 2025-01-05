@@ -21,6 +21,25 @@ class GameLists {
     return newList.get(layer);
   }
 
+  getById(itemId) {
+    const defaultList = this.default || new LayerList();
+    const movedList = this.moved || new LayerList();
+
+    // Create a new copy before merging
+    const newList = new LayerList();
+    newList.merge(defaultList);
+    newList.merge(movedList);
+
+    for (const layerId in newList.list) {
+      const bonesList = newList.list[layerId];
+      for (const boneId in bonesList.list) {
+        if (boneId === itemId) {
+          return bonesList.list[boneId];
+        }
+      }
+    }
+  }
+
   /**
    * Remove from both lists. so moving an item first removes it from default then adds it into the moved list
    * @param {bones} item 

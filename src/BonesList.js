@@ -1,3 +1,11 @@
+/**
+ * A list of bones found in/on this layer.
+ * The surface of the world, undeground, the sky, etc.
+ * Also inventories of players, NPCs and chests etc
+ * Adding soemthing into one BonesList has to remove it from all other BonesLists
+ * Showing the contents of a chest should show the players inbentory BonesList plust the checsts bones list
+ * 
+ */
 class BonesList {
   id = '';
   static DELIM = ';';
@@ -33,6 +41,7 @@ class BonesList {
   
   /**
    * Return a unique list where the type and variants are unique and the quantity is the sum of all the quantities
+   * @returns {Object} a list of bones with unique types and variants - non-destructive purely visual representation of bones
    */
   compact() {
     //const compactedList = new BonesList(this.id);
