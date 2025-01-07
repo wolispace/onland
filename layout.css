@@ -40,6 +40,13 @@ body {
   opacity: 100%;
 }
 
+.log {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  margin: 0.5rem;
+  padding: 2px;
+}
+
 .shadow {
   background: radial-gradient(ellipse at center,
       rgba(0, 0, 0, var(--shadow)) 0%,

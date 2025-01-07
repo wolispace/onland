@@ -35,6 +35,8 @@ const settings = {
   pickupItems: false, // auto pick up each item we collide with
   dofBlur: true, // turn off the blur effect
   dofScale: false, // make objects larger when closer to the bottom of the screen - EXPERIMENTAL!
-}
+};
+
+export default settings;
 
 

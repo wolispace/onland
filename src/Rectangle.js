@@ -1,4 +1,7 @@
-class Rectangle extends Vector {
+
+import Vector from './Vector.js';
+
+export default class Rectangle extends Vector {
   w = 0;
   h = 0;
 
@@ -13,10 +16,10 @@ class Rectangle extends Vector {
   }
 
   /**
-   * 
+   * Getter to return the centre point as a new vector
    * @returns the centre point of the rectangle
    */
-  center() {
+  get center() {
     return new Vector(
       this.w / 2,
       this.h / 2);

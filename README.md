@@ -33,7 +33,7 @@ When a tree is chopped it is removed from
 - the land 
 - the suburb
 - the world html
-- wood is added as a new item into app.items and put in our inventory
+- wood is added as a new item into app.gameLists and put in our inventory
 
 When a rock is moved is is updated in
 - the land 
@@ -52,5 +52,5 @@ one list of all items not in their default place
 
 Current working list of items spatially located in the world at this point in time
 - this is another LayerList object.
-- we flesh out these bones ov objects when we need collision boxes and svg etc.. from assets.js
+- we flesh out these bones of objects when we need collision boxes and svg etc.. from assets.js
 

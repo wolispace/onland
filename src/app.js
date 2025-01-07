@@ -1,218 +1,28 @@
+import Clock from './Clock.js';
+import Asset from './Asset.js';
+import settings from './settings.js';
+import Utils from './Utils.js';
+import Rectangle from './Rectangle.js';
+import SpacialHashGrid from './SpacialHashGrid.js';
+
 // all of the events..
 document.addEventListener("DOMContentLoaded", function () {
-  app.start();
-});
-
-const mode = 'test';
-
-let app = {
-
-  suburbSize: settings[mode].suburbSize, // need a fixed suburb size as it will match data loaded from disk
-  landSize: settings[mode].landSize, // how big each land (logically grouped items saved to disk) is 
-  itemQty: settings[mode].itemQty,
-
-  encodeKeys: ['id', 'type', 'variant', 'layer', 'x', 'y'],
-
-  start() {
-    app.input = new Input();
-    app.uniqueId = new UniqueId();
-    app.events = new Events();
-    app.store = new Store();
-    app.inventory = new Inventory();
-    app.overlays = new Overlays();
-    app.gameLists = new GameLists();
-    app.imageCache = new ImageCache();
-
-    app.scrollable = { div: document.querySelector(".scrollable") };
-    app.world = new World(settings[mode].worldSize);
-    app.world.div = document.querySelector(`#world`);
-
-    let params = assets.make({ type: 'cube', id: '_me', x: settings[mode].start.x, y: settings[mode].start.y, autoShow: true });
-    params.parent = 'world';
-
-    app.me = new Mover(params);
-
-    // set up the overlay that holds the controls and other overlay things like dialogs
-    //app.overlay = { div: document.querySelector(`#overlay`) };
-
-
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('reset')) {
-      this.doTest();
-    }
-
-    //app.world.populate();
-
-    app.loadData('0_0');
-    shiftSuburbsAsync(app.me);
-    controls.setup();
-
-    setTimeout(() => {
-      //this.testDialog();
-    }, 500);
-
-
-    app.gameLoop = new GameLoop(app.update, app.show);
-    app.gameLoop.start();
-    //app.world.layers.suburbs.show();
-  },
-
-
-  /**
-   * Update the position and state of everything in the world
-   * @param {int} deltaTime 
-   */
-  update(deltaTime) {
-    //console.log('deltaTime', deltaTime);
-    app.me.move();
-  },
-
-  /**
-   * Show the world and all of its children
-   */
-  show() {
-    app.me.position();
-    app.me.setPostcode();
-  },
-
-  doTest() {
-    // write some test data into the store (resets store for testing)..
-    const movedItems = `sX,,tree,001a,,250,80;Y,,tree,001a,,350,80 iJ,,rock,001a,,0,0`;
-      app.store.save(settings.MOVED_ITEMS, movedItems);
-
-    //app.gameLists.decode(`${settings.SURFACE}A,,tree,,,350,150;B,,tree,,,200,100 ${settings.INVENTORY}c,,rock,,,;d,,arch,,,`);
-
-    //app.gameLists.allocate();
-    //app.gameLists.render(settings.SURFACE);
-  },
-
-
-
-  endMovement: function () {
-    // do something when we have stopped moving..
-  },
-
-  // given a event, work out the key code and return up, down left right or undefined
-  getDirection: function (code) {
-    let keyCode = code.toLowerCase().replace('arrow', '');
-    return typeof app.directions[keyCode] === 'string' ? app.directions[keyCode] : keyCode;
-  },
-
-  // return true if the key code is a valid direction (otherwise its space, esc, enter etc..)
-  isDirection: function (keyCode) {
-    return typeof app.directions[keyCode] === 'object';
-  },
-
-  // remember to wrap functions in functions before passing them as onEnd
-  animate: (element, type, duration, onEnd) => {
-    if (element && element.style) {
-      element.style.animation = `${type} ${duration}s ease-in-out 0s 1 normal forwards`;
-      element.addEventListener("animationstart", function handler() {
-        this.removeEventListener("animationstart", handler);
-      });
-
-      element.addEventListener("animationend", function handler() {
-        element.style.animation = "";
-        if (typeof onEnd == "function") {
-          onEnd();
-        }
-        this.removeEventListener("animationend", handler);
-      });
-    }
-  },
-
-  /** when we are in a new land, clear previous item info and load the kings square of land data
-   * @params {string} land key eg '0_0' or 4_6' lands are bigger than suburbs
-   */
-  loadData(landKey) {
-    // clear all previous background colours ready to setup a new set of 9 suburbs
-    app.backgroundColors = {};
-    const layer = settings.SURFACE;
-    const surrounds = app.world.layers.lands.kingsSquare(landKey);
-    const filePromises = [];
-
-    surrounds.list.forEach((land => {
-      const filePromise = loadScript(`lands/${settings[mode].lands}_${land}.js`)
-        .then(() => {
-          // File loaded successfully, you can now use its functions/variables
-          if (app.defaultData) {
-            if (typeof (app.defaultData) == "string") {
-              app.gameLists.decode(app.defaultData, settings.DEFAULT);
-            }
-          }
-          // if no background colour defined the default to sea green
-          if (!app.backgroundColor) {
-            app.backgroundColor = { r: 99, g: 149, b: 125 }; // seagreen
-          }
-          app.backgroundColors[land] = app.backgroundColor;
-        })
-        .catch((error) => {
-          console.error('Error loading script:', error);
-        });
-      filePromises.push(filePromise);
-    }));
-
-    Promise.all(filePromises)
-      .then(() => {
-        // All files have been read from disk
-        // Handle the data as a whole here
-        processAllData(surrounds);
-      })
-      .catch((error) => {
-        console.error('Error loading scripts:', error);
-      });
-  },
-};
-
-function processAllData(surrounds) {
-  // now app.gameLists has all default items in basic form (read from js files)
-  // update with all known/moved items from local storage
-  let movedItems = app.store.load(settings.MOVED_ITEMS);
-  app.gameLists.decode(movedItems);
-  // remove all that are not in the current surround lands
-  app.gameLists.prune(surrounds);
-  // allocate them all to layers
-  app.gameLists.allocate();
-  // draw everything on the surface
-  app.gameLists.render(settings.SURFACE);
-  app.overlays.updateForPlayerPosition(app.me.y);
-  app.world.updateBackgroundColor();
-}
-
-async function shiftSuburbsAsync(mover) {
-  mover.updateCollisionBox();
-  let postcode = app.world.layers.suburbs.makeKey(mover.collisionBox);
-  if (mover.postcode !== postcode) {
-    // we have changed suburbs to check if we have also changed lands
-    let currentLand = app.world.layers[settings.LANDS].makeKey(mover.collisionBox);
-    if (mover.land !== currentLand) {
-      // switched lands so load and hide
-      app.loadData(currentLand);
-      mover.land = currentLand;
-    }
-    mover.postcode = postcode;
-  }
-}
-
-
-/**
- * Loads the js file ie one that has a js data object with more world data
- * @param {string} src path to a js file
- * @returns 
- */
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = src;
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
+    app.start();
   });
-}
+  
+  const mode = 'test';
+  
+  const app = {
+    start() {
+      app.clock = new Clock('app');
+      app.asset = new Asset();
+      app.clock.test();
+          const cellSize = new Rectangle({ w: 100, h: 200 });
+          const gridRectangle = new Rectangle({ w: 1000, h: 2000 });
+      app.testGrid = new SpacialHashGrid('test', gridRectangle, cellSize);
+      console.log(Utils.rnd(5));
+    },
+  };
 
-function addToBody(html) {
-  let bodyElement = document.querySelector("body");
-  bodyElement.insertAdjacentHTML('beforeend', html);
-}
-
+  console.log('app:', settings.isDev);
 

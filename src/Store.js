@@ -1,4 +1,4 @@
-class Store {
+export default class Store {
   constructor(type = 'localStorage') {
     this.type = type;
   }
@@ -36,28 +36,6 @@ class Store {
     localStorage.removeItem(key);
     return this;
   }
-
-  encodeData(data) {
-    let encodedData = [];
-    for (const item of data) {
-      encodedData.push(app.encode(item));
-    }
-    return encodedData.join('^');
-  }
-
-  decodeData(encodedString) {
-    if (!encodedString) return [];
-    let decodedData = [];
-    let itemStrings = encodedString.split('^');
-    for (const item of itemStrings) {
-      let decoded = app.decode(item);
-      decodedData.push(decoded);
-    }
-
-    return decodedData;
-
-  }
-
 
 
 }

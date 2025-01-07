@@ -1,78 +1,105 @@
-class Item extends Drawable {
-  qty = 0;
-  layer = settings.SURFACE; // what layer are we currently on
-  autoShow = false;
-  children = [];
+// the bare bones of items id, type, position
+ export default class Item {
+  static DELIM = ','; // how encoded elements of these bones are delimited
+  static ENCODED_KEYS = ['id', 'parent', 'type', 'qty', 'x', 'y'];
+  id = '';
+  parent = '';
+  type = '';
+  qty = 1;
+  x = 0;
+  y = 0;
 
+  // can pass in either an encoded string or an object with matching params
   constructor(params) {
-    super(params);
-    this.id = params.id;
-    this.type = params.type;
-    this.variant = params.variant;
-    this.layer = params.layer ?? settings.SURFACE;
-    this.autoShow = params.autoShow;
-    this.setup();
-  }
-
-  setup() {
-    this.setPostcode();
-    app.world.addToLayers(this);
-    if (this.autoShow) {
-      this.show();
+    // if we initialise with an encodes string, decode it otherwise set the params id = id etc..
+    if (typeof params == 'string') {
+      this.decode(params);
+    } else {
+      for (let key in params) {
+        this[key] = params[key];
+      };
     }
+  }
+  
+  setup(app) {
+    // if no id defined then generate a unique id
+    if (this.id === '') {
+      this.id = app.uniqueId.next;
+    }
+    // record this id as in use
+    app.uniqueId.set(this.id);
+    // prep the image cache as we know we need this image
+    app.imageCache.addInUse(this);
+
   }
 
   /**
-   * Compares suburbs
-   * @returns is the item in view of the player
+   * Returns an encodes string of this bones object
+   * @params {boolean} includePosition should we include the x, y position? Save space when in an inventory
+   * @returns {string} encoded eg 'a,,rock,,,100,200' or `b,,coin,,,55`
    */
-  isVisible() {
-    let isVisible = true;
-    if (this.id !== '_me') {
-      // which suburb will this item be in
-      let currentPostcode = app.world.layers.suburbs.makeKey(app.me);
-      let kingsSquare = app.world.layers.suburbs.kingsSquare(currentPostcode);
-      if (!kingsSquare.has(this.postcode)) {
-        isVisible = false;
-      };
-      //console.log('isVisible', isVisible, currentPostcode, this.postcode, this.id);
+  encode(includePosition = true) {
+    let encoded = [];
+
+    for (const key of Item.ENCODED_KEYS) {
+      let value = this[key];
+      if (value === null || value === undefined
+        || value === 'world' 
+        || (key === 'qty' && value === 1)) {
+        value = '';
+      }
+      if (includePosition) {
+        encoded.push(value);
+      } else {
+        if ('xy'.indexOf(key) < 0) {
+          encoded.push(value);
+        }
+      }
     }
-    return isVisible;
+
+    return encoded.join(Item.DELIM);
   }
 
+  /**
+   * 
+   * @param {string} encodedString 'a,rock,,,100,150'
+   * @returns {object} this {id, type, qty, x, y}
+   */
+  decode(encodedString) {
+    const decodedValues = encodedString.split(Item.DELIM);
 
+    for (let i = 0; i < Item.ENCODED_KEYS.length; i++) {
+      const key = Item.ENCODED_KEYS[i];
+      let value = decodedValues[i];
+      if (value !== '') {
+        // x, y and qty are ints
+        if ('xqty'.indexOf(key) > -1) {
+          this[key] = parseInt(value);
+        } else {
+          this[key] = value;
+        }
+      }
+    }
 
-  // all items can have child items so showing this one also shows all its children, and their children etc..
-  addChild(item) {
-    this.children.add(item);
+    return this;
   }
 
-  removeChild(item) {
-    this.children.take(item);
-  }
+  /**
+   * Place this item into the layers of the world
+   * Since one item may have multiple collision boxes each needs to be added into the correct spacial hash grid
+   * 
+   * @param {object} app 
+   */
+  allocate(app) {
+    // place this in spacial grid cell/s
+    const itemInfo = app.asset.make(this);
+    //app.world.layers[layerId].addAll(itemInfo, itemInfo[layerId]);
+    app.world.layers[settings.SURFACE].addAll(itemInfo, itemInfo[settings.SURFACE]);
+    app.world.layers[settings.GHOSTS].addAll(itemInfo, itemInfo[settings.GHOSTS]);
+    // every visible item 
+    app.world.layers[settings.LANDS].add(this);
+    app.world.layers[settings.SUBURBS].add(this);
 
-  removeChildren() {
-    this.children.clear();
-  }
-
-  remove() {
-    //this.parent.removeChild(this);
-    this.parent.removeFromLayers(this);
-
-    // update moved item as this is now in the inventory
-
-    //this.parent.removeFromLayersById(this.id);
-    this.hide();
-  }
-
-  addClass(className) {
-    if (!this.div) return;
-    this.div.classList.add(className);
-  }
-
-  removeClass(className) {
-    if (!this.div) return;
-    this.div.classList.remove(className);
   }
 
 }

@@ -1,29 +1,25 @@
-class Point {
+export default class Point {
   x = 0;
   y = 0;
- 
+
   constructor(x, y) {
     this.x = x;
     this.y = y;
-  }
-
-  toString() {
-    return JSON.stringify(this);
   }
 
   copy() {
     return new Point(this.x, this.y);
   }
 
-  add(vector) {
-    this.x += vector.x;
-    this.y += vector.y;
+  add(point) {
+    this.x += point.x;
+    this.y += point.y;
     return this;
   }
 
-  take(vector) {
-    this.x -= vector.x;
-    this.y -= vector.y;
+  take(point) {
+    this.x -= point.x;
+    this.y -= point.y;
     return this;
   }
 
@@ -45,7 +41,10 @@ class Point {
     return this;
   }
 
-  isZero() {
+  /**
+   * Getter returns true if both x and y are zero
+   */
+  get isZero() {
     return this.x === 0 && this.y === 0;
   }
 

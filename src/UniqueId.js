@@ -1,4 +1,5 @@
-class UniqueId {
+
+export default class UniqueId {
   static reel = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
   constructor(lastId) {
@@ -16,9 +17,9 @@ class UniqueId {
   }
 
   /**
-   * returns the current last id defined.
+   * Getter returns the current last id defined.
    */
-  get() {
+  get last() {
     return this.lastId;
   }
   
@@ -36,13 +37,13 @@ class UniqueId {
   }
 
   /**
-   * increment the last ID so it is alphabetic 'a', 'b', ... 'z'
+   * getter for the next id - increment the last ID so it is alphabetic 'a', 'b', ... 'z'
    * Next comes 'a0' , 'a9' .. 'az'
    * Next comes 'b0', 'b9', ... 'bz'
    * Then we reach 'a00' then 'a000' etc..
    * This means 100,000,000 = 'fUJIn' which takes less space and can be used as a <div id="">
    */
-  next() {
+  get next() {
     let id = this.lastId;
     let index = id.length - 1;
   
@@ -63,7 +64,7 @@ class UniqueId {
     }
   
     this.lastId = id;
-    console.log('last is:', this.lastId);
+ 
     return id;
   }
   

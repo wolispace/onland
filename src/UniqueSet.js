@@ -1,92 +1,73 @@
-class UniqueSet {
-  list = [];
 
-  constructor(params) {
-    this.list = params || [];
-  }
-
-  copy() {
-    return new UniqueSet([...this.list]);
-  }
-
-  addAll(newList) {
-    newList.forEach((key => {
-      this.add(key);
-    }))
-  }
-
-  takeAll(newList) {
-    newList.forEach((key => {
-      this.take(key);
-    }))
-  }
+export default class UniqueSet extends Set {
+ constructor(iterable) { 
+  super(iterable); } 
   
-  // only add the item to the list if it does not exist
-  add(item) {
-    if (!item) {
-      return this.list;
-    }
-    if (!this.list.includes(item)) {
-      this.list.push(item);
-    }
-    return this.list;
+  /** * Adds all elements of another set to this set 
+   * * @param {Set} otherSet - The set of elements to be added 
+   * */ 
+  addAll(otherSet) { 
+    for (let item of otherSet) { 
+      this.add(item); } 
+  } 
+  
+  /** 
+   * * Removes all elements of another set from this set 
+   * * @param {Set} otherSet - The set of elements to be removed 
+   * */ 
+  takeAll(otherSet) { 
+    for (let item of otherSet) { 
+      this.delete(item); 
+    } 
+  } 
+   
+  /**
+   * compares this set with newSet. return a new set where only things in the new set are present in the current set
+   * @param {set} newSet 
+   * @returns {set} 
+   */
+  same(newSet) { 
+    const result = [...this].filter(item => newSet.has(item)); 
+    return new UniqueSet(result); 
   }
 
-  // removes an item from the list
-  take(item) {
-    this.list = this.list.filter(i => i !== item);
-    return this.list;
+
+  /**
+   * everything in newSet that is not yet in this set
+   * @param {set} newSet 
+   * @returns {set}
+   */
+  notIn(newSet) { 
+    const result = [...newSet].filter(item => !this.has(item)); 
+    return new UniqueSet(result); 
+  }
+ 
+  /**
+   * everything that is in this set that is not yet in newSet
+   * @param {set} newSet 
+   * @returns {set}
+   */
+  outside(newSet) { 
+    const result = [...this].filter(item => !newSet.has(item)); 
+    return new UniqueSet(result); 
   }
 
-  has(item) {
-    return this.list.includes(item);
+  toString() {
+    return JSON.stringify(this.toArray());
   }
 
-  clear() {
-    this.list = [];
-    return this.list;
+  /** 
+   * * Converts the set to an array 
+   * * @returns {Array} The array representation of the set 
+   * */ 
+  toArray() { 
+    return Array.from(this); 
   }
-
-  count() {
-    return this.list.length;
-  }
-
-  empty() {
-    return this.list.length === 0;
-  }
-
-  // adds the new list into the list making sure there are not duplicates
-  join(newList) {
-    if (newList && newList.length > 0) {
-      newList.forEach(item => this.add(item));
-    }
-    return this.list;
-  }
-
-  // merge two uniqueSets together
-  merge(newSet) {
-    if (!newSet) return;
-    return this.join(newSet.list);
-  }
-
-  // compares this.list with newList. return an object {same: [], toAdd: [], toTake: [] }
-  // where same is all that match in both lists
-  same(newList) {
-    return this.list.filter(item => newList.includes(item));
-  }
-
-  // everything in newList that is not yet in this.list
-  notIn(newList) {
-    return newList.filter(item => !this.list.includes(item));
-  }
-
-  // everything that is in this.list that is not yet in newList
-  outside(newList) {
-    return this.list.filter(item => !newList.includes(item));
-  }
-
-  // run the passed in function on each item
+  /**
+   * run the passed in function on each item
+   * @param {function} functionName 
+   */
   run(functionName) {
-    this.list.forEach((item) => functionName(item));
+    this.forEach((item) => functionName(item));
   }
 }
