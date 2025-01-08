@@ -29,9 +29,16 @@
     // record this id as in use
     app.uniqueId.set(this.id);
     // prep the image cache as we know we need this image
-    app.imageCache.addInUse(this);
-
+    app.imageCache.addImage(this.fileName);
   }
+
+  /**
+   * Getter for the filename
+   */
+  get fileName() {
+    return `img/${this.type}.png`;
+  }
+
 
   /**
    * Returns an encodes string of this bones object

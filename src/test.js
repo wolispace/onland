@@ -12,6 +12,7 @@ import UniqueId from './UniqueId.js';
 import UniqueSet from './UniqueSet.js';
 import Hood from './Hood.js';
 import ImageCache from './ImageCache.js';
+import Item from './Item.js';
 
 console.log('testing');
 // all of the events..
@@ -25,17 +26,19 @@ const app = {
 
   start() {
     app.setup();
-    //app.runUniqueIdTests();
-    //app.runUniqueSetTests();
-    //app.runHoodTests();
-    //app.runBonesTests();
-    //app.runSpatialHashGridTests();
+    // app.runUniqueIdTests();
+    // app.runUniqueSetTests();
+    // app.runHoodTests();
+    // app.runSpatialHashGridTests();
     app.runImageCacheTests();
+    app.runItemTests();
     app.clock.test();
   },
 
   setup() {
     app.clock = new Clock('app');
+    app.imageCache = new ImageCache();
+    app.uniqueId = new UniqueId();
     // for testing we want to scroll the overlay
     document.querySelector('#overlay').style.overflow = 'scroll';
     document.querySelector('body').style.userSelect = 'auto';
@@ -46,7 +49,6 @@ const app = {
    * Test the uniqueId class can create and read unique ids as expected
   */
   runUniqueIdTests() {
-    app.uniqueId = new UniqueId();
     app.uniqueId.set('W');
     for (let i = 0; i < 10; i++) {
       app.uniqueId.next;
@@ -154,7 +156,6 @@ const app = {
   },
 
   runImageCacheTests() {
-    app.imageCache = new ImageCache();
     app.imageCache.addImage('img/rock_02.png');
     app.compare('addImage', ['http://localhost:88/img/rock_02.png'], app.imageCache.toString());
 
@@ -163,7 +164,29 @@ const app = {
     
   },
 
-  testDialog() {
+  runItemTests() {
+    app.imageCache.clear();
+    const params = {
+      id: 'a',
+      type: 'rock_02',
+      parent: '',
+      qty: 1,
+      x: 50,
+      y: 50,
+    };
+    let newItem = new Item(params);
+    newItem.setup(app);
+    app.compare('newItem', 'rock_02', newItem.type);
+    app.compare('encode', 'a,,rock_02,,50,50', newItem.encode());
+    newItem = new Item('b,rock_02,tree_02,,50,60');
+    newItem.setup(app);
+    app.compare('newItem 2', 'tree_02', newItem.type);
+    app.compare('newItem qty', 1, newItem.qty);
+    app.compare('newItem parent', 'rock_02', newItem.parent);
+    app.compare('imgCache ', ["http://localhost:88/img/rock_02.png","http://localhost:88/img/tree_02.png"], app.imageCache.toString());
+  },
+
+  runDialogTests() {
     const dialogParams = {
       title: 'Welcome to Onland',
       content: `
