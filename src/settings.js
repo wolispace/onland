@@ -16,15 +16,16 @@ const settings = {
   },
   MOVED_ITEMS: 'moved',
   DEFAULT: 'default',
-  OVERHEAD: 'overhead',
-  RAISED: 'raised',
-  UNDERGROUND: 'underground',
   SUBURBS: 'suburbs',
   LANDS: 'lands',
-  SURFACE: 's',
-  GHOSTS: 'g',
-  INVENTORY: 'i',
-  SHADOW: 'd',
+  // default layer ids
+  OVERHEAD: '_o',
+  RAISED: '_r',
+  UNDERGROUND: '_u',
+  SURFACE: '_s',
+  GHOSTS: '_g',
+  INVENTORY: '_me',
+  SHADOW: '_d',
   
   isDev: true, 
   showBoxes: false, // show collision boxes (sufrace and ghost)
