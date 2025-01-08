@@ -11,6 +11,7 @@ import SpacialHashGrid from './SpacialHashGrid.js';
 import UniqueId from './UniqueId.js';
 import UniqueSet from './UniqueSet.js';
 import Hood from './Hood.js';
+import ImageCache from './ImageCache.js';
 
 console.log('testing');
 // all of the events..
@@ -28,7 +29,8 @@ const app = {
     //app.runUniqueSetTests();
     //app.runHoodTests();
     //app.runBonesTests();
-    app.runSpatialHashGridTests();
+    //app.runSpatialHashGridTests();
+    app.runImageCacheTests();
     app.clock.test();
   },
 
@@ -149,6 +151,16 @@ const app = {
     expected = { "0_0": ["b", "c"], "0_1": ["d", "c"] };
     app.testGrid.removeById("a");
     app.compare('removeById', expected, app.testGrid.toString());
+  },
+
+  runImageCacheTests() {
+    app.imageCache = new ImageCache();
+    app.imageCache.addImage('img/rock_02.png');
+    app.compare('addImage', ['http://localhost:88/img/rock_02.png'], app.imageCache.toString());
+
+    app.imageCache.addDirectional('cubeface');
+    app.compare('addImage', ['http://localhost:88/img/rock_02.png', 'http://localhost:88/img/cubeface_0_0.png', 'http://localhost:88/img/cubeface_0_1.png', 'http://localhost:88/img/cubeface_0_2.png', 'http://localhost:88/img/cubeface_1_0.png', 'http://localhost:88/img/cubeface_1_1.png', 'http://localhost:88/img/cubeface_1_2.png', 'http://localhost:88/img/cubeface_2_0.png', 'http://localhost:88/img/cubeface_2_1.png', 'http://localhost:88/img/cubeface_2_2.png'], app.imageCache.toString());
+    
   },
 
   testDialog() {
