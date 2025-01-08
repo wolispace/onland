@@ -60,9 +60,19 @@ export default class SpacialHashGrid extends Rectangle {
    * @returns {string} key key eg x=100, y= 200 returns '1_2' if the cellSize is 100
    */
   makeKey(params) {
-    const rowCols = this.makeRowCols(params, this.cellSize);
-    return new Hood(rowCols).key;
+    const hood = this.makeHood(params);
+    return hood.key;
   }
+
+  /**
+   * Returns the neigbourhood this item lives in given its x and y
+   * @param {object} params has x and y in world coords that need mapping into the grid 
+   * @returns {Hood}  eg x=100, y= 200 returns a hood '1_2' if the cellSize is 100
+   */
+    makeHood(params) {
+      const rowCols = this.makeRowCols(params);
+      return new Hood(rowCols);
+    }
 
   // work out the bounding box for this shape and add() points into the grid for the corners and all cells between them
   // the params must include a Rectangle and an id
@@ -114,6 +124,11 @@ export default class SpacialHashGrid extends Rectangle {
     this.grid = {};
   }
 
+  /**
+   * An item has one or more collidable objects so use each to add the item.id into the matching grid cells
+   * @param {object} item with an id 
+   * @param {array} colliders add the id into each cell of the grid for each collidable rectangle
+   */
   addAll(item, colliders) {
     colliders.forEach((collide) => {
       let collidable = collide.copy().add(item);
@@ -130,7 +145,11 @@ export default class SpacialHashGrid extends Rectangle {
     });
   }
 
-  // add a new item (its id) to the grid
+  /**
+   * Adds an object with x,y and id into the cell of the grid based on its x,y position
+   * @param {object} params {x,y,id}  
+   * @returns key of the cell we added it into
+   */
   add(params) {
     // do we want to removeById(params.id) before adding to make sure its unique?
     const hood = new Hood(params); 
@@ -138,6 +157,12 @@ export default class SpacialHashGrid extends Rectangle {
   }
 
   // we know the key '3_4' and id of the item to add
+  /**
+   * Adds the id into the grid cell matching the key
+   * @param {string} key 
+   * @param {string} id 
+   * @returns {string} key of the cell we added into
+   */
   addToCell(key, id) {
     if (!this.grid[key]) {
       this.grid[key] = new UniqueSet();
@@ -159,10 +184,10 @@ export default class SpacialHashGrid extends Rectangle {
    * @returns 
    */
   remove(params) {
-    const hood = new Hood(params);
+    const hood = this.makeHood(params);
     let cell = this.grid[hood.key];
     if (!cell) return;
-    this.grid[hood.key].take(params.id);
+    this.grid[hood.key].delete(params.id);
   }
 
   /**
@@ -171,13 +196,13 @@ export default class SpacialHashGrid extends Rectangle {
    */
   removeById(id) {
     for (const key in this.grid) {
-      this.grid[key].take(id);
+      this.grid[key].delete(id);
     }
   }
 
   removeIdFromCell(id, key) {
     if (!this.grid[key]) return;
-    this.grid[key].take(id);
+    this.grid[key].delete(id);
   }
 
   // pass in a Rectangle and get its 4 corners
@@ -187,28 +212,43 @@ export default class SpacialHashGrid extends Rectangle {
       const hood = new Hood(corner);
       cells.add(hood.key);
     });
-    return cells;
+    return cells.toArray();
   }
 
   // find all of the items in the 4 cells around the Rectangle's bounding box
   queryShape(rectangle) {
     let cells = this.getCornerCells(rectangle);
-    return this.query(cells.list);
+    return this.query(cells);
   }
 
-  // return all items found in the kings square around the center suburb
+  /**
+   * 
+   * @param {string} key eg '1_1' 
+   * @returns {UniqueSet} of ids found in the neigbourhood (kings square) of the key
+   */
   queryKingsSquare(key) {
     const hood = new Hood(key);
     return this.query(hood.list);
   }
 
-  // return all itemIds in the grid cell
+  /**
+   * Finds all ids in all cells passed in
+   * @param {array} cells ['1_1', '1_2' etc..] 
+   * @returns {UniqueSet} of ids found on those cells
+   */
   query(cells) {
     let found = new UniqueSet();
-    cells.forEach((key) => {
-      //console.log('looking in ', key, this.grid[key]);
-      found.add(this.grid[key]);
-    });
+    for (let key of cells) {
+      found.addAll(this.grid[key]);
+    }
     return found;
+  }
+
+  toString() {
+    const expanded = {};
+    for (const key in this.grid) {
+      expanded[key] = this.grid[key].toArray();
+    }
+    return expanded;
   }
 };

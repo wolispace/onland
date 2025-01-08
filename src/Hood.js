@@ -11,6 +11,9 @@ export default class Hood extends Point {
   constructor(x, y) {
     if (typeof x === "string") {
       [x, y] = Hood.breakKey(x);
+    } else if (x instanceof Point) {
+      y = x.y;
+      x = x.x;
     }
     super(x, y);
   }

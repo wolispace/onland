@@ -28,7 +28,7 @@ const app = {
     //app.runUniqueSetTests();
     //app.runHoodTests();
     //app.runBonesTests();
-    app.runLocationTests();
+    app.runSpatialHashGridTests();
     app.clock.test();
   },
 
@@ -81,6 +81,7 @@ const app = {
   runHoodTests() {
     app.compare('hood numbers', '2_3', new Hood(2, 3).key);
     app.compare('hood string', '2_3', new Hood('2_3').key);
+    app.compare('hood Point', '2_3', new Hood(new Point(2,3)).key);
 
     const hoodOne = new Hood(2, 3);
     const hoodList = ['1_2', '1_3', '1_4', '2_2', '2_3', '2_4', '3_2', '3_3', '3_4'];
@@ -104,7 +105,8 @@ const app = {
     app.compare('outside', '[1,2]', outsideSet.toString());
   },
 
-  runLocationTests() {
+  runSpatialHashGridTests() {
+    // a grid 1000x1000 with 10x10 rows/cols cells of 100x100 each
     const cellSize = new Rectangle({ w: 100, h: 200 });
     const gridRectangle = new Rectangle({ w: 1000, h: 2000 });
     app.testGrid = new SpacialHashGrid('test', gridRectangle, cellSize);
@@ -116,37 +118,37 @@ const app = {
     let key = '4_6';
     let id = 'test_001';
     let placedKey = app.testGrid.addToCell(key, id);
-    app.compare(`addToCell`, key, placedKey);
+    app.compare(`addToCell_1`, key, placedKey);
 
     expected = ["test_001"];
-    app.compare(`addToCell`, expected, app.testGrid.grid[key].toArray());
+    app.compare(`addToCell_2`, expected, app.testGrid.grid[key].toArray());
 
     id = 'test_002';
     placedKey = app.testGrid.addToCell(key, id);
     expected = ["test_001", "test_002"];
-    app.compare(`addToCell`, expected, app.testGrid.grid[key].toArray());
-
+    app.compare(`addToCell_3`, expected, app.testGrid.grid[key].toArray());
+    
     key = ["4_6"];
     app.compare('query', expected, app.testGrid.query(key).toArray());
 
-    params = { id: 'test_001', x: 410, y: 1210 };
     key = '4_6';
     expected = ["test_001", "test_002"];
     app.compare('queryKingsSquare', expected, app.testGrid.queryKingsSquare(key).toArray());
-
-    expected = { list: ["test_002"] };
+    
+    params = { id: 'test_001', x: 420, y: 1220 };
+    expected = ["test_002"];
     app.testGrid.remove(params);
     app.compare(`remove`, expected, app.testGrid.grid[key].toArray());
 
     params = { id: 'test_002', x: 410, y: 1210 };
-    expected = { list: [] };
+    expected = [];
     app.testGrid.remove(params);
     app.compare(`remove`, expected, app.testGrid.grid[key].toArray());
 
     app.testGrid.grid = { '0_0': new UniqueSet(['a', 'b', 'c']), '0_1': new UniqueSet(['d', 'a', 'c']) };
     expected = { "0_0": ["b", "c"], "0_1": ["d", "c"] };
     app.testGrid.removeById("a");
-    app.compare('removeById', expected, app.testGrid.grid.toArray());
+    app.compare('removeById', expected, app.testGrid.toString());
   },
 
   testDialog() {
