@@ -1,4 +1,5 @@
-import UniqueSet from "./UniqueSet";
+import UniqueSet from "./UniqueSet.js";
+import Screen from "./Screen.js";
 
 /**
  * A list of items found in/on this layer.
@@ -16,6 +17,11 @@ export default class ItemList extends UniqueSet {
   constructor(id = '', iterable = []) {
     super(iterable);
     this.id = id;
+  }
+
+  remove(id) {
+    delete this.list[id];
+    Screen.remove(id);      
   }
 
 };

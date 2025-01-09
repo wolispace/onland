@@ -13,6 +13,7 @@ import UniqueSet from './UniqueSet.js';
 import Hood from './Hood.js';
 import ImageCache from './ImageCache.js';
 import Item from './Item.js';
+import Screen from './Screen.js';
 
 console.log('testing');
 // all of the events..
@@ -32,6 +33,7 @@ const app = {
     // app.runSpatialHashGridTests();
     app.runImageCacheTests();
     app.runItemTests();
+    app.runScreenTests();
     app.clock.test();
   },
 
@@ -186,6 +188,16 @@ const app = {
     app.compare('imgCache ', ["http://localhost:88/img/rock_02.png","http://localhost:88/img/tree_02.png"], app.imageCache.toString());
   },
 
+  runScreenTests() {
+    Screen.add('<div class="log" id="_test1">Screen add ok</div>', 'overlay');
+    Screen.add('<div class="log" id="_test2">Screen remove fail</div>', 'overlay');
+
+    app.compare('screen add', {}, Screen.getElement('_test1'));
+    Screen.remove('_test2');
+    app.compare('screen remove', null , Screen.getElement('_test2'));
+
+  },
+
   runDialogTests() {
     const dialogParams = {
       title: 'Welcome to Onland',
@@ -239,7 +251,7 @@ const app = {
    * @param {string} message 
    */
   log(message) {
-    document.querySelector('#overlay').innerHTML += `<p class="log">${message}</p>`;
+    Screen.add(`<p class="log">${message}</p>`, 'overlay');
   }
 
 
