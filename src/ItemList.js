@@ -1,5 +1,5 @@
-import UniqueSet from "./UniqueSet.js";
-import Screen from "./Screen.js";
+import Item from "./Item.js";
+import IndexList from "./IndexList.js";
 
 /**
  * A list of items found in/on this layer.
@@ -10,18 +10,72 @@ import Screen from "./Screen.js";
  * the id should match the id of the item that holds it so if -me is the player then itemList.id = '_me'
  * So surface and underground etc should be prefixed with underscore so they do not clash with auto-generated ids '_s'
  */
-export default class ItemList extends UniqueSet {
-  id = ''; // each ItemList is on a layer 's' = surface, but could be a chest or an NPC inventory etc..
-  static DELIM = ';';
+export default class ItemList extends IndexList{
+  
+  constructor(id) {
+    super(id);
+    this.SEPERATOR = '|';
+    this.DELIM = ';';
+    // if we initialised with an encoded string, decode it to populate this list
+    if (id.includes(this.SEPERATOR)) {
+      this.decode(id);
+    }
+  }
+  /**
+ * Return a unique list where the types are unique and the quantity is the sum of all the quantities
+ * @returns {object} a list of items with unique types - non-destructive purely visual representation of items
+   eg: {rock: {type:rock, qty:3}, tree: {type:tree, qty:22}}
+  */
+  compact() {
+    const uniqueList = {};
+    for (const id in this.list) {
+      const item = this.list[id];
+      const key = item.type;
+      if (uniqueList[key]) {
+        uniqueList[key].qty += item.qty;
+      } else {
+        uniqueList[key] = item;
+      }
+    }
 
-  constructor(id = '', iterable = []) {
-    super(iterable);
-    this.id = id;
+    return uniqueList
+  }
+  
+  /**
+   * When decoding from List we need a new Item
+   * @param {string} encodedItem 
+   * @returns 
+   */
+  createItem(encodedString) 
+  { 
+    return new Item(encodedString); 
+  } 
+
+  /**
+   * Run the allocate() function on all items in this list
+   * Allocating them to their respective layers
+   */
+  allocate() {
+    for (const id in this.list) {
+      const item = this.list[id];
+      item.allocate();
+    }
   }
 
-  remove(id) {
-    delete this.list[id];
-    Screen.remove(id);      
+  /**
+   * TODO: do we need to prune()?
+   * 
+   * Remove all bones from this list that are not in the same LAND as one of the passed-in surrounds
+   * @param {UniqueSet} surrounds 
+   */
+  prune(surrounds) {
+    for (const id in this.list) {
+      const item = this.list[id];
+      const land = app.world.layers[settings.LANDS].makeKey(id);
+      if (!surrounds.has(land)) {
+        delete this.list[id];
+      }
+    }
   }
 
 };

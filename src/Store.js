@@ -3,38 +3,50 @@ export default class Store {
     this.type = type;
   }
 
-  updateMovedList(encodedData) {
-    const decodedData = this.decodeData(encodedData);
-    decodedData.forEach((itemData) => {
-      //add to a temp list of item info to turn into  real item
-      this.movedList[itemData.id] = itemData;
-    });
-  }
-
-  addToMovedList(item) {
-    this.movedList[item.id] = item;
-  }
-
-  getEncodedMovedList() {
-    return this.encodeData(Object.values(this.movedList));
-  }
-
-  save(key, data) {
+  /**
+   * Sets a value into the store
+   * @param {string} key 
+   * @param {string} data 
+   * @returns 
+   */
+  set(key, data) {
     localStorage.setItem(key, data);
     return this;
   }
 
-  load(key) {
+  /**
+   * Gets a value from the store
+   * @param {string} key 
+   * @returns {string}
+   */
+  get(key) {
     return localStorage.getItem(key);
   }
 
+  /**
+   * Returns true if the key is set in the store already
+   * @param {string} key 
+   * @returns {boolean}
+   */
   has(key) {
     return localStorage.getItem(key) !== null;
   }
 
-  clear(key) {
+  /**
+   * Remove a value from the store
+   * @param {string} key 
+   * @returns 
+   */
+  remove(key) {
     localStorage.removeItem(key);
     return this;
+  }
+
+  /**
+   * Clear all values from the store
+   */
+  clear() {
+    localStorage.clear();
   }
 
 

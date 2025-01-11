@@ -13,6 +13,9 @@ import UniqueSet from './UniqueSet.js';
 import Hood from './Hood.js';
 import ImageCache from './ImageCache.js';
 import Item from './Item.js';
+import ItemList from './ItemList.js';
+import LayerList from './LayerList.js';
+import IndexList from './IndexList.js';
 import Screen from './Screen.js';
 
 console.log('testing');
@@ -27,13 +30,16 @@ const app = {
 
   start() {
     app.setup();
-    // app.runUniqueIdTests();
-    // app.runUniqueSetTests();
-    // app.runHoodTests();
-    // app.runSpatialHashGridTests();
-    app.runImageCacheTests();
-    app.runItemTests();
-    app.runScreenTests();
+    // app.testUniqueId();
+    // app.testUniqueSet();
+    // app.testHood();
+    // app.testSpatialHashGrid();
+    // app.testImageCache();
+    // app.testItem();
+    // app.testItemList();
+    // app.testLayerList();
+    app.testStore();
+    //app.testScreen();
     app.clock.test();
   },
 
@@ -50,7 +56,7 @@ const app = {
   /**
    * Test the uniqueId class can create and read unique ids as expected
   */
-  runUniqueIdTests() {
+  testUniqueId() {
     app.uniqueId.set('W');
     for (let i = 0; i < 10; i++) {
       app.uniqueId.next;
@@ -84,7 +90,7 @@ const app = {
     app.compare('zbu + 100_000 = aPoc', 'aPco', app.uniqueId.last);
   },
 
-  runHoodTests() {
+  testHood() {
     app.compare('hood numbers', '2_3', new Hood(2, 3).key);
     app.compare('hood string', '2_3', new Hood('2_3').key);
     app.compare('hood Point', '2_3', new Hood(new Point(2,3)).key);
@@ -100,7 +106,7 @@ const app = {
 
   },
 
-  runUniqueSetTests() {
+  testUniqueSet() {
     const set1 = new UniqueSet([1, 2, 3, 4]);
     const set2 = new UniqueSet([3, 4, 5, 6]);
     const sameSet = set1.same(set2);
@@ -111,7 +117,7 @@ const app = {
     app.compare('outside', '[1,2]', outsideSet.toString());
   },
 
-  runSpatialHashGridTests() {
+  testSpatialHashGrid() {
     // a grid 1000x1000 with 10x10 rows/cols cells of 100x100 each
     const cellSize = new Rectangle({ w: 100, h: 200 });
     const gridRectangle = new Rectangle({ w: 1000, h: 2000 });
@@ -157,7 +163,7 @@ const app = {
     app.compare('removeById', expected, app.testGrid.toString());
   },
 
-  runImageCacheTests() {
+  testImageCache() {
     app.imageCache.addImage('img/rock_02.png');
     app.compare('addImage', ['http://localhost:88/img/rock_02.png'], app.imageCache.toString());
 
@@ -166,7 +172,7 @@ const app = {
     
   },
 
-  runItemTests() {
+  testItem() {
     app.imageCache.clear();
     const params = {
       id: 'a',
@@ -188,7 +194,64 @@ const app = {
     app.compare('imgCache ', ["http://localhost:88/img/rock_02.png","http://localhost:88/img/tree_02.png"], app.imageCache.toString());
   },
 
-  runScreenTests() {
+  testItemList() {
+    const list1 = new ItemList('list1');
+    let newItem = new Item('b,rock_02,tree_02,,50,60');
+    list1.add(newItem);
+    let foundItem = list1.get('b');
+    app.compare('add', foundItem, newItem);
+    newItem = new Item('c,,rock_02,,30,90');
+    list1.add(newItem);
+    app.compare('encode', 'list1|b,rock_02,tree_02,,50,60;c,,rock_02,,30,90', list1.encode());
+
+    const encodedString = '_s|x,,tree_02,,50,60;y,,rock_02,,30,90';
+    const list2 = new ItemList('_s');
+    list2.decode(encodedString);
+    foundItem = list2.get('x');
+    app.compare('decode', 'tree_02', foundItem.type);
+
+  },
+
+  testLayerList() {
+    const list1 = new LayerList('test');
+    let newItem = new Item('a,,rock_02,,20,30');
+    let layerId = '_s';
+    list1.addItem(layerId, newItem);
+    let foundItem = list1.getItem(layerId, 'a');
+    app.compare('add', foundItem, newItem);
+    app.compare('decode', 'test:_s|a,,rock_02,,20,30',list1.encode());
+    list1.clear();
+    app.compare('clear', {}, list1.list);
+
+    let encodedString = `moved:
+_s|a,,tree_02,,50,60;b,,rock_02,,30,90 
+_u|x,,coal_02,,50,60;y,,gem_02,,30,90
+`;
+
+    list1.decode(encodedString);
+    // so we are compared the same formatted/cleaned encoded strings
+    encodedString = IndexList.cleanEncodedString(encodedString);
+    const encodedAgain = list1.encode();
+    app.compare('decoded', encodedString, encodedAgain);
+  },
+
+  testStore() {
+    app.store = new Store();
+    const key1 = 'a';
+    const value1 = 'bingo';
+    app.store.set(key1, value1);
+    app.compare('get/set store', value1, app.store.get(key1));
+    const key2 = 'b';
+    const value2 = 'bongo';
+    app.store.set(key2, value2);
+    app.compare('get/set store', value2, app.store.get(key2));
+    app.store.remove(key1);
+    app.compare('remove', null, app.store.get(key1));
+    app.store.clear();
+    app.compare('clear', null, app.store.get());
+  },
+
+  testScreen() {
     Screen.add('<div class="log" id="_test1">Screen add ok</div>', 'overlay');
     Screen.add('<div class="log" id="_test2">Screen remove fail</div>', 'overlay');
 
@@ -198,7 +261,7 @@ const app = {
 
   },
 
-  runDialogTests() {
+  testDialog() {
     const dialogParams = {
       title: 'Welcome to Onland',
       content: `

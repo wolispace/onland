@@ -17,8 +17,8 @@ This is a work-in-progress as I build a game engine to then build a game.
 
 ## storage concept
 Each item has a unique ID within the world
-We have pre-defined grid lands 0_0, 0_1 etc..
-An item is first defined in one of these land files
+We have pre-defined grid of lands 0_0, 0_1 etc..
+Default items are first defined in one of these land files
 
 Read all item from the default files current surrounds (kings square around current pos)
 read all modified items from storage (every item not in its default place)
@@ -44,13 +44,21 @@ When we move to a different land, repeat.
 
 
 Lists
-one list of all items not in their default place
-- this includes placed and pushed items, hidden items underground, items in inventories (shop, museum , player) etc
-- for storing we only need encoded id,parent,type,variant,qty,x,y all items per layer
-- this is the LayerList - decode from local storage and encode to store
-- some layers dont care about x,y (inventory, museum shelf) so skip when encoding
+We have two gamelists: default and moved
+All player interactions are stored in moved
+Default is loaded from the server
+Moved is stored in loca storage
+A gamesLists consists of several itemLists
+An itemList has an id eg '_s' for surface and a list of items
+Decoding is done per gameList and takes a string (\n ignored) 
+'_s|a,,rock,,10,20;b,,rock,,30,40 
+ _u|x,,gold,,30,55;y,,diamond,,66,77
+ ajD|a,,rock;b,,rock;c,,log
+'
+We only store key info , other info is read from Asset.js as needed like image, collision boxes and behaviour.
 
-Current working list of items spatially located in the world at this point in time
-- this is another LayerList object.
-- we flesh out these bones of objects when we need collision boxes and svg etc.. from assets.js
+The layer id should match an item's id so a checst or an NPC can have an inventory eg a check with id 'ajD' would be encoded in local storage 'ajD|a,,rock;b,,rock;c,,log' 
+
+Auto-generated ids (UniqueId.js) are a-zA-Z0-9 so punctuation can be used for deimiters and underscores for special ids like the surface layer.
+
 
