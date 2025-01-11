@@ -15,7 +15,7 @@ export default class Vector extends Point{
    * Getter for the magnitude of this vector
    * @returns the length of the vector
    */
-  get magnitude() {
+  magnitude() {
     return Math.sqrt(this.x ** 2 + this.y ** 2);
   }
 
@@ -25,7 +25,7 @@ export default class Vector extends Point{
    * 
    */
   normalise() {
-    const magnitude = this.magnitude;
+    const magnitude = this.magnitude();
     if (magnitude > 0) {
       this.x /= magnitude;
       this.y /= magnitude;
@@ -33,7 +33,7 @@ export default class Vector extends Point{
   }
 
   limit(maxMagnitude) {
-    if (Math.abs(this.magnitude) > maxMagnitude) {
+    if (Math.abs(this.magnitude()) > maxMagnitude) {
       this.normalise();
       this.multiply(maxMagnitude);
     }

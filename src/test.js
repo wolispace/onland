@@ -3,7 +3,7 @@ import Clock from './Clock.js';
 import Asset from './Asset.js';
 import settings from './settings.js';
 import Utils from './Utils.js';
-
+import Vector from "./Vector.js";
 import Point from './Point.js';
 import Rectangle from './Rectangle.js';
 import Store from './Store.js';
@@ -38,7 +38,9 @@ const app = {
     // app.testItem();
     // app.testItemList();
     // app.testLayerList();
-    app.testStore();
+    //app.testStore();
+    app.testPoint();
+    //app.testVector();
     //app.testScreen();
     app.clock.test();
   },
@@ -290,6 +292,37 @@ _u|x,,coal_02,,50,60;y,,gem_02,,30,90
       ]
     };
     app.dlg = new Dialog(dialogParams);
+  },
+
+  testPoint() {
+    const point1 = new Point(1, 1);
+    const point2 = new Point(2, 2);
+    const point3 = point1.copy().add(point2);
+    app.compare('point add', 3, point3.x);
+    app.compare('point add', {x:1, y:4}, point3.add({x:-2, y:1}));
+    point2.backup();
+    point2.take(point1);
+    app.compare('take', 1, point2.x);
+    app.compare('equals', true, point1.equals(point2));
+    point2.restore();
+    app.compare('restore', 2, point2.x);
+    const dist = point1.distance(point2);
+    app.compare('distance', 1.4142135623730951, dist);
+
+  },
+
+  testVector() {
+    const vec1 = new Vector(1,1);
+    const vec2 = new Vector(100,100);
+
+    app.compare('vector mag', 1.4142135623730951, vec1.magnitude());
+    vec1.normalise();
+    app.compare('vector norm', 0.9999999999999999, vec1.magnitude());
+    app.compare('vector x', 0.7071067811865475, vec1.x);
+    
+    vec2.limit(50);
+    app.compare('limit', {"x":35.35533905932737,"y":35.35533905932737}, vec2);
+
   },
 
   /**
