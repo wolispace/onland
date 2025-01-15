@@ -31,18 +31,18 @@ const app = {
 
   start() {
     app.setup();
-    // app.testUniqueId();
-    // app.testUniqueSet();
-    //app.testHood();
+    app.testUniqueId();
+    app.testUniqueSet();
+    app.testHood();
     app.testArea();
-    // app.testSpatialHashGrid();
-    // app.testImageCache();
-    // app.testItem();
-    // app.testItemList();
-     app.testLayerList();
-    //app.testStore();
-    //app.testPoint();
-    //app.testVector();
+    app.testSpatialHashGrid();
+    app.testImageCache();
+    app.testItem();
+    app.testItemList();
+    app.testLayerList();
+    app.testStore();
+    app.testPoint();
+    app.testVector();
     //app.testScreen();
     app.clock.test();
   },
@@ -109,9 +109,12 @@ const app = {
 
     app.compare('breakKey', [-3, 6], Hood.breakKey('-3_6'));
 
+    const cellSize = new Area(settings.cellSize);
     hoodOne.set(2,5);
-    const params = {w: settings.cellSize, h:settings.cellSize};
-    app.compare('expand', {x:2000,y:5000}, hoodOne.expand(params));
+    hoodOne.setCoords(cellSize);
+    app.compare('set coords', {x:2000,y:5000}, hoodOne.coords);
+    
+  
 
 
   },
