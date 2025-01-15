@@ -1,19 +1,16 @@
 const settings = {
   test: {
-    suburbSize: 1000, // need a fixed suburb size as it will match data loaded from disk
-    landSize: 1000, // how big each land (logically grouped items saved to disk) is 
     worldSize: { w: 3000, h: 3000 },
     start: { x: 100, y: 100 },
-    itemQty: 10,
     lands: 'test',
   },
-  bones: {
-    suburbSize: 1000, // need a fixed suburb size as it will match data loaded from disk
-    landSize: 1000, // how big each land (logically grouped items saved to disk) is 
-    worldSize: { w: 2000, h: 2000 }, // needs to match files on disk
+  world: {
+    worldSize: { w: 20000, h: 20000 }, // needs to match files on disk
     start: { x: 100, y: 60 },
-    lands: 'bones',
+    lands: 'world',
   },
+
+  cellSize: 1000, // all cells in grids are squares 1000x1000px
   MOVED_ITEMS: 'moved',
   DEFAULT: 'default',
   SUBURBS: 'suburbs',

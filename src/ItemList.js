@@ -21,6 +21,7 @@ export default class ItemList extends IndexList{
       this.decode(id);
     }
   }
+  
   /**
  * Return a unique list where the types are unique and the quantity is the sum of all the quantities
  * @returns {object} a list of items with unique types - non-destructive purely visual representation of items

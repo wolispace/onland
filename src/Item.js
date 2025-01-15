@@ -33,6 +33,16 @@
   }
 
   /**
+   * Expands the items x,y by the cellSize and its hood
+   * An item 11,33 in hood 1_2 and cells size 1000 = 1011x2033
+   * @param {Point} point 
+   */
+  expand(point) {
+    this.x = this.x + point.x;
+    this.y = this.y + point.y;
+  }
+
+  /**
    * Getter for the filename
    */
   get fileName() {

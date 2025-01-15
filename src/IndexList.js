@@ -93,7 +93,7 @@ export default class IndexList {
    * @returns {string}
    */
   static cleanEncodedString(encodedString) {
-    return encodedString.replace(/\n/g, '');
+    return encodedString.replace(/\n/g, '').trim();
   }
 
   /**

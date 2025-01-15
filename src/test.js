@@ -1,7 +1,7 @@
 // for testing our classes
+import settings from './settings.js';
 import Clock from './Clock.js';
 import Asset from './Asset.js';
-import settings from './settings.js';
 import Utils from './Utils.js';
 import Vector from "./Vector.js";
 import Point from './Point.js';
@@ -11,6 +11,7 @@ import SpacialHashGrid from './SpacialHashGrid.js';
 import UniqueId from './UniqueId.js';
 import UniqueSet from './UniqueSet.js';
 import Hood from './Hood.js';
+import Area from "./Area.js";
 import ImageCache from './ImageCache.js';
 import Item from './Item.js';
 import ItemList from './ItemList.js';
@@ -32,14 +33,15 @@ const app = {
     app.setup();
     // app.testUniqueId();
     // app.testUniqueSet();
-    // app.testHood();
+    //app.testHood();
+    app.testArea();
     // app.testSpatialHashGrid();
     // app.testImageCache();
     // app.testItem();
     // app.testItemList();
-    // app.testLayerList();
+     app.testLayerList();
     //app.testStore();
-    app.testPoint();
+    //app.testPoint();
     //app.testVector();
     //app.testScreen();
     app.clock.test();
@@ -96,6 +98,7 @@ const app = {
     app.compare('hood numbers', '2_3', new Hood(2, 3).key);
     app.compare('hood string', '2_3', new Hood('2_3').key);
     app.compare('hood Point', '2_3', new Hood(new Point(2,3)).key);
+    app.compare('hood any', '2_3', new Hood({x:2, y:3}).key);
 
     const hoodOne = new Hood(2, 3);
     const hoodList = ['1_2', '1_3', '1_4', '2_2', '2_3', '2_4', '3_2', '3_3', '3_4'];
@@ -105,6 +108,18 @@ const app = {
     app.compare('addHood', '-1_2', hoodOne.addHood(hoodTwo).key);
 
     app.compare('breakKey', [-3, 6], Hood.breakKey('-3_6'));
+
+    hoodOne.set(2,5);
+    const params = {w: settings.cellSize, h:settings.cellSize};
+    app.compare('expand', {x:2000,y:5000}, hoodOne.expand(params));
+
+
+  },
+
+  testArea() {
+    const area1 = new Area(1000, 1000);
+    //app.compare('multiply', {x:2000,y:5000}, area1.expand({x:2,y:5}));
+
 
   },
 
@@ -226,15 +241,27 @@ const app = {
     app.compare('clear', {}, list1.list);
 
     let encodedString = `moved:
-_s|a,,tree_02,,50,60;b,,rock_02,,30,90 
+_s|a,,tree_02,,50,60;b,,rock_02,,30,90/
 _u|x,,coal_02,,50,60;y,,gem_02,,30,90
 `;
 
     list1.decode(encodedString);
     // so we are compared the same formatted/cleaned encoded strings
     encodedString = IndexList.cleanEncodedString(encodedString);
-    const encodedAgain = list1.encode();
+    let encodedAgain = list1.encode();
     app.compare('decoded', encodedString, encodedAgain);
+
+    // expand the x,y of items in this layerList for world coords
+    list1.expand('1_3');
+    encodedAgain = list1.encode();
+
+    encodedString = `moved:
+_s|a,,tree_02,,1050,3060;b,,rock_02,,1030,3090/
+_u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
+    `;
+    encodedString = IndexList.cleanEncodedString(encodedString);
+    app.compare('expand', encodedString, encodedAgain);
+    
   },
 
   testStore() {
@@ -338,7 +365,7 @@ _u|x,,coal_02,,50,60;y,,gem_02,,30,90
     if (expected === result) {
       this.log(`${name} ok`);
     } else {
-      this.log(`${name} fail: expected ${expected}, but got ${result}`);
+      this.log(`${name} fail: expected <br/>${expected}, but got <br/>${result}`);
     }
   },
 

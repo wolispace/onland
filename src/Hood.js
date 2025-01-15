@@ -1,17 +1,20 @@
 import Point from "./Point.js";
+import Area from "./Area.js";
 
 export default class Hood extends Point {
   static DELIM = '_';
+  coords = new Point(0,0); // the x,y of this hood expanded to workd coords
+  
   /**
    * Can create a new Hood by passing in iether string '3_5' or numbers (3, 5)
    * @param {string or number} x eg '1_1' or just 1 
    * @param {*} y optional or 1
    * 
    */
-  constructor(x, y) {
+  constructor(x, y, area) {
     if (typeof x === "string") {
       [x, y] = Hood.breakKey(x);
-    } else if (x instanceof Point) {
+    } else if (x.x) {
       y = x.y;
       x = x.x;
     }
@@ -28,13 +31,29 @@ export default class Hood extends Point {
     return [parseInt(x), parseInt(y)];
   }
   /**
-   * generates a key from the x,y eg 2,5
+   * Getter generates a key from the x,y eg 2,5
    * @returns {string} a key in the format 'x_y' eg '2_5'
    */
   get key() {
     return `${this.x}${Hood.DELIM}${this.y}`;
   }
 
+  /**
+   * Getter returns a point of the x and y
+   * @returns {Point}
+   */
+  get point() {
+    return new Point(this.x, this.y);
+  }
+
+  /**
+   * Expands the hoods x,y to world coords
+   * eg: hood '2_5' with an area of {w:1000, h:1000} = {x:2000, y:5000}
+   * @param {Area} area 
+   */
+  setCoords(area) {
+    this.coords = area.expand(this.point);
+  }
 
   /**
    * 
@@ -43,15 +62,6 @@ export default class Hood extends Point {
    */
   addHood(hood) {
     return this.add(hood);
-  }
-
-  /**
-   * 
-   * @param {object} params {w, h} of a cell 
-   * @returns {Point} with x and y being the absolute position relative to the cell in the grid
-   */
-  expandHood(params) {
-    return new Point(this.x * params.w, this.y * params.h);
   }
 
   /**

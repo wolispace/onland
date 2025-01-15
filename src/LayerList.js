@@ -1,6 +1,8 @@
-
+import settings from './settings.js';
 import IndexList from "./IndexList.js";
 import ItemList from "./ItemList.js";
+import Hood from "./Hood.js";
+import Area from "./Area.js";
 
 /**
  * A list of one or more layers. 
@@ -11,7 +13,8 @@ export default class LayerList extends IndexList {
 
   constructor(id) {
     super(id);
-    this.DELIM = ' ';
+    this.cellSize = new Area(settings.cellSize);
+    this.DELIM = '/';
     this.SEPERATOR = ':';
     // if we initialised with an encoded string, decode it to populate this list
     if (id.includes(this.SEPERATOR)) {
@@ -20,8 +23,9 @@ export default class LayerList extends IndexList {
   }
 
   /**
- * Adds a new itemList object for a given layer
- * @param {ItemList} itemList to add, which already includes an id we use for identifying the layer   */
+   * Adds a new itemList object for a given layer
+   * @param {ItemList} itemList to add, which already includes an id we use for identifying the layer   
+   */
   add(itemList) {
     if (itemList.id === '') return;
     if (this.list[itemList.id]) {
@@ -32,7 +36,7 @@ export default class LayerList extends IndexList {
   }
 
   /**
-   * Adds the item inot the list with a known listId eg '_s' = surface
+   * Adds the item into the list with a known listId eg '_s' = surface
    * @param {string} listId 
    * @param {Item} item 
    */
@@ -43,6 +47,12 @@ export default class LayerList extends IndexList {
     this.list[listId].add(item);
   }
 
+  /**
+   * Get the item from the list when we know the list
+   * @param {string} listId 
+   * @param {string} itemId 
+   * @returns 
+   */
   getItem(listId, itemId) {
     const itemList = this.list[listId];
     if (!itemList || !itemId) return;
@@ -50,6 +60,11 @@ export default class LayerList extends IndexList {
     return itemList.get(itemId);
   }
 
+  /**
+   * Remove the item from the list
+   * @param {string} listId 
+   * @param {string} itemId 
+   */
   removeItem(listId, itemId) {
     const itemList = this.list[listId];
     if (itemList) {
@@ -63,7 +78,28 @@ export default class LayerList extends IndexList {
    * @returns 
    */
   createItem(encodedString) {
-    return new ItemList(encodedString);
+    const itemList = new ItemList(encodedString);
+    return itemList;
+  }
+
+  /**
+   * Expand all items x,y in each itemList to the cellSize
+   * we only do this for default loaded data so we can start each file with 0,0
+   * After this, any placed or moved items are in world coords when stored in localStorage in the moved: itemLists
+   * @param {string} hoodKey eg '1_1' 
+   */
+  expand(hoodKey) {
+    const hood = new Hood(hoodKey);
+    hood.setCoords(this.cellSize);
+    for (const listId in this.list) {
+      const itemList = this.get(listId);
+      for (const itemId in itemList.list) {
+        const item = itemList.get(itemId);
+        // add the hoods expanded coords to the item
+        item.expand(hood.coords);
+        //this.removeItem(listId, itemId);
+      }
+    }
   }
 
   /**
@@ -73,7 +109,7 @@ export default class LayerList extends IndexList {
    */
   clean(newLayerList) {
     for (const newListId in newLayerList.list) {
-      const movedList = newLayerList.list[listId];
+      const movedList = newLayerList.get(listId);
       for (const itemId in movedList.list) {
         for (const listId in this.list) {
           this.removeItem(listId, itemId);
@@ -82,4 +118,20 @@ export default class LayerList extends IndexList {
     }
   }
 
+  /**
+   * Loop thught all this.list and remove all that are NOT in the hoodList array
+   * @param {array} hoodList ['0_0', '1_0' ...]
+   */
+  prune(hoodList) {
+    for (const listId in this.list) {
+      const layerList = this.get(listId);
+      for (const itemId in layerList) {
+        const item = layerList.get(itemId);
+        const hood = new Hood(item);
+        if (!hoodList.includes(hood.id)) {
+          this.removeItem(listId, itemId);
+        }
+      }
+    }
+  }
 }
