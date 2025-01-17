@@ -43,7 +43,7 @@ When a rock is moved is is updated in
 When we move to a different land, repeat.
 
 
-Lists
+## Lists
 We have two gamelists: default and moved
 All player interactions are stored in moved
 Default is loaded from the server
@@ -60,5 +60,18 @@ We only store key info , other info is read from Asset.js as needed like image, 
 The layer id should match an item's id so a checst or an NPC can have an inventory eg a check with id 'ajD' would be encoded in local storage 'ajD|a,,rock;b,,rock;c,,log' 
 
 Auto-generated ids (UniqueId.js) are a-zA-Z0-9 so punctuation can be used for deimiters and underscores for special ids like the surface layer.
+
+## Moving items
+On a timer we send an event of a tick (every second maybe?)
+We register plants to grow and NPCs to move on ticks
+When a key is pressed we emit key events
+We register the users player item to these
+When we collide we emit a collide event with the item
+We register items to respond to collisions (move if pushed)
+
+We keep a gameList of items that are currently moving so they get
+updated in the gameLoop.update()
+
+We leave tick events for slow one/off changes like 'after 10 ticks the plant +1 to its growth phase' or 'after 20 ticks move NPC to a new x,y'
 
 

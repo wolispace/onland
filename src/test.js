@@ -17,6 +17,7 @@ import Item from './Item.js';
 import ItemList from './ItemList.js';
 import LayerList from './LayerList.js';
 import IndexList from './IndexList.js';
+import Event from './Event.js';
 import Screen from './Screen.js';
 
 console.log('testing');
@@ -31,18 +32,19 @@ const app = {
 
   start() {
     app.setup();
-    app.testUniqueId();
-    app.testUniqueSet();
-    app.testHood();
-    app.testArea();
-    app.testSpatialHashGrid();
-    app.testImageCache();
-    app.testItem();
-    app.testItemList();
-    app.testLayerList();
-    app.testStore();
-    app.testPoint();
-    app.testVector();
+    // app.testUniqueId();
+    // app.testUniqueSet();
+    // app.testHood();
+    // app.testArea();
+    // app.testSpatialHashGrid();
+    // app.testImageCache();
+    // app.testItem();
+    // app.testItemList();
+    // app.testLayerList();
+    // app.testStore();
+    // app.testPoint();
+    // app.testVector();
+    app.testEvent();
     //app.testScreen();
     app.clock.test();
   },
@@ -54,7 +56,6 @@ const app = {
     // for testing we want to scroll the overlay
     document.querySelector('#overlay').style.overflow = 'scroll';
     document.querySelector('body').style.userSelect = 'auto';
-
   },
 
   /**
@@ -352,6 +353,51 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     
     vec2.limit(50);
     app.compare('limit', {"x":35.35533905932737,"y":35.35533905932737}, vec2);
+
+  },
+
+  testEvent() {
+    app.event = new Event();
+
+    // emit events when key up or down are triggered
+    // anything listening to these
+    document.addEventListener("keydown", (event) => {
+      app.event.emit('KEY_DOWN', event.key);
+    });
+    document.addEventListener("keyup", (event) => {
+      app.event.emit('KEY_UP', event.key);
+    });
+
+    const mainPoint = new Point(1, 1);
+    const point2 = new Point(2, 2);
+
+    // we will add point2 into mainPoint
+    app.event.on('ADD_POINTS', mainPoint, (pointToAdd) => {
+      mainPoint.add(pointToAdd);
+      app.compare('event add', {x:3,y:3}, mainPoint);
+    });
+
+    app.compare('before event?', {x:1, y:1}, mainPoint);
+    app.event.emit('ADD_POINTS', point2);
+    app.compare('after event?', {x:3, y:3}, mainPoint);
+    
+    // put a div on the screen for testing keypresses
+    Screen.add('<div class="log" id="_key">KEY??</div>', 'overlay');
+    const screenKey = Screen.getElement('_key');
+    
+    // a test object with functions that respond to events 
+    const testObj = {
+      keyDown: (eventKey) => {
+        screenKey.innerHTML = `${eventKey} down`;
+      },
+      keyUp: (eventKey) => {
+        screenKey.innerHTML = `${eventKey} up`;
+      }   
+    };
+    
+    // when the events are fired, run the relevent functions
+    app.event.on('KEY_DOWN', testObj, testObj.keyDown);
+    app.event.on('KEY_UP', testObj, testObj.keyUp);
 
   },
 
