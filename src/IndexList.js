@@ -66,6 +66,17 @@ export default class IndexList {
     this.list = {};
   }
 
+  /**
+   * Returns a copy of this list
+   * @param {string} id 
+   * @returns {IndexList} newList
+   */
+  copy(id) {
+    const newList = new IndexList(id);
+    newList.merge(this);
+    return newList;
+  }
+
 
   /**
    * Returns the list of items in encoded form

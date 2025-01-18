@@ -82,7 +82,6 @@ function loadData(hoodKey) {
             const layerList = app.gameList.get(settings.DEFAULT);
             layerList.decode(app.defaultData);
             layerList.expand(hoodKey);
-
           }
         }
         // if no background colour defined the default to sea green
@@ -156,4 +155,6 @@ function loadScript(hoodKey) {
   });
 }
 
-
+// make these accessible via DevTools
+window.app = app;
+window.settings = settings;

@@ -56,10 +56,10 @@ export default class ItemList extends IndexList{
    * Run the allocate() function on all items in this list
    * Allocating them to their respective layers
    */
-  allocate() {
+  allocate(gameList) {
     for (const id in this.list) {
       const item = this.list[id];
-      item.allocate();
+      item.allocate(gameList);
     }
   }
 

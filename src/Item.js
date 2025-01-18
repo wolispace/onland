@@ -103,19 +103,21 @@
 
   /**
    * Place this item into the layers of the world
-   * Since one item may have multiple collision boxes each needs to be added into the correct spacial hash grid
+   * Since one item may have multiple collision boxes 
+   * each needs to be added into the correct spacial hash grid
+   * stored in gameList.layers
    * 
-   * @param {object} app 
+   * @param {GameList} gameList 
    */
-  allocate(app) {
+  allocate(gameList) {
     // place this in spacial grid cell/s
     const itemInfo = app.asset.make(this);
     //app.world.layers[layerId].addAll(itemInfo, itemInfo[layerId]);
-    app.world.layers[settings.SURFACE].addAll(itemInfo, itemInfo[settings.SURFACE]);
-    app.world.layers[settings.GHOSTS].addAll(itemInfo, itemInfo[settings.GHOSTS]);
+    gameList.layers[settings.SURFACE].addAll(itemInfo, itemInfo[settings.SURFACE]);
+    gameList.layers[settings.GHOSTS].addAll(itemInfo, itemInfo[settings.GHOSTS]);
     // every visible item 
-    app.world.layers[settings.LANDS].add(this);
-    app.world.layers[settings.SUBURBS].add(this);
+    gameList.lands[settings.LANDS].add(this);
+    gameList.lands[settings.SUBURBS].add(this);
 
   }
 

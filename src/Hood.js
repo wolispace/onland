@@ -78,4 +78,16 @@ export default class Hood extends Point {
     return hood;
   }
 
+  get listReal() {
+    const hood = [];
+    for (let x = this.x - 1; x <= this.x + 1; x++) {
+      if (x < 0) continue;
+      for (let y = this.y - 1; y <= this.y + 1; y++) {
+        if (y < 0) continue;
+        hood.push(new Hood(x, y).key);
+      }
+    }
+    return hood;
+  }
+
 };

@@ -19,6 +19,8 @@ import LayerList from './LayerList.js';
 import IndexList from './IndexList.js';
 import Event from './Event.js';
 import Screen from './Screen.js';
+import GameList from './GameList.js';
+import Loader from './Loader.js';
 
 console.log('testing');
 // all of the events..
@@ -44,7 +46,9 @@ const app = {
     // app.testStore();
     // app.testPoint();
     // app.testVector();
-    app.testEvent();
+    //app.testEvent();
+    app.testLoader();
+    //app.testGameList();
     //app.testScreen();
     app.clock.test();
   },
@@ -401,6 +405,24 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
 
   },
 
+
+  testLoader() {
+    const gameList = new GameList('gameList');
+    const landName = 'land'; // the name of the land file eg 'land_0_1.js'
+    app.loader = new Loader(landName);
+    const hoodKey = '0_0';
+
+    app.loader.loadData(hoodKey, gameList);
+
+    console.log(gameList);
+
+  },
+
+  testGameList() {
+    app.gameList = new GameList();
+    app.gameList.setup();
+  },
+
   /**
    * Logs output to the screen if the test is OK or a fail (expected != result)
    * @param {string} name 
@@ -425,6 +447,11 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
   log(message) {
     Screen.add(`<p class="log">${message}</p>`, 'overlay');
   }
-
-
 }
+
+
+  
+  
+// make these accessible via DevTools
+window.app = app;
+window.settings = settings;
