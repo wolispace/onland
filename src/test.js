@@ -47,8 +47,9 @@ const app = {
     // app.testPoint();
     // app.testVector();
     //app.testEvent();
-    app.testLoader();
+    //app.testLoader();
     //app.testGameList();
+    app.testAsset();
     //app.testScreen();
     app.clock.test();
   },
@@ -421,6 +422,26 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
   testGameList() {
     app.gameList = new GameList();
     app.gameList.setup();
+  },
+
+  testAsset() {
+    app.asset = new Asset();
+    const params = {
+      id: 'a',
+      type: 'rock_02',
+      parent: '',
+      qty: 1,
+      x: 50,
+      y: 50,
+    };
+    
+    const item = new Item(params);
+    const itemInfo = app.asset.make(item);
+    Screen.add(itemInfo.html);
+    Screen.position(itemInfo);
+    setTimeout(() => {
+      Screen.remove(itemInfo.id);
+    }, 3000);
   },
 
   /**

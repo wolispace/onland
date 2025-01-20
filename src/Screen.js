@@ -1,9 +1,23 @@
 // used to add and remove things from the screen
 export default class Screen {
 
+  /**
+   * Adds some html to the screen
+   * @param {string} content html to add to the screen 
+   * @param {*} parent default is 'world'
+   */
   static add(content, parent = 'world') {
     parent = this.getElement(`${parent}`);
     parent.insertAdjacentHTML('beforeend', content);
+  }
+
+  /**
+   * 
+   * @param {Item} item with x,y so we can position it in the world div 
+   */
+  static position(item) {
+    const div = this.getElement(item.id);
+    div.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
   }
 
   /**

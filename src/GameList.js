@@ -2,29 +2,35 @@ import IndexList from "./IndexList.js";
 import LayerList from "./LayerList.js";
 
 /**
- * Holds the default and moved LayerLists (maybe others?) so ise an IndexList
- * Combines into a tempory list 
+ * Holds the default and moved LayerLists
+ * Combines into a tempory combined list used within the game 
  * Keeps lists updated to avoid duplicates
+ * Also holds the current layers for collisions (surface, ghosts etc..)
+ * Keeps an index list of all items in combined for quick access
  */
 export default class GameList extends IndexList {
   MOVED = 'moved';
   DEFAULT = 'default';
+  COMBINED = 'combined';
+  INDEX = 'index';
+  LAYER = 'layer';
 
+  
   constructor(id) {
     super(id);
     this.setup();
   }
-
-
+  
+  
   //NOTE: use this.add(layerList) to add a newly decoded layerList 'default' or 'moved'
-
+  
   // when first setting up the gameList we run this
   setup() {
-    const listNames = ['default', 'moved', 'index', 'combined', 'layers'];
+    const listNames = [this.DEFAULT, this.MOVED, this.INDEX, this.LAYER];
     for (const listName of listNames) {
       this.add(new IndexList(listName));
     }
-    this.update();
+    this.combined = new IndexList(this.COMBINED);
   }
 
   /**
@@ -34,7 +40,6 @@ export default class GameList extends IndexList {
   update() {
     this.combine();
     this.reindex();
-    console.log(this);
   }
 
   /**
@@ -44,23 +49,16 @@ export default class GameList extends IndexList {
   combine() {
     this.combined = this.get(this.DEFAULT).copy(this.COMBINED);
     this.combined.merge(this.get(this.MOVED));
+    this.combined.DELIM = 'X';
   }
 
   /**
-   * Returns the combined list of items (default + moved)
-   * @returns {IndexList}
-   */
-  combined() {
-    return this.get(this.COMBINED);
-  }
-
-  /**
-   * Loops through both lists and reindexes each list 
+   * Loops through both lists and reindexes each list
+   * So whe can get the list (default or moved) an item is in when found in combined 
    */
   reindex() {
-    for (const listId in this.list) {
-      this.reindexList(this.get(listId));
-    }
+    this.reindexList(this.get(this.DEFAULT));
+    this.reindexList(this.get(this.MOVED));
   }
 
   /**
@@ -79,7 +77,7 @@ export default class GameList extends IndexList {
         };
         this.index.add(params);
         // also allocate them into layers (and lands?)
-        item.allocate(this);
+        this.allocate(item);
       }
     }
   }
@@ -91,7 +89,7 @@ export default class GameList extends IndexList {
      * MAYBE app.gameList.get('moved').addItem(listId, item); 
      */
   set(listId, item) {
-    this.get('moved').addItem(listId, item);
+    this.get(this.MOVED).addItem(listId, item);
   }
 
   /**
@@ -100,9 +98,8 @@ export default class GameList extends IndexList {
    * @returns {Item}
    */
   getById(id) {
-    const combined = this.get('combined');
-    for (const listId in combined.list) {
-      const itemList = combined.list[listId];
+    for (const listId in this.combined.list) {
+      const itemList = this.combined.list[listId];
       for (const itemId in itemList.list) {
         if (itemId === id) {
           return itemList.list[id];
@@ -150,17 +147,17 @@ export default class GameList extends IndexList {
     return this.combined.prune(hoodList);
   }
 
-  allocate() {
-    this.clean();
-    this.default.allocate();
-    this.moved.allocate();
+  allocate(item) {
+    const itemInfo = Asset.make(item);
+    this.get(this.DEFAULT).allocate();
+    this.get(this.MOVED).allocate();
   }
 
   /**
    * remove everything from default list that is in moved list
    */
   clean() {
-    this.default.clean(this.moved);
+    this.get(this.DEFAULT).clean(this.get(this.MOVED));
   }
 
 

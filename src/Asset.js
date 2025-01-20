@@ -1,37 +1,62 @@
 import Utils from './Utils.js';
-
+import IndexList from './IndexList.js';
 import Collidable from './Collidable.js';
-export default class Asset {
+export default class Asset extends IndexList {
   constructor() {
+    super('asset');
     this.loadAssets();
   }
 
-  make(type) {
-    const item = this.list[type];
-    return item;
+  /**
+   * Returns a fleshed-out item with html string and collision layers etc..
+   * @param {Item} item 
+   * @returns {object} itemInfo
+   */
+  make(item) {
+    let itemInfo = this.get(item.type);
+    itemInfo = { ...itemInfo, ...item };
+    const set = this.getSet(item);
+    itemInfo.html = this.htmlSets[set];
+    itemInfo.html = Utils.replaceParams(itemInfo.html, itemInfo);
+    return itemInfo;
+  }
+
+  /**
+   * Based on the type, get different wrapping html (item, button etc..)
+   * @param {object} itemInfo 
+   * @returns {string} set
+   */
+  getSet(item) {
+    const set = 'item';
+    if (item.type.includes('button')) {
+      set = 'button';
+    } else if (item.type.includes('control')) {
+      set = 'control';
+    }
+    return set;
   }
 
   htmlSets = {
-    items: `<div id="%id%" class="%type% item" style="width: %w%px; height: 1px;">%shadows%%content%</div>`,
-    controls: `<div id="%id%" class="%type%" style="left:%x%px; bottom:%y%px; width: %w%px; height: %h%px;">%content%</div>`,
-    buttons: `<div id="%id%" class="%type%" style="left:%x%px; top:%y%px; width: %w%px; height: %h%px;">%content%</div>`
+    item: `<div id="%id%" class="%type% item" style="width: %w%px; height: 1px;">%shadows%%content%</div>`,
+    control: `<div id="%id%" class="%type%" style="left:%x%px; bottom:%y%px; width: %w%px; height: %h%px;">%content%</div>`,
+    button: `<div id="%id%" class="%type%" style="left:%x%px; top:%y%px; width: %w%px; height: %h%px;">%content%</div>`
   }
 
-    /**
-   * 
-   * @param {object} params with a .qty 
-   * @returns {string} the html for showing a qty for a button
-   */
-    buildQty(params) {
-      return `<div class="qty">${params.qty}</div>`;
-    }
+  /**
+ * 
+ * @param {object} params with a .qty 
+ * @returns {string} the html for showing a qty for a button
+ */
+  buildQty(params) {
+    return `<div class="qty">${params.qty}</div>`;
+  }
 
-     /**
-   * Buids the img or dvg for display in an inv button
-   * 
-   * @param {object} params 
-   * @returns 
-   */
+  /**
+* Buids the img or dvg for display in an inv button
+* 
+* @param {object} params 
+* @returns 
+*/
   buildInvHtml(params) {
     let html = Utils.replaceParams(params.content, params);
     html += assets.buildQty(params);
@@ -61,7 +86,7 @@ export default class Asset {
         s: [new Collidable({ x: 0, y: 0, w: 30, h: 15 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: -45, w: 30, h: 45 })], // a list of ghost collision boxes
         d: [new Collidable({ x: -10, y: -10, w: 50, h: 35 })], // a list of shadow boxes
-        content: `<img src="img/tree_basic.png" %style%>`,
+        content: `<img src="img/tree_01.png" %style%>`,
       },
       tree_02: {
         top: -80,
@@ -69,7 +94,7 @@ export default class Asset {
         w: 70,
         s: [new Collidable({ x: 0, y: 0, w: 20, h: 15 })], // a list of collision boxes
         g: [new Collidable({ x: 0, y: -50, w: 20, h: 50 })], // a list of ghost collision boxes
-        content: `<img src="img/tree_001a.png" %style%>`,
+        content: `<img src="img/tree_02.png" %style%>`,
       },
 
       rock_01: {
@@ -82,14 +107,14 @@ export default class Asset {
         d: [new Collidable({ x: -20, y: -5, w: 60, h: 20 })], // a list of shadow boxes
         content: ``,
       },
-      rock_002: {
+      rock_02: {
         top: -20,
         left: -5,
         w: 50,
         onCollide: 'stop',
         s: [new Collidable({ x: 0, y: 0, w: 40, h: 10 })], // a list of collision boxes
         g: [], // no need for ghosting small slow objects
-        content: `<img src="img/rock_001a.png" %style%>`,
+        content: `<img src="img/rock_02.png" %style%>`,
       },
       world: {
         name: 'world',

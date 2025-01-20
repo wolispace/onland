@@ -79,6 +79,7 @@ body {
 
 .item>img {
   position: absolute;
+  width: 100%;
 }
 
 .ghost {
