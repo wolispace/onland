@@ -17,6 +17,8 @@ export default class Screen {
    */
   static position(item) {
     const div = this.getElement(item.id);
+    // TODO calc the distance between old pos and new so the duration cane be adjusted to match (slow down whem moving longer distances)
+    div.style.transition = 'transform 0.3s ease';
     div.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
   }
 

@@ -440,7 +440,11 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     Screen.add(itemInfo.html);
     Screen.position(itemInfo);
     setTimeout(() => {
-      Screen.remove(itemInfo.id);
+      itemInfo.x = 300;
+      Screen.position(itemInfo);
+      setTimeout(() => {
+        Screen.remove(itemInfo.id);
+      }, 3000);
     }, 3000);
   },
 
