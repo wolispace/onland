@@ -37,10 +37,18 @@ $html = "<!DOCTYPE html>
     <div id='msg1' class='msg'></div>
     <div id='msg2' class='msg'></div>
     <div id='msg3' class='msg'></div>
-    <svg width='0' height='0'>
+    <svg>
       <filter id='noise-filter'>
-        <feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch' />
-      </filter>
+        <feTurbulence 
+          type='fractalNoise' 
+          baseFrequency='0.9' 
+          numOctaves='5' 
+          stitchTiles='stitch' />
+<!--        <feColorMatrix
+          type='matrix'
+          values=\"0 0 0 0 0 0 0.2 0 0 0 0 0 0 0 0 0 0 0 0.1 0\" />
+        <feBlend mode='multiply' in2='SourceGraphic' />  
+-->      </filter>
     </svg>
   </body>
 </html>";
