@@ -24,24 +24,30 @@ export default class Loader {
     // clear all previous background colours ready to setup a new set of 9 suburbs
     this.backgroundColors = {};
     const hood = new Hood(hoodKey);
-
     const filePromises = [];
 
     for (const hoodKey of hood.listReal) {
-      if (hoodKey.includes('-')) continue;
-      const filePromise = this.loadScript(hoodKey)
-        .then(() => {
-          if (this.defaultData) {
-            if (typeof (this.defaultData) === "string") {
+      //console.log('hoodKey', hoodKey);
+      // Change file extension from .js to .json in the URL construction
+      const filePromise = fetch(`lands/land_${hoodKey}.json`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(loadedData => {
+          if (loadedData.defaultData) {
+            if (typeof (loadedData.defaultData) === "string") {
               const layerList = gameList.get(settings.DEFAULT);
-              layerList.decode(this.defaultData);
+              layerList.decode(loadedData.defaultData);
               layerList.expand(hoodKey);
             }
           }
           //TODO: allocate a backgroundcolor
         })
         .catch((error) => {
-          console.error('Error loading script:', error);
+          console.error('Error loading JSON:', error);
         });
       filePromises.push(filePromise);
     }
@@ -52,8 +58,7 @@ export default class Loader {
         gameList.update();
       })
       .catch((error) => {
-        console.error('Error loading scripts:', error);
-        //throw error; // Re-throw to allow handling by caller
+        console.error('Error loading files:', error);
       });
   }
 

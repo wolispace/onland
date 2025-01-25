@@ -47,8 +47,8 @@ When we move to a different land, repeat.
 We have two gamelists: default and moved
 All player interactions are stored in moved
 Default is loaded from the server
-Moved is stored in loca storage
-A gamesLists consists of several itemLists
+Moved is stored in local storage
+A gamesList consists of several itemLists
 An itemList has an id eg '_s' for surface and a list of items
 Decoding is done per gameList and takes a string (\n ignored) 
 '_s|a,,rock,,10,20;b,,rock,,30,40 
@@ -60,6 +60,14 @@ We only store key info , other info is read from Asset.js as needed like image, 
 The layer id should match an item's id so a checst or an NPC can have an inventory eg a check with id 'ajD' would be encoded in local storage 'ajD|a,,rock;b,,rock;c,,log' 
 
 Auto-generated ids (UniqueId.js) are a-zA-Z0-9 so punctuation can be used for deimiters and underscores for special ids like the surface layer.
+
+## Grids
+We store the SHGs for each layer (surface, ghost) in an IndexList within GameList
+When we reindex our lists we flesh out the grids
+So we need to store the collision layers with each item (but not encode it)
+Then the reindexing takes those Collidables and adds them into the grids
+
+
 
 ## Moving items
 On a timer we send an event of a tick (every second maybe?)

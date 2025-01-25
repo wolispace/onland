@@ -25,9 +25,14 @@ export default class IndexList {
   /**
    * Returns the item with the matching id
    * @param {string} id 
+   * @param {any} value the default value if the list doesnt already exist 
    * @returns {Item} 
    */
-  get(id) {
+  get(id, value = '') {
+    // make sure the item exists 
+    if (!this.has(id)) {
+      this.list[id] = value;
+    }
     return this.list[id];
   }
 
@@ -117,6 +122,7 @@ export default class IndexList {
     this.id = parts[0].trim();
     const encodedItems = parts[1].trim();
     const items = encodedItems.split(this.DELIM);
+    //console.log(this.id, items);
     for (const encodedItem of items) {
       if (encodedItem.trim() === '') continue;
       const item = this.createItem(encodedItem.trim());

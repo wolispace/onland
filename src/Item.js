@@ -1,5 +1,9 @@
 // the bare bones of items id, type, position
- export default class Item {
+import Asset from "./Asset.js";
+import IndexList from "./IndexList.js";
+import Collidable from "./Collidable.js";
+
+export default class Item {
   static DELIM = ','; // how encoded elements of these bones are delimited
   static ENCODED_KEYS = ['id', 'parent', 'type', 'qty', 'x', 'y'];
   id = '';
@@ -8,6 +12,7 @@
   qty = 1;
   x = 0;
   y = 0;
+  collideList = new IndexList('collidable'); // list of layers holding collidable rectangles
 
   // can pass in either an encoded string or an object with matching params
   constructor(params) {
@@ -97,8 +102,41 @@
         }
       }
     }
+    this.updateCollideList();
 
     return this;
+  }
+
+  /**
+   * Updates the list of collidables for items current position
+   * collidable is an indexList where each is a layer (surface, ghost)
+   * containing the Collidables for each layer
+   * The collidable info is relative to the items x, y 
+   * so add the items x,y to the collidable 
+   * @returns 
+   */
+  updateCollideList() {
+    const asset = new Asset();
+    const itemInfo = asset.get(this.type);
+    if (!itemInfo.collideList) return;
+    
+    // loop through collidable layers
+    for (let layerId in itemInfo.collideList) {
+      const layer = this.collideList.get(layerId, new IndexList());
+      layer.id = layerId;
+      //console.log(layer);
+      // loop through collidable items in this layer
+
+      for (let collideInfo of itemInfo.collideList[layerId]) {
+        const collidable = new Collidable(collideInfo);
+        collidable.id = this.id;
+        // expand relative x,y to absolute x,y
+        collidable.add(this);
+        layer.add(collidable, new IndexList());
+      }
+      // Add this line to save the changes back to this.collidable
+      this.collideList.add(layer);
+    }
   }
 
   /**

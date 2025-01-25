@@ -10,6 +10,17 @@ export default class Collidable extends Rectangle {
     this.onCollide = params.onCollide ?? this.onCollide;
   }
 
+  /**
+   * Add the x,y of the item to this rectangle
+   * @param {Collidable} item
+   */
+  add(item) {
+    this.x = this.x + item.x;
+    this.y = this.y + item.y;
+    this.w = this.w + item.x;
+    this.h = this.h + item.y;
+  }
+
   copy() {
     return new Collidable(this);
   }

@@ -34,23 +34,23 @@ const app = {
 
   start() {
     app.setup();
-    // app.testUniqueId();
-    // app.testUniqueSet();
-    // app.testHood();
-    // app.testArea();
-    // app.testSpatialHashGrid();
-    // app.testImageCache();
-    // app.testItem();
-    // app.testItemList();
-    // app.testLayerList();
-    // app.testStore();
-    // app.testPoint();
-    // app.testVector();
-    //app.testEvent();
-    //app.testLoader();
-    //app.testGameList();
+    app.testUniqueId();
+    app.testUniqueSet();
+    app.testHood();
+    app.testArea();
+    app.testSpatialHashGrid();
+    app.testImageCache();
+     app.testItem();
+     app.testItemList();
+     app.testLayerList();
+    app.testStore();
+    app.testPoint();
+    app.testVector();
+    app.testEvent();
+    app.testLoader();
+    app.testGameList();
     app.testAsset();
-    //app.testScreen();
+    app.testScreen();
     app.clock.test();
   },
 
@@ -408,14 +408,14 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
 
 
   testLoader() {
-    const gameList = new GameList('gameList');
+    app.gameList = new GameList('gameList');
     const landName = 'land'; // the name of the land file eg 'land_0_1.js'
     app.loader = new Loader(landName);
     const hoodKey = '0_0';
 
-    app.loader.loadData(hoodKey, gameList);
-
-    console.log(gameList);
+    app.loader.loadData(hoodKey, app.gameList);
+    app.gameList.reindex();
+    console.log(app.gameList);
 
   },
 

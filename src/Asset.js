@@ -8,7 +8,7 @@ export default class Asset extends IndexList {
   }
 
   /**
-   * Returns a fleshed-out item with html string and collision layers etc..
+   * Returns a fleshed-out item with html string and collision collideList etc..
    * @param {Item} item 
    * @returns {object} itemInfo
    */
@@ -73,9 +73,10 @@ export default class Asset extends IndexList {
         // collision boxes, first is matching the parent div x,y then whatever height and width for the collision box (can be more than one)
         // ghost boxes are shifted y to close to the top of the image and extend down to top of collision box s
         // shadows arre wider versions of the collision box/s but will be drawn into the png using a transparent layer
-        s: [new Collidable({ x: 0, y: 0, w: 30, h: 15 })], // a list of collision boxes
-        g: [new Collidable({ x: 0, y: -20, w: 30, h: 20 })], // a list of ghost collision boxes
-        d: [new Collidable({ x: -15, y: -10, w: 50, h: 35 })], // a list of shadows
+        collideList: {
+          s: [{ x: 0, y: 0, w: 30, h: 15 }], // a list of collision boxes
+          g: [{ x: 0, y: -20, w: 30, h: 20 }], // a list of ghost collision boxes
+        },
         content: `<img src="img/cube_basic_1_2.png" %style%>`,
       },
       tree_01: {
@@ -83,18 +84,19 @@ export default class Asset extends IndexList {
         top: -60,
         left: -15,
         w: 70,
-        s: [new Collidable({ x: 0, y: 0, w: 30, h: 15 })], // a list of collision boxes
-        g: [new Collidable({ x: 0, y: -45, w: 30, h: 45 })], // a list of ghost collision boxes
-        d: [new Collidable({ x: -10, y: -10, w: 50, h: 35 })], // a list of shadow boxes
-        content: `<img src="img/tree_01.png" %style%>`,
+        collideList: {
+          s: [{ x: 0, y: 0, w: 30, h: 15 }], // a list of collision boxes
+          g: [{ x: 0, y: -45, w: 30, h: 45 }], // a list of ghost collision boxes
+        }, content: `<img src="img/tree_01.png" %style%>`,
       },
       tree_02: {
         top: -80,
         left: -30,
         w: 70,
-        s: [new Collidable({ x: 0, y: 0, w: 20, h: 15 })], // a list of collision boxes
-        g: [new Collidable({ x: 0, y: -50, w: 20, h: 50 })], // a list of ghost collision boxes
-        content: `<img src="img/tree_02.png" %style%>`,
+        collideList: {
+          s: [{ x: 0, y: 0, w: 20, h: 15 }], // a list of collision boxes
+          g: [{ x: 0, y: -50, w: 20, h: 50 }], // a list of ghost collision boxes
+        }, content: `<img src="img/tree_02.png" %style%>`,
       },
 
       rock_01: {
@@ -102,19 +104,18 @@ export default class Asset extends IndexList {
         left: -5,
         w: 50,
         onCollide: 'stop',
-        s: [new Collidable({ x: 0, y: 0, w: 40, h: 10 })], // a list of collision boxes
-        g: [], // no need for ghosting small slow objects
-        d: [new Collidable({ x: -20, y: -5, w: 60, h: 20 })], // a list of shadow boxes
-        content: ``,
+        collideList: {
+          s: [{ x: 0, y: 0, w: 40, h: 10 }], // a list of collision boxes
+        }, content: ``,
       },
       rock_02: {
         top: -20,
         left: -5,
         w: 50,
         onCollide: 'stop',
-        s: [new Collidable({ x: 0, y: 0, w: 40, h: 10 })], // a list of collision boxes
-        g: [], // no need for ghosting small slow objects
-        content: `<img src="img/rock_02.png" %style%>`,
+        collideList: {
+          s: [{ x: 0, y: 0, w: 40, h: 10 }], // a list of collision boxes
+        }, content: `<img src="img/rock_02.png" %style%>`,
       },
       world: {
         name: 'world',

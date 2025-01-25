@@ -1,11 +1,12 @@
 import IndexList from "./IndexList.js";
 import LayerList from "./LayerList.js";
+import Asset from "./Asset.js";
 
 /**
  * Holds the default and moved LayerLists
  * Combines into a tempory combined list used within the game 
  * Keeps lists updated to avoid duplicates
- * Also holds the current layers for collisions (surface, ghosts etc..)
+ * Also holds the SHGs for collisions (surface, ghosts etc..)
  * Keeps an index list of all items in combined for quick access
  */
 export default class GameList extends IndexList {
@@ -15,10 +16,12 @@ export default class GameList extends IndexList {
   INDEX = 'index';
   LAYER = 'layer';
 
+  grids = new IndexList('grids');
   
   constructor(id) {
     super(id);
     this.setup();
+    this.asset = new Asset();
   }
   
   
@@ -28,7 +31,7 @@ export default class GameList extends IndexList {
   setup() {
     const listNames = [this.DEFAULT, this.MOVED, this.INDEX, this.LAYER];
     for (const listName of listNames) {
-      this.add(new IndexList(listName));
+      this.add(new LayerList(listName));
     }
     this.combined = new IndexList(this.COMBINED);
   }
@@ -69,13 +72,15 @@ export default class GameList extends IndexList {
   reindexList(layerList) {
     for (const listId in layerList.list) {
       const itemList = layerList.get(listId);
-      for (const item in itemList.list) {
+      for (const itemId in itemList.list) {
+        // DEBUG need our item here
+        const item = itemList.list[itemId];
         const params = {
           id: item.id,
           gameListId: layerList.id,
           listId: itemList.id,
         };
-        this.index.add(params);
+        this.get(this.INDEX).add(params);
         // also allocate them into layers (and lands?)
         this.allocate(item);
       }
@@ -148,9 +153,20 @@ export default class GameList extends IndexList {
   }
 
   allocate(item) {
-    const itemInfo = Asset.make(item);
-    this.get(this.DEFAULT).allocate();
-    this.get(this.MOVED).allocate();
+    let itemInfo = this.asset.list[item.type];
+    if (!itemInfo || !itemInfo.layers) return;
+    const layerList = this.get(this.LAYER);
+
+// loop through all collidables layers and allocate the item into each one
+    for (const layerId in itemInfo.layers) {
+      const colliderList = itemInfo.layers[layerId];
+      for (const colliders of colliderList) {
+         console.log(collider);    
+         layerList.addItem(item.id, collider);
+      }
+      //console.log(layerId, layer);
+    }
+    // allocate each collision box in each collision layer into the matching gameList layer
   }
 
   /**

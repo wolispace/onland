@@ -11,6 +11,11 @@ export default class Point {
     return new Point(this.x, this.y);
   }
 
+  /**
+   * Adds the passed in objects x,y onto the current Points x,y
+   * @param {object} point with x,y 
+   * @returns 
+   */
   add(point) {
     this.x += point.x;
     this.y += point.y;
