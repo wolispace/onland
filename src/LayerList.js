@@ -1,5 +1,5 @@
 import settings from './settings.js';
-import IndexList from "./IndexList.js";
+import EncodeList from "./EncodeList.js";
 import ItemList from "./ItemList.js";
 import Hood from "./Hood.js";
 import Area from "./Area.js";
@@ -9,7 +9,7 @@ import Area from "./Area.js";
  * Each layer is identified by an id and has a list of items
  * We can interact with just one or all layers via this class
  */
-export default class LayerList extends IndexList {
+export default class LayerList extends EncodeList {
 
   constructor(id) {
     super(id);

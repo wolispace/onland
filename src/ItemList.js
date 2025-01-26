@@ -1,5 +1,5 @@
 import Item from "./Item.js";
-import IndexList from "./IndexList.js";
+import EncodeList from "./EncodeList.js";
 
 /**
  * A list of items found in/on this layer.
@@ -10,7 +10,7 @@ import IndexList from "./IndexList.js";
  * the id should match the id of the item that holds it so if -me is the player then itemList.id = '_me'
  * So surface and underground etc should be prefixed with underscore so they do not clash with auto-generated ids '_s'
  */
-export default class ItemList extends IndexList{
+export default class ItemList extends EncodeList{
   
   constructor(id) {
     super(id);

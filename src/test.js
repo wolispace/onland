@@ -17,6 +17,7 @@ import Item from './Item.js';
 import ItemList from './ItemList.js';
 import LayerList from './LayerList.js';
 import IndexList from './IndexList.js';
+import EncodeList from './EncodeList.js';
 import Event from './Event.js';
 import Screen from './Screen.js';
 import GameList from './GameList.js';
@@ -40,9 +41,9 @@ const app = {
     app.testArea();
     app.testSpatialHashGrid();
     app.testImageCache();
-     app.testItem();
-     app.testItemList();
-     app.testLayerList();
+    app.testItem();
+    app.testItemList();
+    app.testLayerList();
     app.testStore();
     app.testPoint();
     app.testVector();
@@ -103,8 +104,8 @@ const app = {
   testHood() {
     app.compare('hood numbers', '2_3', new Hood(2, 3).key);
     app.compare('hood string', '2_3', new Hood('2_3').key);
-    app.compare('hood Point', '2_3', new Hood(new Point(2,3)).key);
-    app.compare('hood any', '2_3', new Hood({x:2, y:3}).key);
+    app.compare('hood Point', '2_3', new Hood(new Point(2, 3)).key);
+    app.compare('hood any', '2_3', new Hood({ x: 2, y: 3 }).key);
 
     const hoodOne = new Hood(2, 3);
     const hoodList = ['1_2', '1_3', '1_4', '2_2', '2_3', '2_4', '3_2', '3_3', '3_4'];
@@ -116,11 +117,11 @@ const app = {
     app.compare('breakKey', [-3, 6], Hood.breakKey('-3_6'));
 
     const cellSize = new Area(settings.cellSize);
-    hoodOne.set(2,5);
+    hoodOne.set(2, 5);
     hoodOne.setCoords(cellSize);
-    app.compare('set coords', {x:2000,y:5000}, hoodOne.coords);
-    
-  
+    app.compare('set coords', { x: 2000, y: 5000 }, hoodOne.coords);
+
+
 
 
   },
@@ -165,14 +166,14 @@ const app = {
     placedKey = app.testGrid.addToCell(key, id);
     expected = ["test_001", "test_002"];
     app.compare(`addToCell_3`, expected, app.testGrid.grid[key].toArray());
-    
+
     key = ["4_6"];
     app.compare('query', expected, app.testGrid.query(key).toArray());
 
     key = '4_6';
     expected = ["test_001", "test_002"];
     app.compare('queryKingsSquare', expected, app.testGrid.queryKingsSquare(key).toArray());
-    
+
     params = { id: 'test_001', x: 420, y: 1220 };
     expected = ["test_002"];
     app.testGrid.remove(params);
@@ -195,7 +196,7 @@ const app = {
 
     app.imageCache.addDirectional('cubeface');
     app.compare('addImage', ['http://localhost:88/img/rock_02.png', 'http://localhost:88/img/cubeface_0_0.png', 'http://localhost:88/img/cubeface_0_1.png', 'http://localhost:88/img/cubeface_0_2.png', 'http://localhost:88/img/cubeface_1_0.png', 'http://localhost:88/img/cubeface_1_1.png', 'http://localhost:88/img/cubeface_1_2.png', 'http://localhost:88/img/cubeface_2_0.png', 'http://localhost:88/img/cubeface_2_1.png', 'http://localhost:88/img/cubeface_2_2.png'], app.imageCache.toString());
-    
+
   },
 
   testItem() {
@@ -217,7 +218,7 @@ const app = {
     app.compare('newItem 2', 'tree_02', newItem.type);
     app.compare('newItem qty', 1, newItem.qty);
     app.compare('newItem parent', 'rock_02', newItem.parent);
-    app.compare('imgCache ', ["http://localhost:88/img/rock_02.png","http://localhost:88/img/tree_02.png"], app.imageCache.toString());
+    app.compare('imgCache ', ["http://localhost:88/img/rock_02.png", "http://localhost:88/img/tree_02.png"], app.imageCache.toString());
   },
 
   testItemList() {
@@ -245,7 +246,7 @@ const app = {
     list1.addItem(layerId, newItem);
     let foundItem = list1.getItem(layerId, 'a');
     app.compare('add', foundItem, newItem);
-    app.compare('decode', 'test:_s|a,,rock_02,,20,30',list1.encode());
+    app.compare('decode', 'test:_s|a,,rock_02,,20,30', list1.encode());
     list1.clear();
     app.compare('clear', {}, list1.list);
 
@@ -256,7 +257,7 @@ _u|x,,coal_02,,50,60;y,,gem_02,,30,90
 
     list1.decode(encodedString);
     // so we are compared the same formatted/cleaned encoded strings
-    encodedString = IndexList.cleanEncodedString(encodedString);
+    encodedString = EncodeList.cleanEncodedString(encodedString);
     let encodedAgain = list1.encode();
     app.compare('decoded', encodedString, encodedAgain);
 
@@ -268,9 +269,9 @@ _u|x,,coal_02,,50,60;y,,gem_02,,30,90
 _s|a,,tree_02,,1050,3060;b,,rock_02,,1030,3090/
 _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     `;
-    encodedString = IndexList.cleanEncodedString(encodedString);
+    encodedString = EncodeList.cleanEncodedString(encodedString);
     app.compare('expand', encodedString, encodedAgain);
-    
+
   },
 
   testStore() {
@@ -295,7 +296,7 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
 
     app.compare('screen add', {}, Screen.getElement('_test1'));
     Screen.remove('_test2');
-    app.compare('screen remove', null , Screen.getElement('_test2'));
+    app.compare('screen remove', null, Screen.getElement('_test2'));
 
   },
 
@@ -335,7 +336,7 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     const point2 = new Point(2, 2);
     const point3 = point1.copy().add(point2);
     app.compare('point add', 3, point3.x);
-    app.compare('point add', {x:1, y:4}, point3.add({x:-2, y:1}));
+    app.compare('point add', { x: 1, y: 4 }, point3.add({ x: -2, y: 1 }));
     point2.backup();
     point2.take(point1);
     app.compare('take', 1, point2.x);
@@ -348,16 +349,16 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
   },
 
   testVector() {
-    const vec1 = new Vector(1,1);
-    const vec2 = new Vector(100,100);
+    const vec1 = new Vector(1, 1);
+    const vec2 = new Vector(100, 100);
 
     app.compare('vector mag', 1.4142135623730951, vec1.magnitude());
     vec1.normalise();
     app.compare('vector norm', 0.9999999999999999, vec1.magnitude());
     app.compare('vector x', 0.7071067811865475, vec1.x);
-    
+
     vec2.limit(50);
-    app.compare('limit', {"x":35.35533905932737,"y":35.35533905932737}, vec2);
+    app.compare('limit', { "x": 35.35533905932737, "y": 35.35533905932737 }, vec2);
 
   },
 
@@ -379,17 +380,17 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     // we will add point2 into mainPoint
     app.event.on('ADD_POINTS', mainPoint, (pointToAdd) => {
       mainPoint.add(pointToAdd);
-      app.compare('event add', {x:3,y:3}, mainPoint);
+      app.compare('event add', { x: 3, y: 3 }, mainPoint);
     });
 
-    app.compare('before event?', {x:1, y:1}, mainPoint);
+    app.compare('before event?', { x: 1, y: 1 }, mainPoint);
     app.event.emit('ADD_POINTS', point2);
-    app.compare('after event?', {x:3, y:3}, mainPoint);
-    
+    app.compare('after event?', { x: 3, y: 3 }, mainPoint);
+
     // put a div on the screen for testing keypresses
     Screen.add('<div class="log" id="_key">KEY??</div>', 'overlay');
     const screenKey = Screen.getElement('_key');
-    
+
     // a test object with functions that respond to events 
     const testObj = {
       keyDown: (eventKey) => {
@@ -397,9 +398,9 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
       },
       keyUp: (eventKey) => {
         screenKey.innerHTML = `${eventKey} up`;
-      }   
+      }
     };
-    
+
     // when the events are fired, run the relevent functions
     app.event.on('KEY_DOWN', testObj, testObj.keyDown);
     app.event.on('KEY_UP', testObj, testObj.keyUp);
@@ -434,7 +435,7 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
       x: 50,
       y: 50,
     };
-    
+
     const item = new Item(params);
     const itemInfo = app.asset.make(item);
     Screen.add(itemInfo.html);
@@ -475,8 +476,8 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
 }
 
 
-  
-  
+
+
 // make these accessible via DevTools
 window.app = app;
 window.settings = settings;

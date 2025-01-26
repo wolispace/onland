@@ -153,20 +153,30 @@ export default class GameList extends IndexList {
   }
 
   allocate(item) {
-    let itemInfo = this.asset.list[item.type];
-    if (!itemInfo || !itemInfo.layers) return;
-    const layerList = this.get(this.LAYER);
-
-// loop through all collidables layers and allocate the item into each one
-    for (const layerId in itemInfo.layers) {
-      const colliderList = itemInfo.layers[layerId];
-      for (const colliders of colliderList) {
-         console.log(collider);    
-         layerList.addItem(item.id, collider);
+    if (!item.collideList) return;
+    console.log('allocate', item.collideList.list);
+    for (const layerId in item.collideList.list) {
+      const colliderList = item.collideList[layerId];
+      console.log(  'colliderList', layerId, colliderList);
+      for (const colliderId in colliderList) {
+        const collider = colliderList.get(colliderId);
+        console.log('collider', collider);
+        layerList.addItem(item.id, collider);
       }
       //console.log(layerId, layer);
     }
-    // allocate each collision box in each collision layer into the matching gameList layer
+    const layerList = this.get(this.LAYER);
+
+// // loop through all collidables layers and allocate the item into each one
+//     for (const layerId in itemInfo.layers) {
+//       const colliderList = itemInfo.layers[layerId];
+//       for (const colliders of colliderList) {
+//          console.log(collider);    
+//          layerList.addItem(item.id, collider);
+//       }
+//       //console.log(layerId, layer);
+//     }
+//     // allocate each collision box in each collision layer into the matching gameList layer
   }
 
   /**
