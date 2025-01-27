@@ -24,6 +24,7 @@ export default class SpacialHashGrid extends Rectangle {
    * @param {object} app contains the app.world 
    */
   show(app) {
+    //TODO: update this to forOf()
     Object.keys(this.grid).forEach(key => {
       const hood = new Hood(key);
       hood.expandHood(this.cellSize);

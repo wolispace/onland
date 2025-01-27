@@ -24,15 +24,13 @@ export default class EncodeList extends IndexList {
   encode() {
     let encodedString = this.id;
     let delim = this.SEPERATOR;
-    for (const id in this.list) {
-      const item = this.list[id];
-      //console.log('encoding item', item);
-      if (!item) continue;
+    this.forOf(item => {
+      if (!item) return;
      // console.trace('encoding item', item);
       encodedString += delim;
       encodedString += item.encode();
       delim = this.DELIM;
-    }
+    });
 
     return encodedString;
   }

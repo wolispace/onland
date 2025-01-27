@@ -77,9 +77,26 @@ export default class IndexList {
 
   /**
    * Executes a function for each item in the list
-   * @param {Function} fn The function to execute on each item
+   * @param {Function} functionName The function to execute on each item
    */
-  forEach(fn) {
-    Object.values(this.list).forEach(fn);
+  forEach(functionName) {
+    Object.values(this.list).forEach(functionName);
   }
+
+  /**
+   * Executes the function on each item
+   * can use (item) => {} or (item, id) => {}
+   * @param {function} functionName 
+   */
+  forOf(functionName) {
+    for (const [id, item] of Object.entries(this.list)) {
+      functionName(item, id);
+    }
+  }
+
+  /**
+   * Returns the number of items in the list
+   * @returns {number}
+   */
+  size = () => Object.keys(this.list).length;
 }

@@ -72,7 +72,7 @@ export default class UniqueSet extends Set {
    * run the passed in function on each item
    * @param {function} functionName 
    */
-  run(functionName) {
+  forOf(functionName) {
     this.forEach((item) => functionName(item));
   }
 }

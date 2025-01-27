@@ -58,9 +58,9 @@ export default class GameList {
    * So whe can get the list (default or moved) an item is in when found in combined 
    */
   reindex() {
-    this.combined.forEach(
+    this.combined.forOf(
       layerList => {
-        layerList.forEach(item => {
+        layerList.forOf(item => {
           this.index.add(item);
         });
       }

@@ -35,23 +35,23 @@ const app = {
 
   start() {
     app.setup();
-    // app.testUniqueId();
-    // app.testUniqueSet();
-    // app.testHood();
-    // app.testArea();
-    // app.testSpatialHashGrid();
-    // app.testImageCache();
-    // app.testItem();
-    // app.testItemList();
-    // app.testLayerList();
-    // app.testStore();
-    // app.testPoint();
-    // app.testVector();
-    // app.testEvent();
+    app.testUniqueId();
+    app.testUniqueSet();
+    app.testHood();
+    app.testArea();
+    app.testSpatialHashGrid();
+    app.testImageCache();
+    app.testItem();
+    app.testItemList();
+    app.testLayerList();
+    app.testStore();
+    app.testPoint();
+    app.testVector();
+    app.testEvent();
     app.testLoader();
-    // app.testGameList();
-    // app.testAsset();
-    // app.testScreen();
+    app.testGameList();
+    app.testAsset();
+    app.testScreen();
     app.clock.test();
   },
 
