@@ -1,6 +1,7 @@
 import IndexList from "./IndexList.js";
 import LayerList from "./LayerList.js";
 import Asset from "./Asset.js";
+import SpacialHashGrid from "./SpacialHashGrid.js";
 
 /**
  * Holds the default and moved LayerLists
@@ -36,6 +37,16 @@ export default class GameList {
   }
 
   /**
+   * Returns the params needed for setting up different grids
+   * surface and ghost grids are 50x50, suburbs are larger
+   * @param {string} layerId 
+   * @returns 
+   */
+  gridParams(layerId) {
+  return {x:50, y:50};
+  }
+
+  /**
    * Update the combined list of items
    * and the indexes of the items
   */
@@ -62,33 +73,12 @@ export default class GameList {
       layerList => {
         layerList.forOf(item => {
           this.index.add(item);
+          this.allocate(item);
         });
       }
     );
   }
 
-  /**
-   * Loop thought all items in all itemLists and add them into our index
-   *  of itemId = {gameListId: 'default', listId: '_s'}
-   * @param {LayerList} layerList 
-   */
-  reindexList(layerList) {
-    for (const listId in layerList.list) {
-      const itemList = layerList.get(listId);
-      for (const itemId in itemList.list) {
-        // DEBUG need our item here
-        const item = itemList.list[itemId];
-        const params = {
-          id: item.id,
-          gameListId: layerList.id,
-          listId: itemList.id,
-        };
-        this.index.add(params);
-        // also allocate them into layers (and lands?)
-        this.allocate(item);
-      }
-    }
-  }
 
   /**
      * Adding a new item into our list of moved items
@@ -157,29 +147,17 @@ export default class GameList {
 
   allocate(item) {
     if (!item.collideList) return;
-    console.log('allocate', item.collideList.list);
-    for (const layerId in item.collideList.list) {
-      const colliderList = item.collideList[layerId];
-      console.log(  'colliderList', layerId, colliderList);
-      for (const colliderId in colliderList) {
-        const collider = colliderList.get(colliderId);
-        console.log('collider', collider);
-        layerList.addItem(item.id, collider);
-      }
-      //console.log(layerId, layer);
-    }
-    const layerList = this.get(this.LAYER);
-
-// // loop through all collidables layers and allocate the item into each one
-//     for (const layerId in itemInfo.layers) {
-//       const colliderList = itemInfo.layers[layerId];
-//       for (const colliders of colliderList) {
-//          console.log(collider);    
-//          layerList.addItem(item.id, collider);
-//       }
-//       //console.log(layerId, layer);
-//     }
-//     // allocate each collision box in each collision layer into the matching gameList layer
+    item.collideList.forOf((layerList, layerId) => {
+      // make sure we have a grid for this layer
+      const rect = {w: 2000, h: 2000};
+      const cellSize = {x:50, y: 50};
+      const newGrid = new SpacialHashGrid(layerId, rect, cellSize);
+      const thisGrid = this.grid.get(layerId, newGrid);
+      layerList.forOf(collider => {
+        // add this collidable into the grid for layerId eg surface
+        thisGrid.addShape(collider);
+      });
+    });
   }
 
   /**

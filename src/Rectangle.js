@@ -1,4 +1,5 @@
 
+import Point from './Point.js';
 import Vector from './Vector.js';
 
 export default class Rectangle extends Vector {
