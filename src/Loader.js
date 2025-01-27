@@ -25,6 +25,7 @@ export default class Loader {
     this.backgroundColors = {};
     const hood = new Hood(hoodKey);
     const filePromises = [];
+    const source = 'default';
 
     for (const hoodKey of hood.listReal) {
       //console.log('hoodKey', hoodKey);
@@ -39,7 +40,7 @@ export default class Loader {
         .then(loadedData => {
           if (loadedData.defaultData) {
             if (typeof (loadedData.defaultData) === "string") {
-              const layerList = gameList.get(settings.DEFAULT);
+              const layerList = gameList.default;
               layerList.decode(loadedData.defaultData);
               layerList.expand(hoodKey);
             }

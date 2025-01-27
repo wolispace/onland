@@ -11,8 +11,8 @@ import Area from "./Area.js";
  */
 export default class LayerList extends EncodeList {
 
-  constructor(id) {
-    super(id);
+  constructor(id, source = '') {
+    super(id, source);
     this.cellSize = new Area(settings.cellSize);
     this.DELIM = '/';
     this.SEPERATOR = ':';
@@ -42,7 +42,7 @@ export default class LayerList extends EncodeList {
    */
   addItem(listId, item) {
     if (!this.list[listId]) {
-      this.list[listId] = new ItemList(listId);
+      this.list[listId] = new ItemList(listId, this.source);
     }
     this.list[listId].add(item);
   }
@@ -78,8 +78,7 @@ export default class LayerList extends EncodeList {
    * @returns 
    */
   createItem(encodedString) {
-    const itemList = new ItemList(encodedString);
-    return itemList;
+    return new ItemList(encodedString, this.source);
   }
 
   /**

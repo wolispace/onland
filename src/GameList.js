@@ -9,31 +9,30 @@ import Asset from "./Asset.js";
  * Also holds the SHGs for collisions (surface, ghosts etc..)
  * Keeps an index list of all items in combined for quick access
  */
-export default class GameList extends IndexList {
+export default class GameList {
   MOVED = 'moved';
   DEFAULT = 'default';
   COMBINED = 'combined';
   INDEX = 'index';
-  LAYER = 'layer';
+  GRID = 'grid';
+  asset = new Asset();
 
-  grids = new IndexList('grids');
-  
-  constructor(id) {
-    super(id);
+  constructor() {
     this.setup();
-    this.asset = new Asset();
   }
   
-  
-  //NOTE: use this.add(layerList) to add a newly decoded layerList 'default' or 'moved'
-  
-  // when first setting up the gameList we run this
   setup() {
-    const listNames = [this.DEFAULT, this.MOVED, this.INDEX, this.LAYER];
+    // make the Encode lists for data read from disk and memory
+    let listNames = [this.DEFAULT, this.MOVED];
     for (const listName of listNames) {
-      this.add(new LayerList(listName));
+      this[listName] = new LayerList(listName, listName);
     }
-    this.combined = new IndexList(this.COMBINED);
+
+    // make the index lists that dont need to be encoded/decoded
+    listNames = [this.COMBINED, this.INDEX, this.GRID];
+    for (const listName of listNames) {
+      this[listName] = new IndexList(listName);
+    }
   }
 
   /**
@@ -50,9 +49,8 @@ export default class GameList extends IndexList {
    * @returns {LayerList}
    */
   combine() {
-    this.combined = this.get(this.DEFAULT).copy(this.COMBINED);
-    this.combined.merge(this.get(this.MOVED));
-    this.combined.DELIM = 'X';
+    this.combined = this.default.copy(this.COMBINED);
+    this.combined.merge(this.moved);
   }
 
   /**
@@ -60,8 +58,13 @@ export default class GameList extends IndexList {
    * So whe can get the list (default or moved) an item is in when found in combined 
    */
   reindex() {
-    this.reindexList(this.get(this.DEFAULT));
-    this.reindexList(this.get(this.MOVED));
+    this.combined.forEach(
+      layerList => {
+        layerList.forEach(item => {
+          this.index.add(item);
+        });
+      }
+    );
   }
 
   /**
@@ -80,7 +83,7 @@ export default class GameList extends IndexList {
           gameListId: layerList.id,
           listId: itemList.id,
         };
-        this.get(this.INDEX).add(params);
+        this.index.add(params);
         // also allocate them into layers (and lands?)
         this.allocate(item);
       }

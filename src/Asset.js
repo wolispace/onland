@@ -1,6 +1,6 @@
 import Utils from './Utils.js';
 import IndexList from './IndexList.js';
-import Collidable from './Collidable.js';
+
 export default class Asset extends IndexList {
   constructor() {
     super('asset');

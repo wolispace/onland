@@ -69,6 +69,7 @@ function loadData(hoodKey) {
   // clear all previous background colours ready to setup a new set of 9 suburbs
   app.backgroundColors = {};
   const hood = new Hood(hoodKey);
+  const source = 'default';
 
   const layer = settings.SURFACE;
   const filePromises = [];

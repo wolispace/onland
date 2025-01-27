@@ -12,8 +12,8 @@ import EncodeList from "./EncodeList.js";
  */
 export default class ItemList extends EncodeList{
   
-  constructor(id) {
-    super(id);
+  constructor(id, source = '') {
+    super(id, source);
     this.SEPERATOR = '|';
     this.DELIM = ';';
     // if we initialised with an encoded string, decode it to populate this list
@@ -49,7 +49,7 @@ export default class ItemList extends EncodeList{
    */
   createItem(encodedString) 
   { 
-    return new Item(encodedString); 
+    return new Item(encodedString, this.source); 
   } 
 
   /**

@@ -11,12 +11,11 @@ export default class EncodeList extends IndexList {
   DELIM = ';'; // how we delimit the list when encoding
   list = {};
 
-  constructor(id = '') {
+  constructor(id = '', source = '') {
     super();
     this.id = id;
+    this.source = source; // pass this down to its children so we know what loaded it default/moved
   }
-
-
 
   /**
    * Returns the list of items in encoded form
@@ -61,6 +60,7 @@ export default class EncodeList extends IndexList {
     for (const encodedItem of items) {
       if (encodedItem.trim() === '') continue;
       const item = this.createItem(encodedItem.trim());
+      item.source = this.source;
       //console.log('decoding item', item);
       this.add(item);
     };

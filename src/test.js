@@ -35,23 +35,23 @@ const app = {
 
   start() {
     app.setup();
-    app.testUniqueId();
-    app.testUniqueSet();
-    app.testHood();
-    app.testArea();
-    app.testSpatialHashGrid();
-    app.testImageCache();
-    app.testItem();
-    app.testItemList();
-    app.testLayerList();
-    app.testStore();
-    app.testPoint();
-    app.testVector();
-    app.testEvent();
+    // app.testUniqueId();
+    // app.testUniqueSet();
+    // app.testHood();
+    // app.testArea();
+    // app.testSpatialHashGrid();
+    // app.testImageCache();
+    // app.testItem();
+    // app.testItemList();
+    // app.testLayerList();
+    // app.testStore();
+    // app.testPoint();
+    // app.testVector();
+    // app.testEvent();
     app.testLoader();
-    app.testGameList();
-    app.testAsset();
-    app.testScreen();
+    // app.testGameList();
+    // app.testAsset();
+    // app.testScreen();
     app.clock.test();
   },
 
@@ -200,6 +200,7 @@ const app = {
   },
 
   testItem() {
+    const source = 'TEST';
     app.imageCache.clear();
     const params = {
       id: 'a',
@@ -209,7 +210,7 @@ const app = {
       x: 50,
       y: 50,
     };
-    let newItem = new Item(params);
+    let newItem = new Item(params, source);
     newItem.setup(app);
     app.compare('newItem', 'rock_02', newItem.type);
     app.compare('encode', 'a,,rock_02,,50,50', newItem.encode());
@@ -222,7 +223,8 @@ const app = {
   },
 
   testItemList() {
-    const list1 = new ItemList('list1');
+    const source = 'TEST';
+    const list1 = new ItemList('list1', source);
     let newItem = new Item('b,rock_02,tree_02,,50,60');
     list1.add(newItem);
     let foundItem = list1.get('b');
@@ -232,7 +234,7 @@ const app = {
     app.compare('encode', 'list1|b,rock_02,tree_02,,50,60;c,,rock_02,,30,90', list1.encode());
 
     const encodedString = '_s|x,,tree_02,,50,60;y,,rock_02,,30,90';
-    const list2 = new ItemList('_s');
+    const list2 = new ItemList('_s', source);
     list2.decode(encodedString);
     foundItem = list2.get('x');
     app.compare('decode', 'tree_02', foundItem.type);

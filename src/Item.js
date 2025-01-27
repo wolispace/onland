@@ -15,7 +15,8 @@ export default class Item {
   collideList = new IndexList('collidable'); // list of layers holding collidable rectangles
 
   // can pass in either an encoded string or an object with matching params
-  constructor(params) {
+  constructor(params, source = '') {
+    this.source = source;
     // if we initialise with an encodes string, decode it otherwise set the params id = id etc..
     if (typeof params == 'string') {
       this.decode(params);
@@ -88,6 +89,7 @@ export default class Item {
    * @returns {object} this {id, type, qty, x, y}
    */
   decode(encodedString) {
+
     const decodedValues = encodedString.split(Item.DELIM);
 
     for (let i = 0; i < Item.ENCODED_KEYS.length; i++) {
