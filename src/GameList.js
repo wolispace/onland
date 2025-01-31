@@ -149,9 +149,9 @@ export default class GameList {
     if (!item.collideList) return;
     item.collideList.forOf((layerList, layerId) => {
       // make sure we have a grid for this layer
-      const rect = {w: 2000, h: 2000};
-      const cellSize = {x:50, y: 50};
-      const newGrid = new SpacialHashGrid(layerId, rect, cellSize);
+      const area = {w: 2000, h: 2000};
+      const size = {w:50, h: 50};
+      const newGrid = new SpacialHashGrid(layerId, area, size);
       const thisGrid = this.grid.get(layerId, newGrid);
       layerList.forOf(collider => {
         // add this collidable into the grid for layerId eg surface

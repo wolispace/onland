@@ -49,10 +49,10 @@ export default class Hood extends Point {
   /**
    * Expands the hoods x,y to world coords
    * eg: hood '2_5' with an area of {w:1000, h:1000} = {x:2000, y:5000}
-   * @param {Area} area 
+   * @param {Point} point 
    */
-  setCoords(area) {
-    this.coords = area.expand(this.point);
+  setCoords(point) {
+    this.coords = point.expand(this.point);
   }
 
   /**

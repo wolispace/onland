@@ -1,25 +1,49 @@
 import Point from './Point.js';
-import Rectangle from './Rectangle.js';
 import Hood from './Hood.js';
+import Area from './Area.js';
 import UniqueSet from './UniqueSet.js';
+import IndexList from './IndexList.js';
 
-export default class SpacialHashGrid extends Rectangle {
+export default class SpacialHashGrid extends IndexList {
   grid = {};
 
-  constructor(name, rectangle, cellSize) {
-    super(rectangle);
-    this.name = name;
-    this.cellSize = cellSize;
+  /**
+   * 
+   * @param {string} id 
+   * @param {Area} area how large the grid is eg 2000x2000
+   * @param {Area} size how large each cell is eg 100x100
+   */
+  constructor(id, area, size) {
+    super('grid');
+    this.id = id;
+    this.area = area;
+    this.size = size;
     this.setup();
   }
 
   setup() {
-    // the whole area divided up into a cellSize grid given as a point of x,y rows and cols
-    const area = new Point(this.w, this.h);
-    this.rowCols = this.makeRowCols(area);
+    // make a point that represents the size of each cell in x,y 
+    this.areaPoint = new Point(this.area.w, this.area.h);
+    // make a point that is the total rows and columns in this grid
+    this.rowCols = this.makeRowCols(this.areaPoint);
   }
 
   /**
+ * Returns the row/s and col/s of the given point within the grid
+ * a grid of 1000 x 1000 with a cellSize of 10 x 10 = a 100 rows x 100 cols grid
+ * Pass in 23,52 and a cell size of 10,10 will results in row,col 2,5
+ * @param {Point} point with {x, y} 
+ * @returns {Point} with new {x, y} 
+ */
+  makeRowCols(point) {
+    return new Point(
+      Math.floor(point.x / this.size.w),
+      Math.floor(point.y / this.size.h)
+    );
+  }
+
+  /**
+   * 
    * Shows the grid on the world for debugging
    * @param {object} app contains the app.world 
    */
@@ -30,24 +54,12 @@ export default class SpacialHashGrid extends Rectangle {
       hood.expandHood(this.cellSize);
 
       const div = `<div class="showGrid ${this.name}" 
-      style="top: ${hood.y}px; left: ${hood.x}px; width:${this.cellSize.w}px; height:${this.cellSize.h}px;"></div>`;
+      style="top: ${hood.y}px; left: ${hood.x}px; width:${this.cellSize.x}px; height:${this.cellSize.y}px;"></div>`;
       app.world.add(div);
     });
   }
 
-  /**
-   * Returns the row/s and col/s of the given point within the grid
-   * a grid of 1000 x 1000 with a cellSize of 10 x 10 = a 100 rows x 100 cols grid
-   * Pass in 23,52 and a cell size of 10,10 will results in row,col 2,5
-   * @param {object} pos with {x, y} 
-   * @returns {Point} with new {x, y} 
-   */
-  makeRowCols(pos) {
-    return new Point(
-      Math.floor(pos.x / this.cellSize.w),
-      Math.floor(pos.y / this.cellSize.h)
-    );
-  }
+
 
   // the top left corner of a given cell eg '4_6'
   cellTopLeft(key) {
@@ -56,7 +68,7 @@ export default class SpacialHashGrid extends Rectangle {
   }
 
   /**
-   * 
+   * TODO: is this obsolete now?
    * @param {object} params has x and y in world coords that need mapping into the grid 
    * @returns {string} key key eg x=100, y= 200 returns '1_2' if the cellSize is 100
    */
@@ -70,10 +82,10 @@ export default class SpacialHashGrid extends Rectangle {
    * @param {object} params has x and y in world coords that need mapping into the grid 
    * @returns {Hood}  eg x=100, y= 200 returns a hood '1_2' if the cellSize is 100
    */
-    makeHood(params) {
-      const rowCols = this.makeRowCols(params);
-      return new Hood(rowCols);
-    }
+  makeHood(params) {
+    const rowCols = this.makeRowCols(params);
+    return new Hood(rowCols);
+  }
 
   // work out the bounding box for this shape and add() points into the grid for the corners and all cells between them
   // the params must include a Rectangle and an id
@@ -91,9 +103,11 @@ export default class SpacialHashGrid extends Rectangle {
     let [left, top] = Hood.breakKey(keys[0]);
     let [right, bottom] = Hood.breakKey(keys[2]);
 
+    console.log('addShape', keys, left, top, right, bottom);
+
     for (let x = left; x <= right; x++) {
       for (let y = top; y <= bottom; y++) {
-        const hood = new Hood(x,y);
+        const hood = new Hood(x, y);
         this.addToCell(hood.key, params.id);
       }
     }
@@ -153,7 +167,7 @@ export default class SpacialHashGrid extends Rectangle {
    */
   add(params) {
     // do we want to removeById(params.id) before adding to make sure its unique?
-    const hood = new Hood(params); 
+    const hood = new Hood(params);
     return this.addToCell(hood.key, params.id);
   }
 
@@ -187,6 +201,7 @@ export default class SpacialHashGrid extends Rectangle {
   remove(params) {
     const hood = this.makeHood(params);
     let cell = this.grid[hood.key];
+    console.log(params, hood.key, cell, this.grid);
     if (!cell) return;
     this.grid[hood.key].delete(params.id);
   }

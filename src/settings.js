@@ -10,7 +10,8 @@ const settings = {
     lands: 'world',
   },
 
-  cellSize: 1000, // all cells in grids are squares 1000x1000px
+  cellArea: {x: 1000, y: 1000}, // cells in the suburb grid
+  gridCellArea: {x: 50, y: 50}, // cells in the collision gridS
   MOVED_ITEMS: 'moved',
   DEFAULT: 'default',
   SUBURBS: 'suburbs',

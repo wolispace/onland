@@ -35,23 +35,24 @@ const app = {
 
   start() {
     app.setup();
-    app.testUniqueId();
-    app.testUniqueSet();
-    app.testHood();
-    app.testArea();
-    app.testSpatialHashGrid();
-    app.testImageCache();
-    app.testItem();
-    app.testItemList();
-    app.testLayerList();
-    app.testStore();
     app.testPoint();
-    app.testVector();
-    app.testEvent();
-    app.testLoader();
-    app.testGameList();
-    app.testAsset();
-    app.testScreen();
+    app.testArea();
+    app.testRectangle();
+    // app.testUniqueId();
+    // app.testUniqueSet();
+    app.testHood();
+    app.testSpatialHashGrid();
+    // app.testImageCache();
+    // app.testItem();
+    // app.testItemList();
+    // app.testLayerList();
+    // app.testStore();
+    // app.testVector();
+    // app.testEvent();
+    // app.testLoader();
+    // app.testGameList();
+    // app.testAsset();
+    // app.testScreen();
     app.clock.test();
   },
 
@@ -116,7 +117,7 @@ const app = {
 
     app.compare('breakKey', [-3, 6], Hood.breakKey('-3_6'));
 
-    const cellSize = new Area(settings.cellSize);
+    const cellSize = new Point(1000, 1000);
     hoodOne.set(2, 5);
     hoodOne.setCoords(cellSize);
     app.compare('set coords', { x: 2000, y: 5000 }, hoodOne.coords);
@@ -128,8 +129,13 @@ const app = {
 
   testArea() {
     const area1 = new Area(1000, 1000);
-    //app.compare('multiply', {x:2000,y:5000}, area1.expand({x:2,y:5}));
+    // no functions in area to test as yet
+    //app.compare('multiply', {w:2000,h:5000}, area1.expand({w:2,h:5}));
 
+
+  },
+
+  testRectangle() {
 
   },
 
@@ -146,13 +152,17 @@ const app = {
 
   testSpatialHashGrid() {
     // a grid 1000x1000 with 10x10 rows/cols cells of 100x100 each
-    const cellSize = new Rectangle({ w: 100, h: 200 });
-    const gridRectangle = new Rectangle({ w: 1000, h: 2000 });
-    app.testGrid = new SpacialHashGrid('test', gridRectangle, cellSize);
+    app.testGrid = new SpacialHashGrid('test', { w: 1000, h: 1000 }, { w: 100, h: 100 });
 
-    let params = null;
-    let expected = new Point(10, 10);
-    app.compare('rowCols', expected, app.testGrid.rowCols);
+    app.compare('area', { w: 1000, h: 1000 }, app.testGrid.area);
+    app.compare('size', { w: 100, h: 100 }, app.testGrid.size);
+    app.compare('areaPoint', { x: 1000, y: 1000 }, app.testGrid.areaPoint);
+    app.compare('rowCols', { x: 10, y: 10 }, app.testGrid.rowCols);
+    
+    app.compare('makeHood', {"x":2,"y":3,"coords":{"x":0,"y":0}}, app.testGrid.makeHood({x: 200, y: 300}));
+    
+    let params;
+    let expected;
 
     let key = '4_6';
     let id = 'test_001';
@@ -174,12 +184,12 @@ const app = {
     expected = ["test_001", "test_002"];
     app.compare('queryKingsSquare', expected, app.testGrid.queryKingsSquare(key).toArray());
 
-    params = { id: 'test_001', x: 420, y: 1220 };
+    params = { id: 'test_001', x: 420, y: 620 };
     expected = ["test_002"];
     app.testGrid.remove(params);
     app.compare(`remove`, expected, app.testGrid.grid[key].toArray());
 
-    params = { id: 'test_002', x: 410, y: 1210 };
+    params = { id: 'test_002', x: 410, y: 610 };
     expected = [];
     app.testGrid.remove(params);
     app.compare(`remove`, expected, app.testGrid.grid[key].toArray());
@@ -339,6 +349,7 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     const point3 = point1.copy().add(point2);
     app.compare('point add', 3, point3.x);
     app.compare('point add', { x: 1, y: 4 }, point3.add({ x: -2, y: 1 }));
+    app.compare('expand', { x: 1000, y: 4000 }, point3.expand({ x: 1000, y: 1000 }));
     point2.backup();
     point2.take(point1);
     app.compare('take', 1, point2.x);

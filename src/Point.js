@@ -1,10 +1,8 @@
 export default class Point {
-  x = 0;
-  y = 0;
 
   constructor(x, y) {
-    this.x = x;
-    this.y = y;
+    this.x = x || 0;
+    this.y = y || 0;
   }
 
   copy() {
@@ -32,6 +30,15 @@ export default class Point {
     this.x *= scalar;
     this.y *= scalar;
     return this;
+  }
+
+  /**
+   * Returns the current point expanded out by the passed in point so 10x10 * 2x2 = 20x20
+   * @param {Point} point 
+   * @returns {Point}
+   */
+  expand(point) {
+    return new Point(this.x * point.x, this.y * point.y);
   }
 
   round(decimals = 2) {

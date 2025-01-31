@@ -2,7 +2,7 @@ import settings from './settings.js';
 import EncodeList from "./EncodeList.js";
 import ItemList from "./ItemList.js";
 import Hood from "./Hood.js";
-import Area from "./Area.js";
+import Point from "./Point.js";
 
 /**
  * A list of one or more layers. 
@@ -13,7 +13,7 @@ export default class LayerList extends EncodeList {
 
   constructor(id, source = '') {
     super(id, source);
-    this.cellSize = new Area(settings.cellSize);
+    this.cellArea = new Point(settings.cellArea);
     this.DELIM = '/';
     this.SEPERATOR = ':';
     // if we initialised with an encoded string, decode it to populate this list
@@ -82,14 +82,14 @@ export default class LayerList extends EncodeList {
   }
 
   /**
-   * Expand all items x,y in each itemList to the cellSize
+   * Expand all items x,y in each itemList to the cellArea
    * we only do this for default loaded data so we can start each file with 0,0
    * After this, any placed or moved items are in world coords when stored in localStorage in the moved: itemLists
    * @param {string} hoodKey eg '1_1' 
    */
   expand(hoodKey) {
     const hood = new Hood(hoodKey);
-    hood.setCoords(this.cellSize);
+    hood.setCoords(this.cellArea);
     for (const listId in this.list) {
       const itemList = this.get(listId);
       for (const itemId in itemList.list) {

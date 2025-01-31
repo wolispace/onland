@@ -1,15 +1,18 @@
 
 import Point from './Point.js';
-import Vector from './Vector.js';
+import Area from './Area.js';
 
-export default class Rectangle extends Vector {
-  w = 0;
-  h = 0;
-
+export default class Rectangle {
+  /**
+   * 
+   * @param {number} x 
+   * @param {number} y 
+   * @param {number} width 
+   * @param {number} height 
+   */
   constructor(params) {
-    super(params.x ?? 0, params.y ?? 0);
-    this.w = params.w;
-    this.h = params.h;
+    this.position = new Point(params.x, params.y);    // Position using Point
+    this.area = new Area(params.w, params.h); // Dimensions using Area
   }
 
   copy() {
@@ -18,10 +21,10 @@ export default class Rectangle extends Vector {
 
   /**
    * Getter to return the centre point as a new vector
-   * @returns the centre point of the rectangle
+   * @returns {Point} the centre point of the rectangle
    */
   get center() {
-    return new Vector(
+    return new Point(
       this.w / 2,
       this.h / 2);
   }
@@ -46,6 +49,15 @@ export default class Rectangle extends Vector {
       this.w === rectangle.w &&
       this.h === rectangle.h
     );
+  }
+
+  /**
+   * Multiply the area by the point for calculating offsets from a grid to the world coords
+   * @param {Area} area eg {w:5, h:2} 
+   * @returns {Rectangle} eg: w,h=1000x1000 returns w:5000, h:2000
+   */
+  expand(area) {
+    return new Rectangle(this.w * area.w, this.h * area.h);
   }
 
 }

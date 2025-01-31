@@ -83,3 +83,34 @@ updated in the gameLoop.update()
 We leave tick events for slow one/off changes like 'after 10 ticks the plant +1 to its growth phase' or 'after 20 ticks move NPC to a new x,y'
 
 
+Key recommendations:
+
+Point : Use for positions in 2D space
+
+Properties: x, y
+
+Use when you need to represent a location
+
+Vector : Use for direction and magnitude
+
+Properties: x, y
+
+Use when you need to represent movement or direction
+
+Size : Use for dimensions
+
+Properties: width, height
+
+Use when you need to represent measurements
+
+Rectangle : Combine Point and Size
+
+Use position (Point) for location
+
+Use size (Size) for dimensions
+
+Grid : Use Size for dimensions
+
+Store as dimensions with width as columns and height as rows
+
+Provide getters for rows and columns for clarity
