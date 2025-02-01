@@ -51,10 +51,15 @@ export default class IndexList {
 
   /**
    * Merge the passed in ItemList with the current one
+   * All items in the passed in (moved) list win - stomp over matching ids in the original (default) list
    * @param {ItemList} itemList 
    */
   merge(itemList) {
-    this.list = { ...this.list, ...itemList.list };
+    for (const [key, value] of Object.entries(itemList.list)) {
+      this.list[key] = value;
+    }
+
+    return this;
   }
 
   /**

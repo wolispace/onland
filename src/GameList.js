@@ -44,14 +44,14 @@ export default class GameList {
     this.combine();
     this.reindex();
   }
-
+  
   /**
    * Populates the combined list with all game lists ('default' and 'moved' for starters)
    * @returns {LayerList}
-   */
-  combine() {
-    this.combined = this.default.copy(this.COMBINED);
-    this.combined.merge(this.moved);
+  */
+ combine() {
+   this.combined = this.default.copy(this.COMBINED);
+   this.combined.merge(this.moved);
   }
 
   /**

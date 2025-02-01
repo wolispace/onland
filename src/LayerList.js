@@ -92,6 +92,17 @@ export default class LayerList extends EncodeList {
   }
 
   /**
+   * Copy this layerList - a copy only needs the id and list (I think)
+   * @param {string} id 
+   * @returns 
+   */
+  copy (id) {
+    const newlayerList =  new LayerList(id, this.source);
+    newlayerList.list = this.list;
+    return newlayerList;
+  }
+
+  /**
    * Expand all items x,y in each itemList to the cellArea
    * we only do this for default loaded data so we can start each file with 0,0
    * After this, any placed or moved items are in world coords when stored in localStorage in the moved: itemLists
