@@ -1,6 +1,5 @@
 import settings from "./settings.js";
 import Hood from "./Hood.js";
-import GameList from "./GameList.js";
 
 /**
  * Loads the 9 land files around the neibourhood hoodKey eg '1_2'

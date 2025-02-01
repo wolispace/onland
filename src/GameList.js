@@ -37,16 +37,6 @@ export default class GameList {
   }
 
   /**
-   * Returns the params needed for setting up different grids
-   * surface and ghost grids are 50x50, suburbs are larger
-   * @param {string} layerId 
-   * @returns 
-   */
-  gridParams(layerId) {
-  return {x:50, y:50};
-  }
-
-  /**
    * Update the combined list of items
    * and the indexes of the items
   */
