@@ -201,7 +201,6 @@ export default class SpacialHashGrid extends IndexList {
   remove(params) {
     const hood = this.makeHood(params);
     let cell = this.grid[hood.key];
-    console.log(params, hood.key, cell, this.grid);
     if (!cell) return;
     this.grid[hood.key].delete(params.id);
   }

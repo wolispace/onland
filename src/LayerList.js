@@ -13,13 +13,23 @@ export default class LayerList extends EncodeList {
 
   constructor(id, source = '') {
     super(id, source);
-    this.cellArea = new Point(settings.cellArea);
     this.DELIM = '/';
     this.SEPERATOR = ':';
     // if we initialised with an encoded string, decode it to populate this list
     if (id.includes(this.SEPERATOR)) {
       this.decode(id);
     }
+    // set the default cell area - can be overwritten as needed
+    this.setCellArea(this.cellArea);
+  }
+
+  /**
+   * Set the area of the cells eg a 1000x1000 grid with 100x100 cells has 10x10 cells
+   * So this is the 100x100 so we can scale 
+   * @param {Point} cellArea with x,y 
+   */
+  setCellArea(cellArea) {
+    this.cellArea = cellArea;
   }
 
   /**
@@ -89,13 +99,14 @@ export default class LayerList extends EncodeList {
    */
   expand(hoodKey) {
     const hood = new Hood(hoodKey);
-    hood.setCoords(this.cellArea);
+    const cellArea = this.cellArea;
+    const hoodOffset = hood.expandHood(cellArea);
     for (const listId in this.list) {
       const itemList = this.get(listId);
       for (const itemId in itemList.list) {
         const item = itemList.get(itemId);
         // add the hoods expanded coords to the item
-        item.expand(hood.coords);
+        item.expand(hoodOffset);
         //this.removeItem(listId, itemId);
       }
     }

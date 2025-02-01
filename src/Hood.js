@@ -1,17 +1,20 @@
 import Point from "./Point.js";
-import Area from "./Area.js";
 
+/**
+ * A hood is a 9 square grid of points around a centre point
+ * We start witht he middle then do a kings square around it
+ * Start with '2_2' and we get a list of keys '1_1' to '3_3' (9 squares)
+ */
 export default class Hood extends Point {
   static DELIM = '_';
-  coords = new Point(0,0); // the x,y of this hood expanded to workd coords
-  
+
   /**
    * Can create a new Hood by passing in iether string '3_5' or numbers (3, 5)
    * @param {string or number} x eg '1_1' or just 1 
    * @param {*} y optional or 1
-   * 
+   * @returns {Hood}
    */
-  constructor(x, y, area) {
+  constructor(x, y) {
     if (typeof x === "string") {
       [x, y] = Hood.breakKey(x);
     } else if (x.x) {
@@ -47,21 +50,22 @@ export default class Hood extends Point {
   }
 
   /**
-   * Expands the hoods x,y to world coords
-   * eg: hood '2_5' with an area of {w:1000, h:1000} = {x:2000, y:5000}
-   * @param {Point} point 
-   */
-  setCoords(point) {
-    this.coords = point.expand(this.point);
-  }
-
-  /**
    * 
    * @param {Hood} hood to add to current x,y (using Points add method)
    * @returns {Hood} the hood of the result eg 0,2 + -1,1 = -1,3 = '-1_3'
    */
   addHood(hood) {
     return this.add(hood);
+  }
+
+  /**
+   * Expands the hood eg 1_1 by the cellArea
+   * so 2_5 by 1000x1000 = 2000x5000
+   * @param {Point} point 
+   * @returns {Hood}
+   */
+  expandHood(point) {
+    return this.expand(point);
   }
 
   /**
@@ -78,6 +82,10 @@ export default class Hood extends Point {
     return hood;
   }
 
+  /**
+   * Returns just the actual hood keys nothing in negative
+   * @returns {array} of keys [1,2,3,4,5,6,7,8,9] with 5 as the centre x,y of this Hood
+   */
   get listReal() {
     const hood = [];
     for (let x = this.x - 1; x <= this.x + 1; x++) {

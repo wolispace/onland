@@ -35,17 +35,17 @@ const app = {
 
   start() {
     app.setup();
-    app.testPoint();
-    app.testArea();
-    app.testRectangle();
+    //app.testPoint();
+    //app.testArea();
+    //app.testRectangle();
     // app.testUniqueId();
     // app.testUniqueSet();
     app.testHood();
-    app.testSpatialHashGrid();
+    //app.testSpatialHashGrid();
     // app.testImageCache();
     // app.testItem();
     // app.testItemList();
-    // app.testLayerList();
+     app.testLayerList();
     // app.testStore();
     // app.testVector();
     // app.testEvent();
@@ -109,22 +109,15 @@ const app = {
     app.compare('hood any', '2_3', new Hood({ x: 2, y: 3 }).key);
 
     const hoodOne = new Hood(2, 3);
-    const hoodList = ['1_2', '1_3', '1_4', '2_2', '2_3', '2_4', '3_2', '3_3', '3_4'];
+    let hoodList = ['1_2', '1_3', '1_4', '2_2', '2_3', '2_4', '3_2', '3_3', '3_4'];
     app.compare('getList', hoodList, hoodOne.list);
 
-    const hoodTwo = new Hood(-3, -1);
-    app.compare('addHood', '-1_2', hoodOne.addHood(hoodTwo).key);
+    const hoodTwo = new Hood('1_2');
+    hoodTwo.add(new Point(-1, -2));
+    hoodList = ['0_0', '0_1', '1_0', '1_1'];
+    app.compare('getListReal', hoodList, hoodTwo.listReal);
 
     app.compare('breakKey', [-3, 6], Hood.breakKey('-3_6'));
-
-    const cellSize = new Point(1000, 1000);
-    hoodOne.set(2, 5);
-    hoodOne.setCoords(cellSize);
-    app.compare('set coords', { x: 2000, y: 5000 }, hoodOne.coords);
-
-
-
-
   },
 
   testArea() {
@@ -252,7 +245,10 @@ const app = {
   },
 
   testLayerList() {
-    const list1 = new LayerList('test');
+    const list1 = new LayerList('test', 'default');
+    
+    list1.setCellArea({ x: 1000, y: 1000 });
+
     let newItem = new Item('a,,rock_02,,20,30');
     let layerId = '_s';
     list1.addItem(layerId, newItem);
