@@ -91,19 +91,17 @@ export default class SpacialHashGrid extends IndexList {
   // the params must include a Rectangle and an id
   addShape(params) {
     let keys = [];
-    // find 4 corners
     // add each to the grid, recording the keys for each cell
     params.corners().forEach((point) => {
-      let corner = point.copy();
-      corner.id = params.id;
-      keys.push(this.add(corner));
+      
+      const hood = new Hood(point);
+      // record a list of keys for the corners
+      keys.push(hood.key);
     });
 
     // read keys[0] (TL) and keys[2] (BR) to get the top, left, bottom right
     let [left, top] = Hood.breakKey(keys[0]);
     let [right, bottom] = Hood.breakKey(keys[2]);
-
-    console.log('addShape', keys, left, top, right, bottom);
 
     for (let x = left; x <= right; x++) {
       for (let y = top; y <= bottom; y++) {
@@ -184,7 +182,6 @@ export default class SpacialHashGrid extends IndexList {
     }
     this.grid[key].add(id);
 
-    //console.log(this.grid[key], key, id);
     return key;
   }
 

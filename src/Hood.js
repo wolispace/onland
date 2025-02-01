@@ -17,7 +17,7 @@ export default class Hood extends Point {
   constructor(x, y) {
     if (typeof x === "string") {
       [x, y] = Hood.breakKey(x);
-    } else if (x.x) {
+    } else if (x.x !== undefined) {
       y = x.y;
       x = x.x;
     }
