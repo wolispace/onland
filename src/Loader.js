@@ -42,6 +42,7 @@ export default class Loader {
             if (typeof (loadedData.defaultData) === "string") {
               const layerList = gameList.default;
               layerList.decode(loadedData.defaultData);
+              layerList.setCellArea(settings.cellArea);
               layerList.expand(hoodKey);
             }
           }

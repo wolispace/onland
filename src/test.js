@@ -35,24 +35,24 @@ const app = {
 
   start() {
     app.setup();
-    //app.testPoint();
-    //app.testArea();
-    //app.testRectangle();
-    // app.testUniqueId();
-    // app.testUniqueSet();
+    app.testPoint();
+    app.testArea();
+    app.testRectangle();
+    app.testUniqueId();
+    app.testUniqueSet();
     app.testHood();
-    //app.testSpatialHashGrid();
-    // app.testImageCache();
-    // app.testItem();
-    // app.testItemList();
+    app.testSpatialHashGrid();
+    app.testImageCache();
+    app.testItem();
+    app.testItemList();
      app.testLayerList();
-    // app.testStore();
-    // app.testVector();
-    // app.testEvent();
-    // app.testLoader();
-    // app.testGameList();
-    // app.testAsset();
-    // app.testScreen();
+    app.testStore();
+    app.testVector();
+    app.testEvent();
+    app.testLoader();
+    app.testGameList();
+    app.testAsset();
+    app.testScreen();
     app.clock.test();
   },
 
@@ -152,7 +152,7 @@ const app = {
     app.compare('areaPoint', { x: 1000, y: 1000 }, app.testGrid.areaPoint);
     app.compare('rowCols', { x: 10, y: 10 }, app.testGrid.rowCols);
     
-    app.compare('makeHood', {"x":2,"y":3,"coords":{"x":0,"y":0}}, app.testGrid.makeHood({x: 200, y: 300}));
+    app.compare('makeHood', {"x":2,"y":3}, app.testGrid.makeHood({x: 200, y: 300}));
     
     let params;
     let expected;
