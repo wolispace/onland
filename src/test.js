@@ -45,7 +45,7 @@ const app = {
     app.testImageCache();
     app.testItem();
     app.testItemList();
-     app.testLayerList();
+    app.testLayerList();
     app.testStore();
     app.testVector();
     app.testEvent();
@@ -58,6 +58,7 @@ const app = {
 
   setup() {
     app.clock = new Clock('app');
+    app.utils = new Utils();
     app.imageCache = new ImageCache();
     app.uniqueId = new UniqueId();
     // for testing we want to scroll the overlay
@@ -151,9 +152,9 @@ const app = {
     app.compare('size', { w: 100, h: 100 }, app.testGrid.size);
     app.compare('areaPoint', { x: 1000, y: 1000 }, app.testGrid.areaPoint);
     app.compare('rowCols', { x: 10, y: 10 }, app.testGrid.rowCols);
-    
-    app.compare('makeHood', {"x":2,"y":3}, app.testGrid.makeHood({x: 200, y: 300}));
-    
+
+    app.compare('makeHood', { "x": 2, "y": 3 }, app.testGrid.makeHood({ x: 200, y: 300 }));
+
     let params;
     let expected;
 
@@ -246,7 +247,7 @@ const app = {
 
   testLayerList() {
     const list1 = new LayerList('test', 'default');
-    
+
     list1.setCellArea({ x: 1000, y: 1000 });
 
     let newItem = new Item('a,,rock_02,,20,30');
@@ -417,37 +418,34 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
   },
 
 
-  testLoader() {
+  async testLoader() {
     app.gameList = new GameList('gameList');
     const landName = 'land'; // the name of the land file eg 'land_0_1.js'
     app.loader = new Loader(landName);
     const hoodKey = '0_0';
-
-    app.loader.loadData(hoodKey, app.gameList);    
+    // wait for loading to complete
+    await app.loader.loadData(hoodKey, app.gameList);
   },
-  
-  testGameList() {
-    this.testLoader();
-    
+
+  async testGameList() {
+    await this.testLoader();
+
     // write some test data into the store (resets store for testing)..
-    
     const movedItems = `moved:
     _s|Aa,,tree_02,,1090,1210;b,,rock_02,,330,500/
     _u|Ax,,coal_02,,50,310;y,,gem_02,,1230,1090
     `;
     app.store.set(settings.MOVED_ITEMS, movedItems);
     // load data from disk
-    
-    // mege into combined
     const encodedString = app.store.get(settings.MOVED_ITEMS);
     app.gameList.moved.decode(encodedString);
-    
-    // now we have moved and detault so they can ben combined.
+    // now we have moved and detault so they can ben combined and indexed
     app.gameList.update();
-    
-    console.log(app.gameList);
+    app.compare('index', ["a","b","x","y","Aa","Ax"], app.gameList.index.keys);
 
-    
+    const layerId = '_s';
+    app.compare('loaded', ["a","b","Aa"], app.gameList.default.get(layerId).keys);
+    console.log(app.gameList);
   },
 
   testAsset() {

@@ -4,6 +4,7 @@ import Hood from "./Hood.js";
 /**
  * Loads the 9 land files around the neibourhood hoodKey eg '1_2'
  * Builds up the gameLists
+ * 
  */
 export default class Loader {
 
@@ -18,8 +19,9 @@ export default class Loader {
    * @param {object} app 
    * @param {string} hoodKey - key eg '0_0' or '4_6' lands are bigger than suburbs
    * @returns {Promise} Promise that resolves when all data is loaded
+   * call with `await loader.loadData(...)` so we wait for loading to finish
    */
-  loadData(hoodKey, gameList) {
+  async loadData(hoodKey, gameList) {
     // clear all previous background colours ready to setup a new set of 9 suburbs
     this.backgroundColors = {};
     const hood = new Hood(hoodKey);
@@ -53,14 +55,13 @@ export default class Loader {
       filePromises.push(filePromise);
     }
 
-    return Promise.all(filePromises)
-      .then(() => {
-        // All files have been read from disk so update the gameLists
-        gameList.update();
-      })
-      .catch((error) => {
-        console.error('Error loading files:', error);
-      });
+    try {
+      await Promise.all(filePromises);
+      // All files have been read from disk so update the gameLists
+      gameList.update();
+    } catch (error_1) {
+      console.error('Error loading files:', error_1);
+    }
   }
 
   /**

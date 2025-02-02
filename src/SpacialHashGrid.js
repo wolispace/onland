@@ -177,6 +177,7 @@ export default class SpacialHashGrid extends IndexList {
    * @returns {string} key of the cell we added into
    */
   addToCell(key, id) {
+    // TODO: convert this to an IndexList
     if (!this.grid[key]) {
       this.grid[key] = new UniqueSet();
     }

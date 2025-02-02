@@ -49,4 +49,12 @@ export default class Utils {
     }
     return html;
   }
+  
+
+  /**
+   * Pause the game for a number of milliseconds
+   * @param {number} ms 
+   * @returns {Promise} 
+   */
+  pause = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 };

@@ -46,6 +46,21 @@ export default class LayerList extends EncodeList {
   }
 
   /**
+   * Merge the items form the itemList foe each layerList
+   * overwrite anything from the default list with the moved list
+   * @param {LayerList} layerList 
+   */
+  merge(layerList) {
+    for (const listId in layerList.list) {
+      const itemList = layerList.get(listId);
+      const thisList = this.get(listId);
+      itemList.forOf((item) => {
+        thisList.add(item);
+      });
+    }
+  }
+
+  /**
    * Adds the item into the list with a known listId eg '_s' = surface
    * @param {string} listId 
    * @param {Item} item 
@@ -98,7 +113,7 @@ export default class LayerList extends EncodeList {
    */
   copy (id) {
     const newlayerList =  new LayerList(id, this.source);
-    newlayerList.list = this.list;
+    newlayerList.list = {... this.list};
     return newlayerList;
   }
 

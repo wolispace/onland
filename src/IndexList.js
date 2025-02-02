@@ -104,4 +104,11 @@ export default class IndexList {
    * @returns {number}
    */
   size = () => Object.keys(this.list).length;
+
+  /**
+   * Returns an array of the keys in this list
+   */
+  get keys(){
+    return Object.keys(this.list);
+  }
 }
