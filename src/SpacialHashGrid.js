@@ -5,8 +5,6 @@ import UniqueSet from './UniqueSet.js';
 import IndexList from './IndexList.js';
 
 export default class SpacialHashGrid extends IndexList {
-  grid = {};
-
   /**
    * 
    * @param {string} id 
@@ -49,7 +47,7 @@ export default class SpacialHashGrid extends IndexList {
    */
   show(app) {
     //TODO: update this to forOf()
-    Object.keys(this.grid).forEach(key => {
+    Object.keys(this.list).forEach(key => {
       const hood = new Hood(key);
       hood.expandHood(this.cellSize);
 
@@ -133,10 +131,6 @@ export default class SpacialHashGrid extends IndexList {
     }
   }
 
-  clear() {
-    this.grid = {};
-  }
-
   /**
    * An item has one or more collidable objects so use each to add the item.id into the matching grid cells
    * @param {object} item with an id 
@@ -178,17 +172,22 @@ export default class SpacialHashGrid extends IndexList {
    */
   addToCell(key, id) {
     // TODO: convert this to an IndexList
-    if (!this.grid[key]) {
-      this.grid[key] = new UniqueSet();
-    }
-    this.grid[key].add(id);
-
+    const keyList = this.get(key, new UniqueSet());
+    keyList.add(id);
     return key;
+
+    // if (!this.has())
+    // if (!this.grid[key]) {
+    //   this.grid[key] = new UniqueSet();
+    // }
+    // this.grid[key].add(id);
+
+    // return key;
   }
 
   // remove all ids from this cell (eg clear a path through some collidables)
   clearCell(key) {
-    this.grid[key].clear();
+    this.get(key).clear();
   }
 
   /**
@@ -198,9 +197,9 @@ export default class SpacialHashGrid extends IndexList {
    */
   remove(params) {
     const hood = this.makeHood(params);
-    let cell = this.grid[hood.key];
+    let cell = this.get(hood.key);
     if (!cell) return;
-    this.grid[hood.key].delete(params.id);
+    this.get(hood.key).delete(params.id);
   }
 
   /**
@@ -208,14 +207,14 @@ export default class SpacialHashGrid extends IndexList {
    * @param {string} id of the item to remove  
    */
   removeById(id) {
-    for (const key in this.grid) {
-      this.grid[key].delete(id);
-    }
+    this.forOf((item) => {
+      item.delete(id);
+    });
   }
 
   removeIdFromCell(id, key) {
-    if (!this.grid[key]) return;
-    this.grid[key].delete(id);
+    if (!this.get(key)) return;
+    this.get(key).delete(id);
   }
 
   // pass in a Rectangle and get its 4 corners
@@ -252,16 +251,16 @@ export default class SpacialHashGrid extends IndexList {
   query(cells) {
     let found = new UniqueSet();
     for (let key of cells) {
-      found.addAll(this.grid[key]);
+      found.addAll(this.get(key));
     }
     return found;
   }
 
   toString() {
     const expanded = {};
-    for (const key in this.grid) {
-      expanded[key] = this.grid[key].toArray();
-    }
+    this.forOf((item, key) => {
+      expanded[key] = item.toArray();
+    })
     return expanded;
   }
 };
