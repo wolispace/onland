@@ -175,14 +175,6 @@ export default class SpacialHashGrid extends IndexList {
     const keyList = this.get(key, new UniqueSet());
     keyList.add(id);
     return key;
-
-    // if (!this.has())
-    // if (!this.grid[key]) {
-    //   this.grid[key] = new UniqueSet();
-    // }
-    // this.grid[key].add(id);
-
-    // return key;
   }
 
   // remove all ids from this cell (eg clear a path through some collidables)
