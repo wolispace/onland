@@ -1,6 +1,7 @@
 
 import Point from './Point.js';
 import Area from './Area.js';
+import UniqueSet from './UniqueSet.js';
 
 export default class Rectangle {
   /**
@@ -34,6 +35,14 @@ export default class Rectangle {
    * @returns an array of points for each corner in this order [TL, TR, BR, BL]
    */
   corners() {
+    const cornerList = new UniqueSet();
+    cornerList.add(new Point(this.x, this.y));
+    cornerList.add(new Point(this.x + this.w, this.y));
+    cornerList.add(new Point(this.x + this.w, this.y + this.h));
+    cornerList.add(new Point(this.x, this.y + this.h));
+
+    return cornerList;
+
     return [
       new Point(this.x, this.y),
       new Point(this.x + this.w, this.y),

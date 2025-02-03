@@ -23,6 +23,9 @@ import Screen from './Screen.js';
 import GameList from './GameList.js';
 import Loader from './Loader.js';
 
+
+settings.showSuccess = false;
+
 console.log('testing');
 // all of the events..
 document.addEventListener("DOMContentLoaded", function () {
@@ -255,7 +258,7 @@ const app = {
     list1.addItem(layerId, newItem);
     let foundItem = list1.getItem(layerId, 'a');
     app.compare('add', foundItem, newItem);
-    app.compare('decode', 'test:_s|a,,rock_02,,20,30', list1.encode());
+    app.compare('decode', 'tXest:_s|a,,rock_02,,20,30', list1.encode());
     list1.clear();
     app.compare('clear', {}, list1.list);
 
@@ -301,7 +304,7 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
 
   testScreen() {
     Screen.add('<div class="log" id="_test1">Screen add ok</div>', 'overlay');
-    Screen.add('<div class="log" id="_test2">Screen remove fail</div>', 'overlay');
+    Screen.add('<div class="log fail" id="_test2">Screen remove fail</div>', 'overlay');
 
     app.compare('screen add', {}, Screen.getElement('_test1'));
     Screen.remove('_test2');
@@ -485,16 +488,17 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     if (expected === result) {
       this.log(`${name} ok`);
     } else {
-      this.log(`${name} fail: expected <br/>${expected}, but got <br/>${result}`);
+      this.log(`${name} fail: expected <br/>${expected}, but got <br/>${result}`, 'fail');
     }
   },
 
   /**
-   * Logs the string to the browser
+   * Logs the string to the browser only if we want to show success
    * @param {string} message 
    */
-  log(message) {
-    Screen.add(`<p class="log">${message}</p>`, 'overlay');
+  log(message, className = '') {
+    if (className === '' && !settings.showSuccess) return;
+    Screen.add(`<p class="log ${className}">${message}</p>`, 'overlay');
   }
 }
 

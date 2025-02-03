@@ -47,6 +47,10 @@ body {
   padding: 2px;
 }
 
+.fail {
+  background-color: rgba(116, 25, 25, 0.5);
+}
+
 .shadow {
   background: radial-gradient(ellipse at center,
       rgba(0, 0, 0, var(--shadow)) 0%,

@@ -220,7 +220,7 @@ export default class SpacialHashGrid extends IndexList {
   // pass in a Rectangle and get its 4 corners
   getCornerCells(rectangle) {
     let cells = new UniqueSet();
-    rectangle.corners().forEach((corner) => {
+    rectangle.corners().forOf(corner => {
       const hood = new Hood(corner);
       cells.add(hood.key);
     });
