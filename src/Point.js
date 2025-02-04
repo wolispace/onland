@@ -1,6 +1,10 @@
 export default class Point {
 
   constructor(x, y) {
+    if (x && x.x !== undefined) {
+      y = x.y;
+      x = x.x;
+    }
     this.x = x || 0;
     this.y = y || 0;
   }

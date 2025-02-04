@@ -381,8 +381,12 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     const point1 = new Point(1, 1);
     const point2 = new Point(2, 2);
     const point3 = point1.copy().add(point2);
-    app.compare('point add', 3, point3.x);
-    app.compare('point add', { x: 1, y: 4 }, point3.add({ x: -2, y: 1 }));
+    const point4 = new Point({x: 4, y: 6});
+    const point5 = new Point().add({x: 4, y: 6});
+    app.compare('point new 4', 4, point4.x);
+    app.compare('point new 5', 4, point5.x);
+    app.compare('point add 3', 3, point3.x);
+    app.compare('point add 2', { x: 1, y: 4 }, point3.add({ x: -2, y: 1 }));
     app.compare('expand', { x: 1000, y: 4000 }, point3.expand({ x: 1000, y: 1000 }));
     point2.backup();
     point2.take(point1);

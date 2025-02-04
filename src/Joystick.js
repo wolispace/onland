@@ -1,4 +1,5 @@
 import Screen from './Screen.js';
+import Point from './Point.js';
 
 export default class Joystick {
   constructor(options = {}) {
@@ -23,6 +24,7 @@ export default class Joystick {
     // prepare display of joystick
     this.container = Screen.getElement('joystick');
     this.stick = Screen.getElement('stick');
+    this.start = Screen.getElement('start');
   }
 
   setupEventListeners() {
@@ -41,8 +43,7 @@ export default class Joystick {
 
     // Get position from either mouse or touch event
     const pos = this.getEventPosition(event);
-    this.origin.x = pos.x;
-    this.origin.y = pos.y;
+    this.origin = new Point(pos);
     this.current.x = pos.x;
     this.current.y = pos.y;
     this.draw();
@@ -82,10 +83,19 @@ export default class Joystick {
   }
 
   draw() {
+    // draw the area of the joystick
     this.container.style.display = 'block';
-    this.container.style.transform = `translate(${this.origin.x}px, ${this.origin.y}px)`;
-    this.redraw();
+    const containerPos = new Point(this.origin);
+    this.container.style.transform = `translate(${containerPos.x}px, ${containerPos.y}px)`;
+    
+    // draw the stick top
     this.stick.style.display = 'block';
+    this.redraw();
+    
+    // draw the starting point
+    this.start.style.display = 'block';
+    this.start.style.transform = `translate(${this.origin.x}px, ${this.origin.y}px)`;
+
   }
 
   redraw() {

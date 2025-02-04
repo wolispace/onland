@@ -342,6 +342,16 @@ button:hover {
   background: rgba(255, 255, 255, 0.45);
   width: 20px;
   height: 20px;
+  border-radius: 50%;
+}
+
+#start {
+  position: absolute;
+  border: 1px solid yellow;
+  background: rgba(255, 255, 255, 0.45);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
 }
 
 @keyframes shrink {

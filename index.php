@@ -37,9 +37,9 @@ $html = "<!DOCTYPE html>
     <div id='msg1' class='msg'></div>
     <div id='msg2' class='msg'></div>
     <div id='msg3' class='msg'></div>
-    <div id='joystick'>
-    </div>
+    <div id='joystick'></div>
     <div id='stick'></div>
+    <div id='start'></div>
     <svg>
       <filter id='noise-filter'>
         <feTurbulence 
