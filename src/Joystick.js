@@ -13,6 +13,7 @@ export default class Joystick {
     this.current = new Point();     // Current touch position
     this.vector = new Vector();      // Normalized direction vector
     this.magnitude = 0;                 // Current magnitude (0-1)
+    this.distance = 0;  // how far from the start is the joystick
 
     // Bind methods
     this.handleStart = this.handleStart.bind(this);
@@ -23,7 +24,7 @@ export default class Joystick {
     this.setupEventListeners();
 
     // prepare display of joystick
-    this.container = Screen.getElement('joystick');
+    this.joystick = Screen.getElement('joystick');
     this.stick = Screen.getElement('stick');
     this.start = Screen.getElement('start');
   }
@@ -60,49 +61,51 @@ export default class Joystick {
     let dis = this.current.copy().take(this.origin);
 
     // Calculate distance
-    const distance = Math.sqrt(dis.x * dis.x + dis.y * dis.y);
+    this.distance = Math.sqrt(dis.x * dis.x + dis.y * dis.y);
     
     // Normalize the vector
-    if (distance > 0) {
-      this.vector.x = dis.x / distance;
-      this.vector.y = dis.y / distance;
+    if (this.distance > 0) {
+      this.vector.x = dis.x / this.distance;
+      this.vector.y = dis.y / this.distance;
     }
     
     // Calculate magnitude (0-1)
-    this.magnitude = Math.min(distance / this.maxRadius, 1);
+    this.magnitude = Math.min(this.distance / this.maxRadius, 1);
+
+    //stop drawing if past limit of joystick
+    // DODO: we dont want to stop but keep moving but not outside limit
+    if (this.distance > 50) return;
     this.redraw();
   }
 
   handleEnd() {
     this.active = false;
+    this.distance = 0;
     this.hide();
     // Keep the last vector direction but start reducing magnitude
   }
 
   draw() {
-    // draw the area of the joystick
-    this.container.style.display = 'block';
-    const containerPos = new Point(this.origin);
-    containerPos.take(new Point(5,5));
-    this.container.style.transform = `translate(${containerPos.x}px, ${containerPos.y}px)`;
+    // draw the area of the joystick - offset by half its size
+    const joystickPos = new Point(this.origin);
+    joystickPos.take(new Point(25, 25));
+    this.joystick.style.display = 'block';
+    this.joystick.style.transform = `translate(${joystickPos.x}px, ${joystickPos.y}px)`;
+    
+    // draw the starting point - offset by half its size
+    const startPos = new Point(this.origin);
+    startPos.take(new Point(5, 5));
+    this.start.style.display = 'block';
+    this.start.style.transform = `translate(${startPos.x}px, ${startPos.y}px)`;
     
     // draw the stick top
     this.stick.style.display = 'block';
     this.redraw();
-    
-    // draw the starting point
-    // offset by half so its centred so we need to know what size it is
-    const offset = new Point(1.25, 1.25);
-    containerPos.take(offset);
-    this.start.style.display = 'block';
-    this.start.style.transform = `translate(${containerPos.x}px, ${containerPos.y}px)`;
-
   }
 
   redraw() {
     const containerPos = this.current.copy();
-    const offset = new Point(10, 10);
-    containerPos.take(offset);
+    containerPos.take(new Point(10, 10));
 
     this.stick.style.transform = `translate(${containerPos.x}px, ${containerPos.y}px)`;
   }
