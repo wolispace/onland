@@ -33,6 +33,24 @@ export default class GameLoop {
       this.accumulatedFrameTime -= this.timeStep;
     }
 
+    
+    // JOYSTICK experiment start
+     // Get joystick state
+     const state = app.joystick.update();
+    
+     // Apply to player velocity
+     app.player.velocity.x = state.x * app.player.maxSpeed;
+     app.player.velocity.y = state.y * app.player.maxSpeed;
+     
+     // Update app.player position
+     app.player.x += app.player.velocity.x;
+     app.player.y += app.player.velocity.y;
+     
+     const ctx = {};
+     // Optional: Draw joystick for debugging
+     //app.joystick.draw(ctx);
+    // JOYSTICK experiment end
+
     // renter
     this.render();
     this.animationFrameId = requestAnimationFrame(this.mainLoop);

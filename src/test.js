@@ -20,6 +20,8 @@ import Event from './Event.js';
 import Screen from './Screen.js';
 import GameList from './GameList.js';
 import Loader from './Loader.js';
+import Joystick from './Joystick.js';
+import GameLoop from './GameLoop.js';
 
 
 settings.showSuccess = false;
@@ -54,6 +56,7 @@ const app = {
     app.testGameList();
     app.testAsset();
     app.testScreen();
+    app.testJoystick();
     app.clock.test();
   },
 
@@ -65,7 +68,40 @@ const app = {
     // for testing we want to scroll the overlay
     document.querySelector('#overlay').style.overflow = 'scroll';
     document.querySelector('body').style.userSelect = 'auto';
+
+
+    app.player = {
+      x:0,
+      y:0,
+      maxSpeed: 10,
+      velocity: new Vector(),
+    };
+
+    app.update = () => {
+      //console.log('gameLoop Opdate');
+      Utils.msg(1, app.joystick.status());
+    };
+
+    app.render = () => {
+      //console.log('gameLoop render');
+
+    };
+
+    app.gameLoop = new GameLoop(app.update, app.render);
+
+    app.gameLoop.start();
+
   },
+
+  testJoystick() {
+    // Create the joystick
+    app.joystick = new Joystick({
+      maxRadius: 100,
+      friction: 0.95
+    });
+  },
+
+
 
   /**
    * Test the uniqueId class can create and read unique ids as expected
@@ -256,7 +292,7 @@ const app = {
     list1.addItem(layerId, newItem);
     let foundItem = list1.getItem(layerId, 'a');
     app.compare('add', foundItem, newItem);
-    app.compare('decode', 'tXest:_s|a,,rock_02,,20,30', list1.encode());
+    app.compare('decode', 'test:_s|a,,rock_02,,20,30', list1.encode());
     list1.clear();
     app.compare('clear', {}, list1.list);
 
