@@ -1,5 +1,6 @@
 import Screen from './Screen.js';
 import Point from './Point.js';
+import Vector from './Vector.js';
 
 export default class Joystick {
   constructor(options = {}) {
@@ -8,9 +9,9 @@ export default class Joystick {
 
     // Current state
     this.active = false;
-    this.origin = { x: 0, y: 0 };     // Where the touch started
-    this.current = { x: 0, y: 0 };     // Current touch position
-    this.vector = { x: 0, y: 0 };      // Normalized direction vector
+    this.origin = new Point();     // Where the touch started
+    this.current = new Point();     // Current touch position
+    this.vector = new Vector();      // Normalized direction vector
     this.magnitude = 0;                 // Current magnitude (0-1)
 
     // Bind methods
@@ -44,8 +45,7 @@ export default class Joystick {
     // Get position from either mouse or touch event
     const pos = this.getEventPosition(event);
     this.origin = new Point(pos);
-    this.current.x = pos.x;
-    this.current.y = pos.y;
+    this.current = new Point(pos);
     this.draw();
   }
 
@@ -54,20 +54,18 @@ export default class Joystick {
     
     event.preventDefault();
     const pos = this.getEventPosition(event);
-    this.current.x = pos.x;
-    this.current.y = pos.y;
+    this.current = new Point(pos);
 
     // Calculate vector from origin to current position
-    let dx = this.current.x - this.origin.x;
-    let dy = this.current.y - this.origin.y;
+    let dis = this.current.copy().take(this.origin);
 
     // Calculate distance
-    const distance = Math.sqrt(dx * dx + dy * dy);
+    const distance = Math.sqrt(dis.x * dis.x + dis.y * dis.y);
     
     // Normalize the vector
     if (distance > 0) {
-      this.vector.x = dx / distance;
-      this.vector.y = dy / distance;
+      this.vector.x = dis.x / distance;
+      this.vector.y = dis.y / distance;
     }
     
     // Calculate magnitude (0-1)
@@ -76,7 +74,6 @@ export default class Joystick {
   }
 
   handleEnd() {
-    console.log('joystick end');
     this.active = false;
     this.hide();
     // Keep the last vector direction but start reducing magnitude
@@ -86,6 +83,7 @@ export default class Joystick {
     // draw the area of the joystick
     this.container.style.display = 'block';
     const containerPos = new Point(this.origin);
+    containerPos.take(new Point(5,5));
     this.container.style.transform = `translate(${containerPos.x}px, ${containerPos.y}px)`;
     
     // draw the stick top
@@ -93,13 +91,20 @@ export default class Joystick {
     this.redraw();
     
     // draw the starting point
+    // offset by half so its centred so we need to know what size it is
+    const offset = new Point(1.25, 1.25);
+    containerPos.take(offset);
     this.start.style.display = 'block';
-    this.start.style.transform = `translate(${this.origin.x}px, ${this.origin.y}px)`;
+    this.start.style.transform = `translate(${containerPos.x}px, ${containerPos.y}px)`;
 
   }
 
   redraw() {
-    this.stick.style.transform = `translate(${this.current.x}px, ${this.current.y}px)`;
+    const containerPos = this.current.copy();
+    const offset = new Point(10, 10);
+    containerPos.take(offset);
+
+    this.stick.style.transform = `translate(${containerPos.x}px, ${containerPos.y}px)`;
   }
 
   hide() {
