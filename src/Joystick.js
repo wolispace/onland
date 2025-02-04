@@ -1,3 +1,5 @@
+import Screen from './Screen.js';
+
 export default class Joystick {
   constructor(options = {}) {
     this.maxRadius = options.maxRadius || 100; // Maximum distance the joystick can be dragged
@@ -17,6 +19,10 @@ export default class Joystick {
 
     // Setup event listeners
     this.setupEventListeners();
+
+    // prepare display of joystick
+    this.container = Screen.getElement('joystick');
+    this.stick = Screen.getElement('stick');
   }
 
   setupEventListeners() {
@@ -31,7 +37,6 @@ export default class Joystick {
   }
 
   handleStart(event) {
-    console.log('joystick start');
     this.active = true;
 
     // Get position from either mouse or touch event
@@ -40,6 +45,7 @@ export default class Joystick {
     this.origin.y = pos.y;
     this.current.x = pos.x;
     this.current.y = pos.y;
+    this.draw();
   }
 
   handleMove(event) {
@@ -65,13 +71,29 @@ export default class Joystick {
     
     // Calculate magnitude (0-1)
     this.magnitude = Math.min(distance / this.maxRadius, 1);
-
+    this.redraw();
   }
 
   handleEnd() {
     console.log('joystick end');
     this.active = false;
+    this.hide();
     // Keep the last vector direction but start reducing magnitude
+  }
+
+  draw() {
+    this.container.style.display = 'block';
+    this.container.style.transform = `translate(${this.origin.x}px, ${this.origin.y}px)`;
+    this.redraw();
+    this.stick.style.display = 'block';
+  }
+
+  redraw() {
+    this.stick.style.transform = `translate(${this.current.x}px, ${this.current.y}px)`;
+  }
+
+  hide() {
+    this.stick.style.display = 'none';
   }
 
   getEventPosition(event) {
@@ -112,7 +134,7 @@ export default class Joystick {
   }
 
   // Optional: Draw joystick for debugging
-  draw(ctx) {
+  drawCtx(ctx) {
     if (!this.active) return;
 
     // Draw outer circle

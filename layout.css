@@ -328,6 +328,22 @@ button:hover {
   left: 0;
 }
 
+#joystick {
+  position:absolute;
+  border: 1px solid black;
+  background: rgba(0, 0, 0, 0.45);
+  width: 100px;
+  height: 100px;
+}
+
+#stick {
+  position: absolute;
+  border: 1px solid white;
+  background: rgba(255, 255, 255, 0.45);
+  width: 20px;
+  height: 20px;
+}
+
 @keyframes shrink {
   0% {
     transform: scale(1, 1);
