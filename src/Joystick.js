@@ -111,6 +111,7 @@ export default class Joystick {
   }
 
   hide() {
+    this.start.style.display = 'none';
     this.stick.style.display = 'none';
   }
 

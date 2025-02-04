@@ -71,15 +71,15 @@ const app = {
 
 
     app.player = {
-      x:0,
-      y:0,
+      x: 0,
+      y: 0,
       maxSpeed: 10,
       velocity: new Vector(),
     };
 
     app.update = () => {
       //console.log('gameLoop Opdate');
-      Utils.msg(1, app.joystick.status());
+      //Utils.msg(1, app.joystick.status());
     };
 
     app.render = () => {
@@ -97,8 +97,25 @@ const app = {
     // Create the joystick
     app.joystick = new Joystick({
       maxRadius: 100,
-      friction: 0.95
+      friction: 0.95,
+      event: app.event,
     });
+
+    app.event.on('JOYSTICK_DOWN', 'caller', (status) => {
+      Utils.msg(1, status);
+
+      if (false) {
+        // Apply to player velocity
+        app.player.velocity.x = status.x * app.player.maxSpeed;
+        app.player.velocity.y = status.y * app.player.maxSpeed;
+  
+        // Update app.player position
+        app.player.x += app.player.velocity.x;
+        app.player.y += app.player.velocity.y;
+      }
+
+    });
+
   },
 
 
@@ -381,8 +398,8 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     const point1 = new Point(1, 1);
     const point2 = new Point(2, 2);
     const point3 = point1.copy().add(point2);
-    const point4 = new Point({x: 4, y: 6});
-    const point5 = new Point().add({x: 4, y: 6});
+    const point4 = new Point({ x: 4, y: 6 });
+    const point5 = new Point().add({ x: 4, y: 6 });
     app.compare('point new 4', 4, point4.x);
     app.compare('point new 5', 4, point5.x);
     app.compare('point add 3', 3, point3.x);
@@ -482,10 +499,10 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     app.gameList.moved.decode(encodedString);
     // now we have moved and detault so they can ben combined and indexed
     app.gameList.update();
-    app.compare('index', ["a","b","x","y","Aa","Ax"], app.gameList.index.keys);
+    app.compare('index', ["a", "b", "x", "y", "Aa", "Ax"], app.gameList.index.keys);
 
     const layerId = '_s';
-    app.compare('loaded', ["a","b","Aa"], app.gameList.default.get(layerId).keys);
+    app.compare('loaded', ["a", "b", "Aa"], app.gameList.default.get(layerId).keys);
     console.log(app.gameList);
   },
 
