@@ -103,23 +103,24 @@ const app = {
     });
 
     const itemInfo = this.makeItem();
-    itemInfo.maxSpeed = 5;
+    itemInfo.maxSpeed = 6;
     itemInfo.velocity = new Vector();
     Screen.add(itemInfo.html);
     Screen.position(itemInfo);
 
-    app.event.on('JOYSTICK_DOWN', 'caller', (status) => {
-      Utils.msg(1, status);
+    // the itemInfo becomes the caller
+    app.event.on('JOYSTICK_DOWN', itemInfo, (status, caller) => {
+      //Utils.msg(1, status);
 
       if (true) {
         // Apply to player velocity
-        itemInfo.velocity.x = status.x * itemInfo.maxSpeed;
-        itemInfo.velocity.y = status.y * itemInfo.maxSpeed;
+        caller.velocity.x = status.x * caller.maxSpeed;
+        caller.velocity.y = status.y * caller.maxSpeed;
         
         // Update app.player position
-        itemInfo.x += itemInfo.velocity.x;
-        itemInfo.y += itemInfo.velocity.y;
-        Screen.position(itemInfo);
+        caller.x += caller.velocity.x;
+        caller.y += caller.velocity.y;
+        Screen.position(caller);
       }
 
     });

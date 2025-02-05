@@ -17,7 +17,7 @@ export default class Event {
   emit(eventName, value) {
     this.callbacks.forEach(stored => {
       if (stored.eventName === eventName) {
-        stored.callback(value)
+        stored.callback(value, stored.caller)
       }
     })
   }
