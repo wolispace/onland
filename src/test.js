@@ -65,6 +65,7 @@ const app = {
     app.utils = new Utils();
     app.imageCache = new ImageCache();
     app.uniqueId = new UniqueId();
+    app.asset = new Asset();
     // for testing we want to scroll the overlay
     document.querySelector('#overlay').style.overflow = 'scroll';
     document.querySelector('body').style.userSelect = 'auto';
@@ -101,17 +102,24 @@ const app = {
       event: app.event,
     });
 
+    const itemInfo = this.makeItem();
+    itemInfo.maxSpeed = 5;
+    itemInfo.velocity = new Vector();
+    Screen.add(itemInfo.html);
+    Screen.position(itemInfo);
+
     app.event.on('JOYSTICK_DOWN', 'caller', (status) => {
       Utils.msg(1, status);
 
-      if (false) {
+      if (true) {
         // Apply to player velocity
-        app.player.velocity.x = status.x * app.player.maxSpeed;
-        app.player.velocity.y = status.y * app.player.maxSpeed;
-  
+        itemInfo.velocity.x = status.x * itemInfo.maxSpeed;
+        itemInfo.velocity.y = status.y * itemInfo.maxSpeed;
+        
         // Update app.player position
-        app.player.x += app.player.velocity.x;
-        app.player.y += app.player.velocity.y;
+        itemInfo.x += itemInfo.velocity.x;
+        itemInfo.y += itemInfo.velocity.y;
+        Screen.position(itemInfo);
       }
 
     });
@@ -506,8 +514,7 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     console.log(app.gameList);
   },
 
-  testAsset() {
-    app.asset = new Asset();
+  makeItem() {
     const params = {
       id: 'a',
       type: 'rock_02',
@@ -516,9 +523,15 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
       x: 50,
       y: 50,
     };
-
     const item = new Item(params);
     const itemInfo = app.asset.make(item);
+
+    return itemInfo;
+    
+  },
+
+  testAsset() {
+    const itemInfo = this.makeItem();
     Screen.add(itemInfo.html);
     Screen.position(itemInfo);
     setTimeout(() => {

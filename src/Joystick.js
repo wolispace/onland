@@ -24,7 +24,6 @@ export default class Joystick {
     this.setupEventListeners();
 
     // prepare display of joystick
-    this.joystick = Screen.getElement('joystick');
     this.stick = Screen.getElement('stick');
     this.start = Screen.getElement('start');
   }
@@ -74,7 +73,7 @@ export default class Joystick {
 
     //stop drawing if past limit of joystick
     // DODO: we dont want to stop but keep moving but not outside limit
-    if (this.distance > 50) return;
+    if (this.distance > 40) return;
     this.redraw();
   }
 
@@ -86,15 +85,9 @@ export default class Joystick {
   }
 
   draw() {
-    // draw the area of the joystick - offset by half its size
-    const joystickPos = new Point(this.origin);
-    joystickPos.take(new Point(25, 25));
-    this.joystick.style.display = 'block';
-    this.joystick.style.transform = `translate(${joystickPos.x}px, ${joystickPos.y}px)`;
-    
     // draw the starting point - offset by half its size
     const startPos = new Point(this.origin);
-    startPos.take(new Point(5, 5));
+    startPos.take(new Point(50, 50));
     this.start.style.display = 'block';
     this.start.style.transform = `translate(${startPos.x}px, ${startPos.y}px)`;
     
@@ -152,27 +145,5 @@ export default class Joystick {
     };
   }
 
-  // Optional: Draw joystick for debugging
-  drawCtx(ctx) {
-    if (!this.active) return;
-
-    // Draw outer circle
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-    ctx.lineWidth = 2;
-    ctx.arc(this.origin.x, this.origin.y, this.maxRadius, 0, Math.PI * 2);
-    ctx.stroke();
-
-    // Draw inner circle (current position)
-    ctx.beginPath();
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-    ctx.arc(this.current.x, this.current.y, 20, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Draw line connecting origin to current
-    ctx.beginPath();
-    ctx.moveTo(this.origin.x, this.origin.y);
-    ctx.lineTo(this.current.x, this.current.y);
-    ctx.stroke();
-  }
+  
 }
