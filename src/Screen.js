@@ -42,4 +42,22 @@ export default class Screen {
   static getElement(id) {
     return document.querySelector(`#${id}`);
   }
+
+  /**
+   * Show the mouse pointer/cursor when moving the mouse 
+   */
+  static showCursor() {
+    const body = document.querySelector(`body`);
+    body.style.cursor = "auto";
+  }
+
+  /**
+   * Hide the mouse pointer/cursor when pressing keys
+   */
+  static hideCursor() {
+    const body = document.querySelector(`body`);
+    body.style.cursor = "none";
+  }
+
+
 }

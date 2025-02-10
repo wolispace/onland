@@ -21,6 +21,7 @@ import Screen from './Screen.js';
 import GameList from './GameList.js';
 import Loader from './Loader.js';
 import Joystick from './Joystick.js';
+import Input from './Input.js';
 import GameLoop from './GameLoop.js';
 
 
@@ -57,6 +58,7 @@ const app = {
     app.testAsset();
     app.testScreen();
     app.testJoystick();
+    app.testInput();
     app.clock.test();
   },
 
@@ -67,6 +69,7 @@ const app = {
     app.uniqueId = new UniqueId();
     app.asset = new Asset();
     app.event = new Event();
+    app.input = new Input();
     
     // for testing we want to scroll the overlay
     document.querySelector('#overlay').style.overflow = 'scroll';
@@ -118,6 +121,7 @@ const app = {
     // the movable item becomes the caller
     app.event.on('JOYSTICK_DOWN', app.player, (status, caller) => {
       //Utils.msg(1, status);
+      Screen.showCursor();
 
       if (true) {
         // Apply to player velocity
@@ -135,7 +139,9 @@ const app = {
 
   },
 
-
+  testInput() {
+    console.log('test input');
+  },
 
   /**
    * Test the uniqueId class can create and read unique ids as expected
@@ -452,6 +458,7 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     // anything listening to these
     document.addEventListener("keydown", (event) => {
       app.event.emit('KEY_DOWN', event.key);
+      Screen.hideCursor();
     });
     document.addEventListener("keyup", (event) => {
       app.event.emit('KEY_UP', event.key);
