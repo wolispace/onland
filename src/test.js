@@ -66,17 +66,13 @@ const app = {
     app.imageCache = new ImageCache();
     app.uniqueId = new UniqueId();
     app.asset = new Asset();
+    app.event = new Event();
+    
     // for testing we want to scroll the overlay
     document.querySelector('#overlay').style.overflow = 'scroll';
     document.querySelector('body').style.userSelect = 'auto';
 
-
-    app.player = {
-      x: 0,
-      y: 0,
-      maxSpeed: 10,
-      velocity: new Vector(),
-    };
+    this.setupPlayer();
 
     app.update = () => {
       //console.log('gameLoop Opdate');
@@ -94,6 +90,23 @@ const app = {
 
   },
 
+  setupPlayer() {
+    const params = {
+      id: '_player',
+      type: 'rock_02',
+      x: 150,
+      y: 80,
+    };
+
+    app.player = app.asset.make(new Item(params));
+
+    app.player.maxSpeed = 6;
+    app.player.velocity = new Vector();
+    Screen.add(app.player.html);
+    Screen.position(app.player);
+
+  },
+
   testJoystick() {
     // Create the joystick
     app.joystick = new Joystick({
@@ -102,14 +115,8 @@ const app = {
       event: app.event,
     });
 
-    const itemInfo = this.makeItem();
-    itemInfo.maxSpeed = 6;
-    itemInfo.velocity = new Vector();
-    Screen.add(itemInfo.html);
-    Screen.position(itemInfo);
-
-    // the itemInfo becomes the caller
-    app.event.on('JOYSTICK_DOWN', itemInfo, (status, caller) => {
+    // the movable item becomes the caller
+    app.event.on('JOYSTICK_DOWN', app.player, (status, caller) => {
       //Utils.msg(1, status);
 
       if (true) {
@@ -124,6 +131,7 @@ const app = {
       }
 
     });
+
 
   },
 
@@ -440,8 +448,6 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
   },
 
   testEvent() {
-    app.event = new Event();
-
     // emit events when key up or down are triggered
     // anything listening to these
     document.addEventListener("keydown", (event) => {
@@ -518,7 +524,7 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
   makeItem() {
     const params = {
       id: 'a',
-      type: 'rock_02',
+      type: 'tree_02',
       parent: '',
       qty: 1,
       x: 50,
