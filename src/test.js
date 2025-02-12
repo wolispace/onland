@@ -21,7 +21,7 @@ import Screen from './Screen.js';
 import GameList from './GameList.js';
 import Loader from './Loader.js';
 import Joystick from './Joystick.js';
-import Input from './Input.js';
+import InputManager from './InputManager.js';
 import GameLoop from './GameLoop.js';
 
 
@@ -58,7 +58,7 @@ const app = {
     app.testAsset();
     app.testScreen();
     app.testJoystick();
-    app.testInput();
+    app.testInputManager();
     app.clock.test();
   },
 
@@ -69,7 +69,7 @@ const app = {
     app.uniqueId = new UniqueId();
     app.asset = new Asset();
     app.event = new Event();
-    app.input = new Input();
+    app.inputManager = new InputManager();
     
     // for testing we want to scroll the overlay
     document.querySelector('#overlay').style.overflow = 'scroll';
@@ -80,10 +80,28 @@ const app = {
     app.update = () => {
       //console.log('gameLoop Opdate');
       //Utils.msg(1, app.joystick.status());
+        // Check for keyboard input
+      if (app.inputManager.isKeyPressed('ArrowRight')) {
+        console.log('Moving right', app.player.velocity);
+        app.player.velocity.x += 1;
+        
+      }
+      if (app.inputManager.isKeyPressed('ArrowLeft')) {
+        console.log('Moving left', app.player.velocity);
+        app.player.velocity.x += -1;
+      }
+      app.player.velocity.x -= 0.5;
+      if (app.player.velocity.x < 0.01) {
+        app.player.velocity.x = 0;  
+      }
+
+      app.player.x += app.player.velocity.x;
     };
 
     app.render = () => {
       //console.log('gameLoop render');
+      if (app.player.velocity.x === 0) return;
+      Screen.position(app.player);
 
     };
 
@@ -139,7 +157,7 @@ const app = {
 
   },
 
-  testInput() {
+  testInputManager() {
     console.log('test input');
   },
 
