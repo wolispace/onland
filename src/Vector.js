@@ -33,6 +33,7 @@ export default class Vector {
       this.x /= magnitude;
       this.y /= magnitude;
     }
+    return this;
   }
 
   /**

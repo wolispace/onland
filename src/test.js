@@ -23,6 +23,7 @@ import Loader from './Loader.js';
 import Joystick from './Joystick.js';
 import InputManager from './InputManager.js';
 import GameLoop from './GameLoop.js';
+import Rectangle from './Rectangle.js';
 
 
 settings.showSuccess = false;
@@ -96,16 +97,36 @@ const app = {
     };
     app.joystick = new Joystick(params);
 
-    app.update = () => {
-      Utils.msg(1, this.inputManager.inputState.pointer);
-      if (app.inputManager.isPointerActive) {
-        // Update joystick state
-        app.joystick.update(this.inputManager.inputState.pointer);
+    // any click in this area is interacting with the joystick, otherwise we move to the mout clicked
+    const joysitckZone = new Rectangle({
+      x: 0,
+      y: 0,
+      w: 200,
+      h: 500,
+    })
 
-        // Get joystick input
-        Utils.msg(1, app.joystick.vector);
-        if (app.joystick.vector.magnitude() > 0.1) {
-          app.player.velocity = app.joystick.vector.scale(app.player.maxSpeed);
+    app.update = () => {
+      if (app.inputManager.isPointerActive) {
+        // get the current mouse or touch x,y
+        const pointer = this.inputManager.inputState.pointer;
+        if (joysitckZone.contains(pointer)) {
+          // Update joystick state with info from the inputManager
+          app.joystick.update(pointer);
+          // if there is some joystick movement then apply it to the players velocity
+          if (app.joystick.vector.magnitude() > 0.1) {
+            app.player.velocity = app.joystick.vector.scale(app.player.maxSpeed);
+          }
+        } else {
+          /* if the pointers possition is outside of the "joystick zone" then
+          calculate a vector from players current position to the pointer's possition 
+          */
+          // Create a vector from player position to pointer position
+          const targetVector = new Vector(
+            pointer.x - app.player.x,
+            pointer.y - app.player.y
+          );
+          // Normalize and scale the vector to move at constant speed
+          app.player.velocity = targetVector.normalise().scale(app.player.maxSpeed);
         }
       } else {
         app.joystick.handleEnd();
@@ -117,7 +138,7 @@ const app = {
           app.player.velocity = new Vector(direction.x, direction.y)
             .scale(app.player.maxSpeed);
         }
-        console.log(key, direction);
+        //console.log(key, direction);
       })
 
       // apply friction
@@ -131,9 +152,10 @@ const app = {
 
     app.render = () => {
       // loop thought a list of all items with velocities and update them.
-      if (app.player.velocity.magnitude() < 0.1) {
+      if (app.player.velocity.magnitude() > 0.00001) {
         Screen.position(app.player);
       }
+
     };
 
     app.gameLoop = new GameLoop(app.update, app.render);

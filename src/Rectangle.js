@@ -40,15 +40,7 @@ export default class Rectangle {
     cornerList.add(new Point(this.x + this.w, this.y));
     cornerList.add(new Point(this.x + this.w, this.y + this.h));
     cornerList.add(new Point(this.x, this.y + this.h));
-
     return cornerList;
-
-    return [
-      new Point(this.x, this.y),
-      new Point(this.x + this.w, this.y),
-      new Point(this.x + this.w, this.y + this.h),
-      new Point(this.x, this.y + this.h),
-    ];
   }
 
   equals(rectangle) {
@@ -68,5 +60,18 @@ export default class Rectangle {
   expand(area) {
     return new Rectangle(this.w * area.w, this.h * area.h);
   }
+
+  /**
+   * Returns true if the point is within the rectangle
+   * @param {Point} point 
+   * @returns {boolean}
+   */
+  contains(point) {
+    return point.x >= this.position.x &&
+      point.x <= this.position.x + this.area.w &&
+      point.y >= this.position.y &&
+      point.y <= this.position.y + this.area.h;
+  }
+
 
 }
