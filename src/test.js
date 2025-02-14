@@ -76,6 +76,21 @@ const app = {
     document.querySelector('body').style.userSelect = 'auto';
 
     this.setupPlayer();
+
+    const directions = {
+      "ArrowRight": new Vector(1, 0),
+      "ArrowLeft": new Vector(-1, 0),
+      "ArrowUp": new Vector(0, -1),
+      "ArrowDown": new Vector(0, 1),
+      "KeyD": new Vector(1, 0),
+      "KeyA": new Vector(-1, 0),
+      "KeyW": new Vector(0, -1),
+      "KeyS": new Vector(0, 1),
+      "KeyQ": new Vector(-1, -1),
+      "KeyE": new Vector(1, -1),
+      "KeyZ": new Vector(-1, 1),
+      "KeyC": new Vector(1, 1),
+    }
     const params = {
       maxRadius: 100,
     };
@@ -83,45 +98,42 @@ const app = {
 
     app.update = () => {
       Utils.msg(1, this.inputManager.inputState.pointer);
-      if (app.inputManager.isPointerActive()) {
+      if (app.inputManager.isPointerActive) {
         // Update joystick state
         app.joystick.update(this.inputManager.inputState.pointer);
 
         // Get joystick input
         Utils.msg(1, app.joystick.vector);
-        if (Math.abs(app.joystick.vector.x) > 0.1 || Math.abs(app.joystick.vector.y) > 0.1) {
-          app.player.velocity.x = app.joystick.vector.x * app.player.maxSpeed;
-          app.player.velocity.y = app.joystick.vector.y * app.player.maxSpeed;
+        if (app.joystick.vector.magnitude() > 0.1) {
+          app.player.velocity = app.joystick.vector.scale(app.player.maxSpeed);
         }
       } else {
         app.joystick.handleEnd();
       }
 
-      // Check for keyboard input
-      if (app.inputManager.isKeyPressed('ArrowRight')) {
-        console.log('Moving right', app.player.velocity);
-        app.player.velocity.x += 1 * app.player.maxSpeed;
+      app.inputManager.keys.forOf((key) => {
+        const direction = directions[key];
+        if (direction) {
+          app.player.velocity = new Vector(direction.x, direction.y)
+            .scale(app.player.maxSpeed);
+        }
+        console.log(key, direction);
+      })
 
-      }
-      if (app.inputManager.isKeyPressed('ArrowLeft')) {
-        console.log('Moving left', app.player.velocity);
-        app.player.velocity.x += -1 * app.player.maxSpeed;
-      }
-
-// apply friction
-      app.player.velocity.x *= app.player.friction;
-      app.player.velocity.y *= app.player.friction;
+      // apply friction
+      app.player.velocity.multiply(app.player.friction);
 
       // Update position
+      //TODO: player should have a position that is a Point we can add to etc..
       app.player.x += app.player.velocity.x;
       app.player.y += app.player.velocity.y;
     };
 
     app.render = () => {
-      //console.log('gameLoop render');
-      if (app.player.velocity.x === 0) return;
-      Screen.position(app.player);
-
+      // loop thought a list of all items with velocities and update them.
+      if (app.player.velocity.magnitude() < 0.1) {
+        Screen.position(app.player);
+      }
     };
 
     app.gameLoop = new GameLoop(app.update, app.render);

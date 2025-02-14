@@ -1,10 +1,14 @@
+import UniqueSet from "./UniqueSet.js";
 import Screen from "./Screen.js";
 
 export default class InputManager {
   constructor() {
     this.activeInputType = null;
+    this.keys = new UniqueSet();
+
     this.inputState = {
       keyboard: new Map(),
+      keydown: false,
       pointer: { x: 0, y: 0, active: false, buttons: new Map() }
     };
 
@@ -31,13 +35,12 @@ export default class InputManager {
   }
 
   handleKeyDown(event) {
-    this.setActiveInput('keyboard');
-    this.inputState.keyboard.set(event.code, true);
+    this.keys.add(event.code);
     Screen.hideCursor();
   }
 
   handleKeyUp(event) {
-    this.inputState.keyboard.set(event.code, false);
+    this.keys.delete(event.code);
   }
 
   handlePointerDown(event) {
@@ -101,13 +104,17 @@ export default class InputManager {
     };
   }
 
+  get isKeyboardActive() {
+    this.activeInputType === 'keyboard';
+  }
+
   // Check if a specific key is pressed
   isKeyPressed(keyCode) {
     return this.inputState.keyboard.get(keyCode) || false;
   }
 
   // Check if pointer is active (mouse button or touch)
-  isPointerActive() {
+  get isPointerActive() {
     return this.inputState.pointer.active;
   }
 

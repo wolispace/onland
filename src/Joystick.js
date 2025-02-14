@@ -70,7 +70,7 @@ export default class Joystick {
     if (!this.active) return;
     this.active = false;
     this.distance = 0;
-    this.vector = new Point();
+    this.vector = new Vector();
     this.hide();
     // Keep the last vector direction but start reducing magnitude
   }

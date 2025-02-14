@@ -39,14 +39,11 @@ export default class IndexList {
   }
 
   /**
-   * Removes the item with matching id and removes it from the screen if present
+   * Removes the item from the list
    * @param {string} id eg:'a' will remove {id='a', type='rock' ...}
    */
   remove(id) {
     delete this.list[id];
-    // use an event to remove from the screen
-    console.log('use an event to Screen.remove(id)');
-    //Screen.remove(id);
   }
 
   /**

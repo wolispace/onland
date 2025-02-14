@@ -61,6 +61,12 @@ export default class Vector {
     return this;
   }
 
+  scale(scalar) {
+    return new Vector(this.x * scalar, this.y * scalar);
+}
+
+
+
   /**
    * Adds another vector to this vector
    * @param {Vector} vector 

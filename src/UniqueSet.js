@@ -1,5 +1,9 @@
 
 export default class UniqueSet extends Set {
+  /**
+   * Generates a new Set with some additional superpowers
+   * @param {itterable} iterable 
+   */
   constructor(iterable) {
     super(iterable);
   }
