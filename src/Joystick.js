@@ -6,8 +6,6 @@ import Utils from './Utils.js';
 export default class Joystick {
   constructor(params) {
     this.maxRadius = params.maxRadius;
-    this.friction = params.friction;
-    this.inputManager = params.inputManager;
     this.status = new Point();
 
     // Current state
@@ -22,8 +20,8 @@ export default class Joystick {
     this.start = Screen.getElement('start');
   }
 
-  update() {
-    const pos = this.inputManager.inputState.pointer;
+  update(pos) {
+    
     if (!this.active) {
       this.handleStart(pos);
     } else {

@@ -76,18 +76,16 @@ const app = {
     document.querySelector('body').style.userSelect = 'auto';
 
     this.setupPlayer();
-    const joystickParams = {
-      inputManager: app.inputManager,
+    const params = {
       maxRadius: 100,
-      friction: 0.95,
     };
-    app.joystick = new Joystick(joystickParams);
+    app.joystick = new Joystick(params);
 
     app.update = () => {
       Utils.msg(1, this.inputManager.inputState.pointer);
       if (app.inputManager.isPointerActive()) {
         // Update joystick state
-        app.joystick.update();
+        app.joystick.update(this.inputManager.inputState.pointer);
 
         // Get joystick input
         Utils.msg(1, app.joystick.vector);
@@ -102,19 +100,17 @@ const app = {
       // Check for keyboard input
       if (app.inputManager.isKeyPressed('ArrowRight')) {
         console.log('Moving right', app.player.velocity);
-        app.player.velocity.x += 1;
+        app.player.velocity.x += 1 * app.player.maxSpeed;
 
       }
       if (app.inputManager.isKeyPressed('ArrowLeft')) {
         console.log('Moving left', app.player.velocity);
-        app.player.velocity.x += -1;
+        app.player.velocity.x += -1 * app.player.maxSpeed;
       }
 
-      // Apply physics
-      app.player.velocity.x -= 0.5;
-      if (app.player.velocity.x < 0.01) {
-        app.player.velocity.x = 0;
-      }
+// apply friction
+      app.player.velocity.x *= app.player.friction;
+      app.player.velocity.y *= app.player.friction;
 
       // Update position
       app.player.x += app.player.velocity.x;
@@ -146,6 +142,7 @@ const app = {
 
     app.player.maxSpeed = 6;
     app.player.velocity = new Vector();
+    app.player.friction = 0.7;
     Screen.add(app.player.html);
     Screen.position(app.player);
 
