@@ -33,15 +33,6 @@ export default class GameLoop {
       this.accumulatedFrameTime -= this.timeStep;
     }
 
-    
-    // JOYSTICK experiment start
-     // Get joystick state
-     const state = app.joystick.update();
-
-     if (state.active) {
-       app.event.emit('JOYSTICK_DOWN', state);
-     }
-
     // renter
     this.render();
     this.animationFrameId = requestAnimationFrame(this.mainLoop);

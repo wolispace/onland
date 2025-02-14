@@ -57,9 +57,9 @@ const app = {
     app.testGameList();
     app.testAsset();
     app.testScreen();
-    app.testJoystick();
     app.testInputManager();
     app.clock.test();
+    //app.testJoystick();
   },
 
   setup() {
@@ -70,32 +70,55 @@ const app = {
     app.asset = new Asset();
     app.event = new Event();
     app.inputManager = new InputManager();
-    
+
     // for testing we want to scroll the overlay
     document.querySelector('#overlay').style.overflow = 'scroll';
     document.querySelector('body').style.userSelect = 'auto';
 
     this.setupPlayer();
+    const joystickParams = {
+      inputManager: app.inputManager,
+      maxRadius: 100,
+      friction: 0.95,
+    };
+    app.joystick = new Joystick(joystickParams);
 
     app.update = () => {
-      //console.log('gameLoop Opdate');
-      //Utils.msg(1, app.joystick.status());
-        // Check for keyboard input
+      Utils.msg(1, this.inputManager.inputState.pointer);
+      if (app.inputManager.isPointerActive()) {
+        // Update joystick state
+        app.joystick.update();
+
+        // Get joystick input
+        Utils.msg(1, app.joystick.vector);
+        if (Math.abs(app.joystick.vector.x) > 0.1 || Math.abs(app.joystick.vector.y) > 0.1) {
+          app.player.velocity.x = app.joystick.vector.x * app.player.maxSpeed;
+          app.player.velocity.y = app.joystick.vector.y * app.player.maxSpeed;
+        }
+      } else {
+        app.joystick.handleEnd();
+      }
+
+      // Check for keyboard input
       if (app.inputManager.isKeyPressed('ArrowRight')) {
         console.log('Moving right', app.player.velocity);
         app.player.velocity.x += 1;
-        
+
       }
       if (app.inputManager.isKeyPressed('ArrowLeft')) {
         console.log('Moving left', app.player.velocity);
         app.player.velocity.x += -1;
       }
+
+      // Apply physics
       app.player.velocity.x -= 0.5;
       if (app.player.velocity.x < 0.01) {
-        app.player.velocity.x = 0;  
+        app.player.velocity.x = 0;
       }
 
+      // Update position
       app.player.x += app.player.velocity.x;
+      app.player.y += app.player.velocity.y;
     };
 
     app.render = () => {
@@ -145,7 +168,7 @@ const app = {
         // Apply to player velocity
         caller.velocity.x = status.x * caller.maxSpeed;
         caller.velocity.y = status.y * caller.maxSpeed;
-        
+
         // Update app.player position
         caller.x += caller.velocity.x;
         caller.y += caller.velocity.y;
@@ -559,7 +582,7 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     const itemInfo = app.asset.make(item);
 
     return itemInfo;
-    
+
   },
 
   testAsset() {
