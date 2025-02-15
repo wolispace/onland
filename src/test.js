@@ -345,10 +345,22 @@ const app = {
 
   testImageCache() {
     app.imageCache.addImage('img/rock_02.png');
-    app.compare('addImage', ['http://localhost:88/img/rock_02.png'], app.imageCache.toString());
+    app.compare('addImage', [`${settings.baseUrl}/img/rock_02.png`], app.imageCache.toString());
 
     app.imageCache.addDirectional('cubeface');
-    app.compare('addImage', ['http://localhost:88/img/rock_02.png', 'http://localhost:88/img/cubeface_0_0.png', 'http://localhost:88/img/cubeface_0_1.png', 'http://localhost:88/img/cubeface_0_2.png', 'http://localhost:88/img/cubeface_1_0.png', 'http://localhost:88/img/cubeface_1_1.png', 'http://localhost:88/img/cubeface_1_2.png', 'http://localhost:88/img/cubeface_2_0.png', 'http://localhost:88/img/cubeface_2_1.png', 'http://localhost:88/img/cubeface_2_2.png'], app.imageCache.toString());
+    const expectedArray = [
+      `${settings.baseUrl}/img/rock_02.png`,
+      `${settings.baseUrl}/img/cubeface_0_0.png`,
+      `${settings.baseUrl}/img/cubeface_0_1.png`,
+      `${settings.baseUrl}/img/cubeface_0_2.png`,
+      `${settings.baseUrl}/img/cubeface_1_0.png`, 
+      `${settings.baseUrl}/img/cubeface_1_1.png`, 
+      `${settings.baseUrl}/img/cubeface_1_2.png`, 
+      `${settings.baseUrl}/img/cubeface_2_0.png`, 
+      `${settings.baseUrl}/img/cubeface_2_1.png`, 
+      `${settings.baseUrl}/img/cubeface_2_2.png`];
+
+    app.compare('addImage', expectedArray, app.imageCache.toString());
 
   },
 
@@ -372,7 +384,7 @@ const app = {
     app.compare('newItem 2', 'tree_02', newItem.type);
     app.compare('newItem qty', 1, newItem.qty);
     app.compare('newItem parent', 'rock_02', newItem.parent);
-    app.compare('imgCache ', ["http://localhost:88/img/rock_02.png", "http://localhost:88/img/tree_02.png"], app.imageCache.toString());
+    app.compare('imgCache ', [`${settings.baseUrl}/img/rock_02.png`, `${settings.baseUrl}/img/tree_02.png`], app.imageCache.toString());
   },
 
   testItemList() {

@@ -10,6 +10,9 @@ const settings = {
     lands: 'world',
   },
 
+  env: 'dev',
+  baseUrl: window.location.origin,
+
   cellArea: {x: 1000, y: 1000}, // cells in the suburb grid
   gridCellArea: {x: 50, y: 50}, // cells in the collision gridS
   MOVED_ITEMS: 'moved',
@@ -35,6 +38,12 @@ const settings = {
   dofBlur: true, // turn off the blur effect
   dofScale: false, // make objects larger when closer to the bottom of the screen - EXPERIMENTAL!
 };
+
+// live server runs in a sub-folder for now
+if (settings.baseUrl.includes('wolispace')) {
+  settings.baseUrl += '/onland_test';
+  settings.env = 'live';
+} 
 
 export default settings;
 
