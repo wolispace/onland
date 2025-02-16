@@ -2,6 +2,7 @@
 
 export default class Vector {
 
+  static decimals = 4;
   constructor(x = 0, y = 0) {
     this.x = x;
     this.y = y;
@@ -64,7 +65,7 @@ export default class Vector {
 
   scale(scalar) {
     return new Vector(this.x * scalar, this.y * scalar);
-}
+  }
 
 
 
@@ -77,6 +78,33 @@ export default class Vector {
     this.x += vector.x;
     this.y += vector.y;
     return this;
+  }
+
+  round(decimals) {
+    this.decimals = decimals ?? this.decimals;
+    const factor = Math.pow(10, this.decimals);
+    this.x = Math.round(this.x * factor) / factor;
+    this.y = Math.round(this.y * factor) / factor;
+    this.roundDownToZero();
+    return this; // add return for method chaining
+  }
+
+  /**
+   * 
+   * @returns Set either x or y to zero if close, and return true if both zero
+   */
+  roundDownToZero() {
+    const epsilon = 2 / Math.pow(10, this.decimals);
+    if (Math.abs(this.x) <= epsilon) {
+      this.x = 0;
+    }
+    if (Math.abs(this.y) <= epsilon) {
+      this.y = 0;
+    }
+  }
+
+  isZero() {
+    return this.x === 0 && this.y === 0;
   }
 
 }

@@ -122,6 +122,9 @@ const app = {
 
       // apply friction
       app.player.velocity.multiply(app.player.friction);
+      app.player.velocity.round(3);
+      if (app.player.velocity.isZero()) return;
+      console.log(app.player.velocity, app.player.friction);
 
       // Update position
       //TODO: player should have a position that is a Point we can add to etc..
@@ -150,9 +153,9 @@ const app = {
     };
 
     app.player = app.asset.make(new Item(params));
-    app.player.maxSpeed = 6;
+    app.player.maxSpeed = 10;
     app.player.velocity = new Vector();
-    app.player.friction = 0.7;
+    app.player.friction = 0.5;
     Screen.add(app.player.html);
     Screen.position(app.player);
   },
