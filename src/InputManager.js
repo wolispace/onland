@@ -1,7 +1,23 @@
 import UniqueSet from "./UniqueSet.js";
 import Screen from "./Screen.js";
+import Vector from "./Vector.js";
 
 export default class InputManager {
+  directionKeys = {
+    "ArrowRight": new Vector(1, 0),
+    "ArrowLeft": new Vector(-1, 0),
+    "ArrowUp": new Vector(0, -1),
+    "ArrowDown": new Vector(0, 1),
+    "KeyD": new Vector(1, 0),
+    "KeyA": new Vector(-1, 0),
+    "KeyW": new Vector(0, -1),
+    "KeyS": new Vector(0, 1),
+    "KeyQ": new Vector(-1, -1),
+    "KeyE": new Vector(1, -1),
+    "KeyZ": new Vector(-1, 1),
+    "KeyC": new Vector(1, 1),
+  };
+
   constructor() {
     this.activeInputType = null;
     this.keys = new UniqueSet();
@@ -30,6 +46,14 @@ export default class InputManager {
     window.addEventListener('touchend', this.handlePointerUp);
   }
 
+  /**
+   * 
+   * @returns {Vector} for the x,y direction a key maps to
+   */
+  directionKey(key) {
+    return this.directionKeys[key];
+  }
+
   handleKeyDown(event) {
     this.keys.add(event.code);
     Screen.hideCursor();
@@ -42,7 +66,7 @@ export default class InputManager {
   handlePointerDown(event) {
     event.preventDefault();
     const pos = this.getPointerPosition(event);
-    
+
     this.setActiveInput(event.type.startsWith('mouse') ? 'mouse' : 'touch');
     this.pointer.active = true;
     this.pointer.x = pos.x;
@@ -64,7 +88,7 @@ export default class InputManager {
   handlePointerUp(event) {
     event.preventDefault();
     this.pointer.active = false;
-    
+
     if (event.type.startsWith('mouse')) {
       this.pointer.buttons.set(event.button, false);
     }

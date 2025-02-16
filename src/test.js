@@ -58,11 +58,12 @@ const app = {
     app.testGameList();
     app.testAsset();
     app.testScreen();
-    app.testInputManager();
     app.clock.test();
-    //app.testJoystick();
   },
 
+  /**
+   * This setups the app and tests input, joystick and othe stuff
+   */
   setup() {
     app.clock = new Clock('app');
     app.utils = new Utils();
@@ -78,38 +79,16 @@ const app = {
 
     this.setupPlayer();
 
-    const directions = {
-      "ArrowRight": new Vector(1, 0),
-      "ArrowLeft": new Vector(-1, 0),
-      "ArrowUp": new Vector(0, -1),
-      "ArrowDown": new Vector(0, 1),
-      "KeyD": new Vector(1, 0),
-      "KeyA": new Vector(-1, 0),
-      "KeyW": new Vector(0, -1),
-      "KeyS": new Vector(0, 1),
-      "KeyQ": new Vector(-1, -1),
-      "KeyE": new Vector(1, -1),
-      "KeyZ": new Vector(-1, 1),
-      "KeyC": new Vector(1, 1),
-    }
     const params = {
       maxRadius: 100,
     };
     app.joystick = new Joystick(params);
 
-    // any click in this area is interacting with the joystick, otherwise we move to the mout clicked
-    const joysitckZone = new Rectangle({
-      x: 0,
-      y: 0,
-      w: 200,
-      h: 500,
-    })
-
     app.update = () => {
       if (app.inputManager.isPointerActive) {
         // get the current mouse or touch x,y
         const pointer = this.inputManager.pointer;
-        if (joysitckZone.contains(pointer)) {
+        if (app.joystick.zone.contains(pointer)) {
           // Update joystick state with info from the inputManager
           app.joystick.update(pointer);
           // if there is some joystick movement then apply it to the players velocity
@@ -133,7 +112,7 @@ const app = {
       }
 
       app.inputManager.keys.forOf((key) => {
-        const direction = directions[key];
+        const direction = app.inputManager.directionKey(key);
         if (direction) {
           app.player.velocity = new Vector(direction.x, direction.y)
             .scale(app.player.maxSpeed);
@@ -159,9 +138,7 @@ const app = {
     };
 
     app.gameLoop = new GameLoop(app.update, app.render);
-
     app.gameLoop.start();
-
   },
 
   setupPlayer() {
@@ -173,46 +150,11 @@ const app = {
     };
 
     app.player = app.asset.make(new Item(params));
-
     app.player.maxSpeed = 6;
     app.player.velocity = new Vector();
     app.player.friction = 0.7;
     Screen.add(app.player.html);
     Screen.position(app.player);
-
-  },
-
-  testJoystick() {
-    // Create the joystick
-    app.joystick = new Joystick({
-      maxRadius: 100,
-      friction: 0.95,
-      event: app.event,
-    });
-
-    // the movable item becomes the caller
-    app.event.on('JOYSTICK_DOWN', app.player, (status, caller) => {
-      //Utils.msg(1, status);
-      Screen.showCursor();
-
-      if (true) {
-        // Apply to player velocity
-        caller.velocity.x = status.x * caller.maxSpeed;
-        caller.velocity.y = status.y * caller.maxSpeed;
-
-        // Update app.player position
-        caller.x += caller.velocity.x;
-        caller.y += caller.velocity.y;
-        Screen.position(caller);
-      }
-
-    });
-
-
-  },
-
-  testInputManager() {
-    console.log('test input');
   },
 
   /**

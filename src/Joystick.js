@@ -1,9 +1,17 @@
 import Point from './Point.js';
 import Vector from './Vector.js';
 import Screen from './Screen.js';
-import Utils from './Utils.js';
+import Rectangle from './Rectangle.js';
 
 export default class Joystick {
+  // where on the screen should pointer interactions be treated as joystick
+  zone = new Rectangle({
+    x: 0,
+    y: 0,
+    w: 200,
+    h: 500,
+  });
+
   constructor(params) {
     this.maxRadius = params.maxRadius;
     this.status = new Point();
@@ -21,7 +29,7 @@ export default class Joystick {
   }
 
   update(pos) {
-    
+
     if (!this.active) {
       this.handleStart(pos);
     } else {
@@ -43,7 +51,7 @@ export default class Joystick {
     if (!this.active) return;
 
     this.current = new Point(pos);
-    
+
     // Calculate vector from origin to current position
     let dis = this.current.copy().take(this.origin);
 
@@ -71,7 +79,8 @@ export default class Joystick {
     this.active = false;
     this.distance = 0;
     this.vector = new Vector();
-    this.hide();
+    this.hide(this.start);
+    this.hide(this.stick);
     // Keep the last vector direction but start reducing magnitude
   }
 
@@ -81,9 +90,11 @@ export default class Joystick {
     startPos.take(new Point(50, 50));
     this.start.style.display = 'block';
     this.start.style.transform = `translate(${startPos.x}px, ${startPos.y}px)`;
+    this.start.style.opacity = 1;
 
     // draw the stick top
     this.stick.style.display = 'block';
+    this.stick.style.opacity = 1;
     this.redraw();
   }
 
@@ -94,9 +105,13 @@ export default class Joystick {
     this.stick.style.transform = `translate(${containerPos.x}px, ${containerPos.y}px)`;
   }
 
-  hide() {
-    this.start.style.display = 'none';
-    this.stick.style.display = 'none';
+  /**
+   * Fade the element away
+   * @param {element} element 
+   */
+  hide(element) {
+    element.style.transition = 'opacity 0.3s ease-out';
+    element.style.opacity = '0';
   }
 
 
