@@ -5,12 +5,8 @@ export default class InputManager {
   constructor() {
     this.activeInputType = null;
     this.keys = new UniqueSet();
+    this.pointer = { x: 0, y: 0, active: false, buttons: new Map() };
 
-    this.inputState = {
-      keyboard: new Map(),
-      keydown: false,
-      pointer: { x: 0, y: 0, active: false, buttons: new Map() }
-    };
 
     // Bind event handlers
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -48,12 +44,12 @@ export default class InputManager {
     const pos = this.getPointerPosition(event);
     
     this.setActiveInput(event.type.startsWith('mouse') ? 'mouse' : 'touch');
-    this.inputState.pointer.active = true;
-    this.inputState.pointer.x = pos.x;
-    this.inputState.pointer.y = pos.y;
+    this.pointer.active = true;
+    this.pointer.x = pos.x;
+    this.pointer.y = pos.y;
 
     if (event.type.startsWith('mouse')) {
-      this.inputState.pointer.buttons.set(event.button, true);
+      this.pointer.buttons.set(event.button, true);
     }
   }
 
@@ -61,16 +57,16 @@ export default class InputManager {
     event.preventDefault();
     const pos = this.getPointerPosition(event);
     Screen.showCursor();
-    this.inputState.pointer.x = pos.x;
-    this.inputState.pointer.y = pos.y;
+    this.pointer.x = pos.x;
+    this.pointer.y = pos.y;
   }
 
   handlePointerUp(event) {
     event.preventDefault();
-    this.inputState.pointer.active = false;
+    this.pointer.active = false;
     
     if (event.type.startsWith('mouse')) {
-      this.inputState.pointer.buttons.set(event.button, false);
+      this.pointer.buttons.set(event.button, false);
     }
   }
 
@@ -98,9 +94,9 @@ export default class InputManager {
   // Get current input position
   getInputPosition() {
     return {
-      x: this.inputState.pointer.x,
-      y: this.inputState.pointer.y,
-      active: this.inputState.pointer.active
+      x: this.pointer.x,
+      y: this.pointer.y,
+      active: this.pointer.active
     };
   }
 
@@ -115,12 +111,12 @@ export default class InputManager {
 
   // Check if pointer is active (mouse button or touch)
   get isPointerActive() {
-    return this.inputState.pointer.active;
+    return this.pointer.active;
   }
 
   // Check if a mouse button is pressed
   isMouseButtonPressed(button) {
-    return this.inputState.pointer.buttons.get(button) || false;
+    return this.pointer.buttons.get(button) || false;
   }
 
   // Clean up method to remove event listeners

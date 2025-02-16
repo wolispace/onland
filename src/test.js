@@ -108,7 +108,7 @@ const app = {
     app.update = () => {
       if (app.inputManager.isPointerActive) {
         // get the current mouse or touch x,y
-        const pointer = this.inputManager.inputState.pointer;
+        const pointer = this.inputManager.pointer;
         if (joysitckZone.contains(pointer)) {
           // Update joystick state with info from the inputManager
           app.joystick.update(pointer);
@@ -467,7 +467,7 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     app.compare('screen add', {}, Screen.getElement('_test1'));
     Screen.remove('_test2');
     app.compare('screen remove', null, Screen.getElement('_test2'));
-
+    Screen.remove('_test1');
   },
 
   testDialog() {
@@ -561,17 +561,14 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     app.event.emit('ADD_POINTS', point2);
     app.compare('after event?', { x: 3, y: 3 }, mainPoint);
 
-    // put a div on the screen for testing keypresses
-    Screen.add('<div class="log" id="_key">KEY??</div>', 'overlay');
-    const screenKey = Screen.getElement('_key');
-
     // a test object with functions that respond to events 
     const testObj = {
       keyDown: (eventKey) => {
-        screenKey.innerHTML = `${eventKey} down`;
+        Utils.msg(1, `${eventKey} down`);
       },
       keyUp: (eventKey) => {
-        screenKey.innerHTML = `${eventKey} up`;
+        Utils.msg(1, `${eventKey} up`);
+        setTimeout(() => {Utils.msg(1, '')}, 1000);
       }
     };
 
