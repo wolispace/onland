@@ -84,47 +84,75 @@ const app = {
     };
     app.joystick = new Joystick(params);
 
-    app.update = () => {
-      if (app.inputManager.isPointerActive) {
-        // get the current mouse or touch x,y
-        const pointer = this.inputManager.pointer;
-        if (app.joystick.zone.contains(pointer)) {
-          // Update joystick state with info from the inputManager
-          app.joystick.update(pointer);
-          // if there is some joystick movement then apply it to the players velocity
-          if (app.joystick.vector.magnitude() > 0.1) {
-            app.player.velocity = app.joystick.vector.scale(app.player.maxSpeed);
+    app.update = (timeStamp, deltaTime) => {
+      // Scale the direction by delta time and a base speed
+      const unitSpeed = app.player.baseSpeed * deltaTime;
+      if (!app.inputManager.isInputActive) {
+        // apply friction
+        app.player.velocity.multiply((app.player.friction * deltaTime));
+      } else {
+        // keyboard or pointer is active
+        if (app.inputManager.isPointerActive) {
+          // get the current mouse or touch x,y
+          const pointer = this.inputManager.pointer;
+          if (app.joystick.zone.contains(pointer)) {
+            // Update joystick state with info from the inputManager
+            app.joystick.update(pointer);
+            // if there is some joystick movement then apply it to the players velocity
+            if (app.joystick.vector.magnitude() > 0.1) {
+              app.player.velocity = app.joystick.vector.scale(app.player.maxSpeed);
+            }
+          } else {
+            /* if the pointers possition is outside of the "joystick zone" then
+            calculate a vector from players current position to the pointer's possition 
+            */
+            // Create a vector from player position to pointer position
+            const targetVector = new Vector(
+              pointer.x - app.player.x,
+              pointer.y - app.player.y
+            );
+            // Normalize and scale the vector to move at constant speed
+            app.player.velocity = targetVector.normalise().scale(app.player.maxSpeed);
           }
         } else {
-          /* if the pointers possition is outside of the "joystick zone" then
-          calculate a vector from players current position to the pointer's possition 
-          */
-          // Create a vector from player position to pointer position
-          const targetVector = new Vector(
-            pointer.x - app.player.x,
-            pointer.y - app.player.y
-          );
-          // Normalize and scale the vector to move at constant speed
-          app.player.velocity = targetVector.normalise().scale(app.player.maxSpeed);
+          app.joystick.handleEnd();
         }
-      } else {
-        app.joystick.handleEnd();
+
+        if (app.inputManager.isInputActive) {
+          // add any preyprsses
+
+
+          app.inputManager.keys.forOf((key) => {
+            const direction = app.inputManager.directionKey(key);
+            if (direction) {
+              console.log(direction);
+              direction.multiply(unitSpeed);
+              app.player.velocity.add(direction);
+              app.player.velocity.limit(app.player.maxSpeed);
+              //console.log(key, direction);
+            }
+          })
+        } else {
+          app.player.velocity.clear();
+        }
+
       }
 
-      app.inputManager.keys.forOf((key) => {
-        const direction = app.inputManager.directionKey(key);
-        if (direction) {
-          app.player.velocity = new Vector(direction.x, direction.y)
-            .scale(app.player.maxSpeed);
-        }
-        //console.log(key, direction);
-      })
-
-      // apply friction
-      app.player.velocity.multiply(app.player.friction);
+      // round velocity
       app.player.velocity.round(3);
       if (app.player.velocity.isZero()) return;
-      console.log(app.player.velocity, app.player.friction);
+
+      // DEBUG round player to 3 decimals
+      const factor = Math.pow(10, 3);
+      app.player.x = Math.round(app.player.x * factor) / factor;
+      app.player.y = Math.round(app.player.y * factor) / factor;
+
+      if (!app.inputManager.isInputActive) {
+        console.log(app.player.x, app.player.y, app.player.velocity, 'friction ON');
+      } else {
+        console.log(app.player.x, app.player.y, app.player.velocity);
+      }
+      //console.log(app.player.velocity, app.player.friction);
 
       // Update position
       //TODO: player should have a position that is a Point we can add to etc..
@@ -153,9 +181,10 @@ const app = {
     };
 
     app.player = app.asset.make(new Item(params));
+    app.player.baseSpeed = 20; // how far to move in a second
     app.player.maxSpeed = 10;
     app.player.velocity = new Vector();
-    app.player.friction = 0.5;
+    app.player.friction = 0.95;
     Screen.add(app.player.html);
     Screen.position(app.player);
   },
@@ -298,11 +327,11 @@ const app = {
       `${settings.baseUrl}/img/cubeface_0_0.png`,
       `${settings.baseUrl}/img/cubeface_0_1.png`,
       `${settings.baseUrl}/img/cubeface_0_2.png`,
-      `${settings.baseUrl}/img/cubeface_1_0.png`, 
-      `${settings.baseUrl}/img/cubeface_1_1.png`, 
-      `${settings.baseUrl}/img/cubeface_1_2.png`, 
-      `${settings.baseUrl}/img/cubeface_2_0.png`, 
-      `${settings.baseUrl}/img/cubeface_2_1.png`, 
+      `${settings.baseUrl}/img/cubeface_1_0.png`,
+      `${settings.baseUrl}/img/cubeface_1_1.png`,
+      `${settings.baseUrl}/img/cubeface_1_2.png`,
+      `${settings.baseUrl}/img/cubeface_2_0.png`,
+      `${settings.baseUrl}/img/cubeface_2_1.png`,
       `${settings.baseUrl}/img/cubeface_2_2.png`];
 
     app.compare('addImage', expectedArray, app.imageCache.toString());
@@ -513,7 +542,7 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
       },
       keyUp: (eventKey) => {
         Utils.msg(1, `${eventKey} up`);
-        setTimeout(() => {Utils.msg(1, '')}, 1000);
+        setTimeout(() => { Utils.msg(1, '') }, 1000);
       }
     };
 

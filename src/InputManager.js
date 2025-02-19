@@ -4,22 +4,22 @@ import Vector from "./Vector.js";
 
 export default class InputManager {
   directionKeys = {
-    "ArrowRight": new Vector(1, 0),
-    "ArrowLeft": new Vector(-1, 0),
-    "ArrowUp": new Vector(0, -1),
-    "ArrowDown": new Vector(0, 1),
-    "KeyD": new Vector(1, 0),
-    "KeyA": new Vector(-1, 0),
-    "KeyW": new Vector(0, -1),
-    "KeyS": new Vector(0, 1),
-    "KeyQ": new Vector(-1, -1),
-    "KeyE": new Vector(1, -1),
-    "KeyZ": new Vector(-1, 1),
-    "KeyC": new Vector(1, 1),
+    "ArrowRight": {x:1, y:0},
+    "ArrowLeft": {x:-1, y:0},
+    "ArrowUp": {x:0, y:-1},
+    "ArrowDown": {x:0, y:1},
+    "KeyD": {x:1, y:0},
+    "KeyA": {x:-1, y:0},
+    "KeyW": {x:0, y:-1},
+    "KeyS": {x:0, y:1},
+    "KeyQ": {x:-1, y:-1},
+    "KeyE": {x:1, y:-1},
+    "KeyZ": {x:-1, y:1},
+    "KeyC": {x:1, y:1},
   };
 
   constructor() {
-    this.activeInputType = null;
+    this.activeInputType = '';
     this.keys = new UniqueSet();
     this.pointer = { x: 0, y: 0, active: false, buttons: new Map() };
 
@@ -51,15 +51,18 @@ export default class InputManager {
    * @returns {Vector} for the x,y direction a key maps to
    */
   directionKey(key) {
-    return this.directionKeys[key];
+    const dir = this.directionKeys[key];
+    return new Vector(dir.x, dir.y);
   }
 
   handleKeyDown(event) {
+    this.setActiveInput('keyboard');
     this.keys.add(event.code);
     Screen.hideCursor();
   }
 
   handleKeyUp(event) {
+    this.clearActiveInput();
     this.keys.delete(event.code);
   }
 
@@ -88,6 +91,7 @@ export default class InputManager {
   handlePointerUp(event) {
     event.preventDefault();
     this.pointer.active = false;
+    this.clearActiveInput();
 
     if (event.type.startsWith('mouse')) {
       this.pointer.buttons.set(event.button, false);
@@ -115,6 +119,10 @@ export default class InputManager {
     }
   }
 
+  clearActiveInput() {
+    this.activeInputType = '';
+  }
+
   // Get current input position
   getInputPosition() {
     return {
@@ -125,7 +133,11 @@ export default class InputManager {
   }
 
   get isKeyboardActive() {
-    this.activeInputType === 'keyboard';
+    return this.activeInputType === 'keyboard';
+  }
+
+  get isInputActive() {
+    return this.activeInputType !== '';
   }
 
   // Check if a specific key is pressed
