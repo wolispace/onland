@@ -84,12 +84,12 @@ const app = {
     };
     app.joystick = new Joystick(params);
 
-    app.update = (timeStamp, deltaTime) => {
+    app.update = (timeStamp, dTimePerSecond) => {
       // Scale the direction by delta time and a base speed
-      const unitSpeed = app.player.baseSpeed * deltaTime;
+      const unitSpeed = app.player.baseSpeed * dTimePerSecond;
       if (!app.inputManager.isInputActive) {
         // apply friction
-        app.player.velocity.multiply((app.player.friction * deltaTime));
+        app.player.velocity.multiply((app.player.friction * dTimePerSecond));
       } else {
         // keyboard or pointer is active
         if (app.inputManager.isPointerActive) {
@@ -100,7 +100,9 @@ const app = {
             app.joystick.update(pointer);
             // if there is some joystick movement then apply it to the players velocity
             if (app.joystick.vector.magnitude() > 0.1) {
-              app.player.velocity = app.joystick.vector.scale(app.player.maxSpeed);
+          // Scale the joystick vector by baseSpeed and delta time
+          app.player.velocity = app.joystick.vector
+            .scale(unitSpeed);
             }
           } else {
             /* if the pointers possition is outside of the "joystick zone" then
@@ -111,8 +113,9 @@ const app = {
               pointer.x - app.player.x,
               pointer.y - app.player.y
             );
-            // Normalize and scale the vector to move at constant speed
-            app.player.velocity = targetVector.normalise().scale(app.player.maxSpeed);
+        // Normalize and scale the vector by baseSpeed and delta time
+        app.player.velocity = targetVector.normalise()
+          .scale(unitSpeed);
           }
         } else {
           app.joystick.handleEnd();
@@ -128,7 +131,7 @@ const app = {
               console.log(direction);
               direction.multiply(unitSpeed);
               app.player.velocity.add(direction);
-              app.player.velocity.limit(app.player.maxSpeed);
+              app.player.velocity.limit(unitSpeed);
               //console.log(key, direction);
             }
           })
@@ -143,9 +146,9 @@ const app = {
       if (app.player.velocity.isZero()) return;
 
       // DEBUG round player to 3 decimals
-      const factor = Math.pow(10, 3);
-      app.player.x = Math.round(app.player.x * factor) / factor;
-      app.player.y = Math.round(app.player.y * factor) / factor;
+      // const factor = Math.pow(10, 3);
+      // app.player.x = Math.round(app.player.x * factor) / factor;
+      // app.player.y = Math.round(app.player.y * factor) / factor;
 
       if (!app.inputManager.isInputActive) {
         console.log(app.player.x, app.player.y, app.player.velocity, 'friction ON');
@@ -181,10 +184,10 @@ const app = {
     };
 
     app.player = app.asset.make(new Item(params));
-    app.player.baseSpeed = 20; // how far to move in a second
-    app.player.maxSpeed = 10;
+    app.player.baseSpeed = 300; // how far to move in a second
+    app.player.maxSpeed = 1;
     app.player.velocity = new Vector();
-    app.player.friction = 0.95;
+    app.player.friction = 0.05;
     Screen.add(app.player.html);
     Screen.position(app.player);
   },
@@ -603,13 +606,13 @@ _u|x,,coal_02,,1050,3060;y,,gem_02,,1030,3090
     const itemInfo = this.makeItem();
     Screen.add(itemInfo.html);
     Screen.position(itemInfo);
-    setTimeout(() => {
-      itemInfo.x = 300;
-      Screen.position(itemInfo);
-      setTimeout(() => {
-        Screen.remove(itemInfo.id);
-      }, 3000);
-    }, 3000);
+    // setTimeout(() => {
+    //   itemInfo.x = 300;
+    //   Screen.position(itemInfo);
+    //   setTimeout(() => {
+    //     Screen.remove(itemInfo.id);
+    //   }, 1000);
+    // }, 1000);
   },
 
   /**

@@ -25,12 +25,12 @@ export default class GameLoop {
 
     // accumulate all the time since the last frame
     this.accumulatedFrameTime += deltaTime;
-    const dTime = (deltaTime / 1000);
+    const dTimePerSecond = (deltaTime / 1000);
 
     // Fixed time step updates
     // if there's enough accumulated time to run one or more fixed updates
     while (this.accumulatedFrameTime >= this.timeStep) {
-      this.update(this.timeStep, dTime);
+      this.update(this.timeStep, dTimePerSecond);
       this.accumulatedFrameTime -= this.timeStep;
     }
 
