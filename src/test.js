@@ -23,6 +23,8 @@ import Loader from './Loader.js';
 import Joystick from './Joystick.js';
 import InputManager from './InputManager.js';
 import GameLoop from './GameLoop.js';
+import Player from './Player.js';
+import PlayerController from './PlayerController.js';
 import Rectangle from './Rectangle.js';
 
 
@@ -71,94 +73,29 @@ const app = {
     app.uniqueId = new UniqueId();
     app.asset = new Asset();
     app.event = new Event();
-    app.inputManager = new InputManager();
+    const joystick =  new Joystick( {maxRadius: 100});
+    app.inputManager = new InputManager(joystick);
+    app.player = new Player();
+    app.playerController = new PlayerController(app.player, app.inputManager);
+
+    Screen.add(app.player.itemInfo.html);
+    Screen.position(app.player);
 
     // for testing we want to scroll the overlay
     document.querySelector('#overlay').style.overflow = 'scroll';
     document.querySelector('body').style.userSelect = 'auto';
 
-    this.setupPlayer();
-
-    const params = {
-      maxRadius: 100,
-    };
-    app.joystick = new Joystick(params);
-
     app.update = (timeStamp, dTimePerSecond) => {
-      // Scale the direction by delta time and a base speed
-      const unitSpeed = app.player.baseSpeed * dTimePerSecond;
-      if (!app.inputManager.isInputActive) {
-        // apply friction
-        app.player.velocity.multiply((app.player.friction * dTimePerSecond));
-      } else {
-        // keyboard or pointer is active
-        if (app.inputManager.isPointerActive) {
-          // get the current mouse or touch x,y
-          const pointer = this.inputManager.pointer;
-          if (app.joystick.zone.contains(pointer)) {
-            // Update joystick state with info from the inputManager
-            app.joystick.update(pointer);
-            // if there is some joystick movement then apply it to the players velocity
-            if (app.joystick.vector.magnitude() > 0.1) {
-          // Scale the joystick vector by baseSpeed and delta time
-          app.player.velocity = app.joystick.vector
-            .scale(unitSpeed);
-            }
-          } else {
-            /* if the pointers possition is outside of the "joystick zone" then
-            calculate a vector from players current position to the pointer's possition 
-            */
-            // Create a vector from player position to pointer position
-            const targetVector = new Vector(
-              pointer.x - app.player.x,
-              pointer.y - app.player.y
-            );
-        // Normalize and scale the vector by baseSpeed and delta time
-        app.player.velocity = targetVector.normalise()
-          .scale(unitSpeed);
-          }
-        } else {
-          app.joystick.handleEnd();
-        }
 
-        if (app.inputManager.isInputActive) {
-          // add any preyprsses
+      app.playerController.update(dTimePerSecond);
 
-
-          app.inputManager.keys.forOf((key) => {
-            const direction = app.inputManager.directionKey(key);
-            if (direction) {
-              console.log(direction);
-              direction.multiply(unitSpeed);
-              app.player.velocity.add(direction);
-              app.player.velocity.limit(unitSpeed);
-              //console.log(key, direction);
-            }
-          })
-        } else {
-          app.player.velocity.clear();
-        }
-
-      }
 
       // round velocity
       app.player.velocity.round(3);
       if (app.player.velocity.isZero()) return;
 
-      // DEBUG round player to 3 decimals
-      // const factor = Math.pow(10, 3);
-      // app.player.x = Math.round(app.player.x * factor) / factor;
-      // app.player.y = Math.round(app.player.y * factor) / factor;
-
-      if (!app.inputManager.isInputActive) {
-        console.log(app.player.x, app.player.y, app.player.velocity, 'friction ON');
-      } else {
-        console.log(app.player.x, app.player.y, app.player.velocity);
-      }
-      //console.log(app.player.velocity, app.player.friction);
-
       // Update position
-      //TODO: player should have a position that is a Point we can add to etc..
+      //TODO: Player should have a .add() to add to the x,y
       app.player.x += app.player.velocity.x;
       app.player.y += app.player.velocity.y;
     };
@@ -175,19 +112,9 @@ const app = {
     app.gameLoop.start();
   },
 
-  setupPlayer() {
-    const params = {
-      id: '_player',
-      type: 'rock_02',
-      x: 150,
-      y: 80,
-    };
-
-    app.player = app.asset.make(new Item(params));
-    app.player.baseSpeed = 300; // how far to move in a second
-    app.player.maxSpeed = 1;
-    app.player.velocity = new Vector();
-    app.player.friction = 0.05;
+  setupPlayer(params) {
+    app.player.x = params.x;
+    app.player.y = params.y;
     Screen.add(app.player.html);
     Screen.position(app.player);
   },

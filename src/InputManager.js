@@ -18,7 +18,8 @@ export default class InputManager {
     "KeyC": {x:1, y:1},
   };
 
-  constructor() {
+  constructor(joystick) {
+    this.joystick = joystick;
     this.activeInputType = '';
     this.keys = new UniqueSet();
     this.pointer = { x: 0, y: 0, active: false, buttons: new Map() };
