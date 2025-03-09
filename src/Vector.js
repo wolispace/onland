@@ -16,6 +16,11 @@ export default class Vector {
     return new Vector(this.x, this.y);
   }
 
+  clear() {
+    this.x = 0;
+    this.y = 0;
+  }
+
   /**
    * Getter for the magnitude of this vector
    * @returns {number} the length of the vector

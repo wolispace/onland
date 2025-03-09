@@ -14,9 +14,9 @@ export default class Player extends Item {
     };
     super(params);
     this.baseSpeed = 300; // how far to move in a second
-    this.maxSpeed = 1;
+    this.maxSpeed = 10000;
     this.velocity = new Vector();
-    this.friction = 0.05;
+    this.friction = 50;
     this.itemInfo = app.asset.make(new Item(this));
   }
 
