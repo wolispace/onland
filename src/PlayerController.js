@@ -72,7 +72,13 @@ export default class PlayerController {
 
     }
 
+    this.player.applyVelocity();
+    this.player.checkCollisions();
+
+
   }
+
+
 
   /**
    * scroll the world div so the player is in the middle of the screen if possible 

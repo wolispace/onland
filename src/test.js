@@ -73,11 +73,11 @@ const app = {
     app.uniqueId = new UniqueId();
     app.asset = new Asset();
     app.event = new Event();
-    const joystick =  new Joystick( {maxRadius: 100});
+    const joystick = new Joystick({ maxRadius: 100 });
     app.inputManager = new InputManager(joystick);
     app.player = new Player();
     app.screen = new Screen();
-    app.playerController = new PlayerController({screen: app.screen, player:app.player, inputManager: app.inputManager});
+    app.playerController = new PlayerController({ screen: app.screen, player: app.player, inputManager: app.inputManager });
 
     Screen.add(app.player.itemInfo.html);
     Screen.position(app.player);
@@ -89,16 +89,6 @@ const app = {
     app.update = (timeStamp, dTimePerSecond) => {
 
       app.playerController.update(dTimePerSecond);
-
-
-      // round velocity
-      app.player.velocity.round(3);
-      if (app.player.velocity.isZero()) return;
-
-      // Update position
-      //TODO: Player should have a .add() to add to the x,y
-      app.player.x += app.player.velocity.x;
-      app.player.y += app.player.velocity.y;
     };
 
     app.render = () => {
