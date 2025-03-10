@@ -76,7 +76,8 @@ const app = {
     const joystick =  new Joystick( {maxRadius: 100});
     app.inputManager = new InputManager(joystick);
     app.player = new Player();
-    app.playerController = new PlayerController(app.player, app.inputManager);
+    app.screen = new Screen();
+    app.playerController = new PlayerController({screen: app.screen, player:app.player, inputManager: app.inputManager});
 
     Screen.add(app.player.itemInfo.html);
     Screen.position(app.player);
@@ -104,6 +105,7 @@ const app = {
       // loop thought a list of all items with velocities and update them.
       if (app.player.velocity.magnitude() > 0.00001) {
         Screen.position(app.player);
+        app.playerController.centerPlayer();
       }
 
     };

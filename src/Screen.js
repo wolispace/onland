@@ -1,5 +1,14 @@
+import Rectangle from "./Rectangle.js";
+import Point from "./Point.js";
+
 // used to add and remove things from the screen
 export default class Screen {
+
+  constructor() {
+    this.scrollableDiv = document.querySelector('.scrollable');
+    this.update();
+  }
+
 
   /**
    * Adds some html to the screen
@@ -57,5 +66,26 @@ export default class Screen {
     body.style.cursor = "none";
   }
 
+  /**
+   * Update details about the screen
+   */
+  update() {
+    this.rectangle = new Rectangle({ w: window.innerWidth, h: window.innerHeight });
+  }
+
+  /**
+   * Scroll the screen so the point is in the middle of the screen
+   * @param {point} point 
+   */
+  centerOnPoint(point) {
+    const scrollPos = new Point(window.scrollX, window.scrollY);
+
+    // Calculate the amount of scrolling
+    const newScroll = point.add(scrollPos).take((this.rectangle.center));
+
+    // // Scroll the world div
+    this.scrollableDiv.scrollLeft = newScroll.x;
+    this.scrollableDiv.scrollTop = newScroll.y;
+  }
 
 }

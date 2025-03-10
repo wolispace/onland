@@ -1,9 +1,12 @@
 import Vector from "./Vector.js";
+import Point from "./Point.js";
+
 // handles interactions between Player and InputManager classes
 export default class PlayerController {
-  constructor(player, inputManager) {
-    this.player = player;
-    this.inputManager = inputManager;
+  constructor(params) {
+    this.screen = params.screen;
+    this.player = params.player;
+    this.inputManager = params.inputManager;
   }
 
   update(dTimePerSecond) {
@@ -69,5 +72,15 @@ export default class PlayerController {
 
     }
 
+  }
+
+  /**
+   * scroll the world div so the player is in the middle of the screen if possible 
+   */
+  centerPlayer() {
+    // // Get the player's coordinates
+    const playerPos = new Point(this.player.x, this.player.y);
+
+    this.screen.centerOnPoint(playerPos);
   }
 }
