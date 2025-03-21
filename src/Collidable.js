@@ -1,5 +1,6 @@
 // every collidable rectangle is part of an item (held in a set of collidables)
 import Rectangle from './Rectangle.js';
+import Point from './Point.js';
 
 export default class Collidable extends Rectangle {
   onCollide = 'skim';

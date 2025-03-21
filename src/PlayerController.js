@@ -73,9 +73,6 @@ export default class PlayerController {
     }
 
     this.player.applyVelocity();
-    this.player.checkCollisions();
-
-
   }
 
 

@@ -96,4 +96,8 @@ export default class Point {
     return this.x === point.x && this.y === point.y;
   }
 
+  isZero() {
+    return this.x === 0 && this.y === 0;
+  }
+
 }

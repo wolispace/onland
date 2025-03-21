@@ -89,6 +89,9 @@ const app = {
     app.update = (timeStamp, dTimePerSecond) => {
 
       app.playerController.update(dTimePerSecond);
+      // check the surface for collision:
+      const layerToCheck = app.gameList.combined.get('_s');
+      app.player.checkCollisions(layerToCheck);
     };
 
     app.render = () => {

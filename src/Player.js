@@ -2,6 +2,8 @@
 import Point from "./Point.js";
 import Vector from "./Vector.js";
 import Item from "./Item.js";
+import Collidable from "./Collidable.js";
+import Rectangle from "./Rectangle.js";
 
 export default class Player extends Item {
   constructor() {
@@ -43,12 +45,33 @@ export default class Player extends Item {
    * Restore previous pos if there was a collision
    */
   restorePos() {
+    if (!this.backup) return;
     this.x = this.backup.x;
     this.y = this.backup.y;
   }
 
-  checkCollisions() {
+  checkCollisions(itemList) {
+    // get current collision box for the player
+    const playerRectInfo = {w: 10, h: 10, x:this.x, y:this.y};
+
+    const playerRectangle = new Rectangle(playerRectInfo);
+
     // loop through all combined items for a layer eg SURFACE for a collision
+    if (!itemList) return;
+    
+    itemList.forOf((item) => {
+      item.collideList.forOf((itemList) => {
+        itemList.forOf((rectangle) => {
+          if (!rectangle) return;
+          const colideInfo = rectangle.collides(playerRectangle);
+
+          if (!colideInfo.isZero()) {
+            this.restorePos();
+          }
+        });
+
+      });
+    });
   }
 
 }
